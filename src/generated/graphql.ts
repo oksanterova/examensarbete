@@ -1,5 +1,6 @@
 import { GraphQLResolveInfo } from 'graphql';
 export type Maybe<T> = T | null;
+export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string,
@@ -7,6 +8,16 @@ export type Scalars = {
   Boolean: boolean,
   Int: number,
   Float: number,
+};
+
+export type Mutation = {
+   __typename?: 'Mutation',
+  createProduct: Product,
+};
+
+
+export type MutationCreateProductArgs = {
+  name: Scalars['String']
 };
 
 export type Product = {
@@ -94,6 +105,7 @@ export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>,
   Product: ResolverTypeWrapper<Product>,
   ID: ResolverTypeWrapper<Scalars['ID']>,
+  Mutation: ResolverTypeWrapper<{}>,
   String: ResolverTypeWrapper<Scalars['String']>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
 }>;
@@ -103,8 +115,13 @@ export type ResolversParentTypes = ResolversObject<{
   Query: {},
   Product: Product,
   ID: Scalars['ID'],
+  Mutation: {},
   String: Scalars['String'],
   Boolean: Scalars['Boolean'],
+}>;
+
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  createProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationCreateProductArgs, 'name'>>,
 }>;
 
 export type ProductResolvers<ContextType = any, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = ResolversObject<{
@@ -116,6 +133,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 }>;
 
 export type Resolvers<ContextType = any> = ResolversObject<{
+  Mutation?: MutationResolvers<ContextType>,
   Product?: ProductResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
 }>;

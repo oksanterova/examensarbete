@@ -5,3 +5,7 @@ type Product {
 type Query {
   products: [Product!]!
 }
+
+type Mutation {
+  createProduct(name: String!): Product!
+}
