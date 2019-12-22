@@ -1,11 +1,59 @@
 type Product {
   id: ID!
+  name: String!
+  sizes: [Size!]
+  quantity: Int!
+  categories: [Category!]
+}
+
+type Category {
+  id: ID!
+  name: String!
+  products: [Product!]
+}
+
+type Size {
+  size: String!
+}
+
+scalar Date
+
+type OrderItem {
+  size: Size!
+  product: Product!
+  quantity: Int!
+}
+
+type Order {
+  id: ID!
+  createdAt: Date!
+  items: [OrderItem!]
+  address: String!
+}
+
+input CreateOrderInput {
+  productIds: [ID!]!
+}
+
+type User {
+  id: ID!
+  name: String!
+  orders: [Order!]
+  address: String!
 }
 
 type Query {
   products: [Product!]!
+  product(id: ID!): Product!
+  user(id: ID!): User!
+  orders: [Order!]!
+  order(id: ID!): Order!
 }
 
 type Mutation {
+  addCategoryToProduct(productId: ID!, categoryId: ID!): Product!
+
   createProduct(name: String!): Product!
+  createCategory(name: String!): Category!
+  createOrder(input: CreateOrderInput!): Order!
 }
