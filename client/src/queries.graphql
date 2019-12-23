@@ -1,0 +1,15 @@
+query GetProducts {
+  products {
+    id
+    name
+    sizes {
+      id
+      name
+    }
+    quantity
+    categories {
+      id
+      name
+    }
+  }
+}
