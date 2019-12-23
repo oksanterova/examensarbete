@@ -195,6 +195,44 @@ export type GetProductsQuery = (
   )> }
 );
 
+export type GetCartQueryVariables = {
+  cartId: Scalars['ID']
+};
+
+
+export type GetCartQuery = (
+  { __typename?: 'Query' }
+  & { cart: (
+    { __typename?: 'Cart' }
+    & Pick<Cart, 'id'>
+    & { items: Maybe<Array<(
+      { __typename?: 'CartItem' }
+      & Pick<CartItem, 'id' | 'quantity'>
+      & { product: (
+        { __typename?: 'Product' }
+        & Pick<Product, 'id'>
+        & { sizes: Maybe<Array<(
+          { __typename?: 'Size' }
+          & Pick<Size, 'id' | 'name'>
+        )>> }
+      ), size: (
+        { __typename?: 'Size' }
+        & Pick<Size, 'id' | 'name'>
+      ) }
+    )>> }
+  ) }
+);
+
+export type AddCartItemMutationVariables = {
+  input: CreateCartItemInput
+};
+
+
+export type AddCartItemMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'addCartItem'>
+);
+
 
 export const GetProductsDocument = gql`
     query GetProducts {
@@ -255,3 +293,115 @@ export function useGetProductsLazyQuery(baseOptions?: ApolloReactHooks.LazyQuery
 export type GetProductsQueryHookResult = ReturnType<typeof useGetProductsQuery>;
 export type GetProductsLazyQueryHookResult = ReturnType<typeof useGetProductsLazyQuery>;
 export type GetProductsQueryResult = ApolloReactCommon.QueryResult<GetProductsQuery, GetProductsQueryVariables>;
+export const GetCartDocument = gql`
+    query GetCart($cartId: ID!) {
+  cart(id: $cartId) {
+    id
+    items {
+      id
+      quantity
+      product {
+        id
+        sizes {
+          id
+          name
+        }
+      }
+      size {
+        id
+        name
+      }
+    }
+  }
+}
+    `;
+export type GetCartComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetCartQuery, GetCartQueryVariables>, 'query'> & ({ variables: GetCartQueryVariables; skip?: boolean; } | { skip: boolean; });
+
+    export const GetCartComponent = (props: GetCartComponentProps) => (
+      <ApolloReactComponents.Query<GetCartQuery, GetCartQueryVariables> query={GetCartDocument} {...props} />
+    );
+    
+export type GetCartProps<TChildProps = {}> = ApolloReactHoc.DataProps<GetCartQuery, GetCartQueryVariables> | TChildProps;
+export function withGetCart<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  GetCartQuery,
+  GetCartQueryVariables,
+  GetCartProps<TChildProps>>) {
+    return ApolloReactHoc.withQuery<TProps, GetCartQuery, GetCartQueryVariables, GetCartProps<TChildProps>>(GetCartDocument, {
+      alias: 'getCart',
+      ...operationOptions
+    });
+};
+
+/**
+ * __useGetCartQuery__
+ *
+ * To run a query within a React component, call `useGetCartQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCartQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCartQuery({
+ *   variables: {
+ *      cartId: // value for 'cartId'
+ *   },
+ * });
+ */
+export function useGetCartQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetCartQuery, GetCartQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetCartQuery, GetCartQueryVariables>(GetCartDocument, baseOptions);
+      }
+export function useGetCartLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetCartQuery, GetCartQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetCartQuery, GetCartQueryVariables>(GetCartDocument, baseOptions);
+        }
+export type GetCartQueryHookResult = ReturnType<typeof useGetCartQuery>;
+export type GetCartLazyQueryHookResult = ReturnType<typeof useGetCartLazyQuery>;
+export type GetCartQueryResult = ApolloReactCommon.QueryResult<GetCartQuery, GetCartQueryVariables>;
+export const AddCartItemDocument = gql`
+    mutation AddCartItem($input: CreateCartItemInput!) {
+  addCartItem(input: $input)
+}
+    `;
+export type AddCartItemMutationFn = ApolloReactCommon.MutationFunction<AddCartItemMutation, AddCartItemMutationVariables>;
+export type AddCartItemComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<AddCartItemMutation, AddCartItemMutationVariables>, 'mutation'>;
+
+    export const AddCartItemComponent = (props: AddCartItemComponentProps) => (
+      <ApolloReactComponents.Mutation<AddCartItemMutation, AddCartItemMutationVariables> mutation={AddCartItemDocument} {...props} />
+    );
+    
+export type AddCartItemProps<TChildProps = {}> = ApolloReactHoc.MutateProps<AddCartItemMutation, AddCartItemMutationVariables> | TChildProps;
+export function withAddCartItem<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  AddCartItemMutation,
+  AddCartItemMutationVariables,
+  AddCartItemProps<TChildProps>>) {
+    return ApolloReactHoc.withMutation<TProps, AddCartItemMutation, AddCartItemMutationVariables, AddCartItemProps<TChildProps>>(AddCartItemDocument, {
+      alias: 'addCartItem',
+      ...operationOptions
+    });
+};
+
+/**
+ * __useAddCartItemMutation__
+ *
+ * To run a mutation, you first call `useAddCartItemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddCartItemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addCartItemMutation, { data, loading, error }] = useAddCartItemMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddCartItemMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddCartItemMutation, AddCartItemMutationVariables>) {
+        return ApolloReactHooks.useMutation<AddCartItemMutation, AddCartItemMutationVariables>(AddCartItemDocument, baseOptions);
+      }
+export type AddCartItemMutationHookResult = ReturnType<typeof useAddCartItemMutation>;
+export type AddCartItemMutationResult = ApolloReactCommon.MutationResult<AddCartItemMutation>;
+export type AddCartItemMutationOptions = ApolloReactCommon.BaseMutationOptions<AddCartItemMutation, AddCartItemMutationVariables>;

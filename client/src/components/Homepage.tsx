@@ -1,5 +1,96 @@
-import React from "react";
-import { useGetProductsQuery } from "../generated/graphql";
+import React, { useContext } from "react";
+import {
+  useGetProductsQuery,
+  useAddCartItemMutation,
+  Product,
+  CreateCartItemInput,
+  GetCartDocument
+} from "../generated/graphql";
+import AppBar from "@material-ui/core/AppBar";
+import {
+  Toolbar,
+  Typography,
+  CardContent,
+  Container,
+  Grid,
+  Card,
+  CardActions,
+  Button,
+  CardMedia,
+  CircularProgress
+} from "@material-ui/core";
+import styled from "styled-components";
+import CartContext from "../CartContext";
+import Cart from "./Cart";
+
+const Main = styled.main`
+  padding-top: ${props => props.theme.spacing(8)}px;
+`;
+
+const CardGrid = styled(Container)`
+  padding-top: ${props => props.theme.spacing(8)}px;
+  padding-bottom: ${props => props.theme.spacing(8)}px;
+`;
+
+const CustomCard = styled(Card)`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
+const ProductMedia = styled(CardMedia)`
+  paddingtop: "56.25%"; // 16:9
+`;
+
+const ProductCard: React.FC<Product> = product => {
+  const { cartId } = useContext(CartContext);
+
+  const input: CreateCartItemInput = {
+    cartId,
+    productId: product.id,
+    sizeId: "1",
+    quantity: 1
+  };
+
+  const [
+    addCartItemMutation,
+    { data, loading, error }
+  ] = useAddCartItemMutation({
+    variables: {
+      input
+    },
+    refetchQueries: () => [{ query: GetCartDocument, variables: { cartId } }],
+    awaitRefetchQueries: true
+  });
+
+  return (
+    <CustomCard>
+      <ProductMedia
+        image="https://source.unsplash.com/random"
+        title="Image title"
+      />
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="h2">
+          {product.name}
+        </Typography>
+        <Typography>{JSON.stringify(product)}</Typography>
+      </CardContent>
+      <CardActions>
+        <Button
+          size="small"
+          color="primary"
+          onClick={() => addCartItemMutation()}
+        >
+          {loading ? (
+            <CircularProgress size={14} />
+          ) : (
+            <Typography>Add to Cart</Typography>
+          )}
+        </Button>
+      </CardActions>
+    </CustomCard>
+  );
+};
 
 const Homepage: React.FC = () => {
   const { loading, data, error } = useGetProductsQuery();
@@ -13,11 +104,27 @@ const Homepage: React.FC = () => {
   }
 
   return (
-    <ul>
-      {data?.products.map(product => (
-        <li key={product.id}>{JSON.stringify(product)}</li>
-      ))}
-    </ul>
+    <>
+      <AppBar>
+        <Toolbar>
+          <Typography variant="h6" color="inherit" noWrap>
+            Album layout
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Main>
+        <CardGrid maxWidth="md">
+          <Grid container spacing={4}>
+            {data?.products.map(product => (
+              <Grid item key={product.id} xs={12} sm={6} md={4}>
+                <ProductCard {...product} />
+              </Grid>
+            ))}
+          </Grid>
+        </CardGrid>
+        <Cart />
+      </Main>
+    </>
   );
 };
 

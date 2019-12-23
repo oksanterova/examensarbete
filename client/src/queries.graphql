@@ -13,3 +13,28 @@ query GetProducts {
     }
   }
 }
+
+query GetCart($cartId: ID!) {
+  cart(id: $cartId) {
+    id
+    items {
+      id
+      quantity
+      product {
+        id
+        sizes {
+          id
+          name
+        }
+      }
+      size {
+        id
+        name
+      }
+    }
+  }
+}
+
+mutation AddCartItem($input: CreateCartItemInput!) {
+  addCartItem(input: $input)
+}
