@@ -85,7 +85,7 @@ function orderToGql({ id, items, ...rest }: Order): graphql.Order {
 
 const queryResolvers: QueryResolvers = {
   cart: async (_, { id }) => {
-    const cart = (await Cart.findOne(id)) ?? throwNotFound();
+    const cart = await Cart.findOneOrFail(id);
 
     return cartToGql(cart);
   },
@@ -95,7 +95,7 @@ const queryResolvers: QueryResolvers = {
     return products.map(productToGql);
   },
   product: async (_, { id }) => {
-    const product = (await Product.findOne(id)) ?? throwNotFound();
+    const product = await Product.findOneOrFail(id);
 
     return productToGql(product);
   },
@@ -105,7 +105,7 @@ const queryResolvers: QueryResolvers = {
     return orders.map(orderToGql);
   },
   order: async (_, { id }) => {
-    const order = (await Order.findOne(id)) ?? throwNotFound();
+    const order = await Order.findOneOrFail(id);
 
     return orderToGql(order);
   },
@@ -115,7 +115,7 @@ const queryResolvers: QueryResolvers = {
     return sizes.map(sizeToGql);
   },
   size: async (_, { id }) => {
-    const size = (await Size.findOne(id)) ?? throwNotFound();
+    const size = await Size.findOneOrFail(id);
 
     return sizeToGql(size);
   }
@@ -129,9 +129,9 @@ const mutationResolvers: MutationResolvers = {
   addCartItem: async (_, { input }) => {
     const { productId, cartId, quantity, sizeId } = input;
 
-    const cart = (await Cart.findOne(cartId)) ?? throwNotFound();
-    const size = (await Size.findOne(sizeId)) ?? throwNotFound();
-    const product = (await Product.findOne(productId)) ?? throwNotFound();
+    const cart = await Cart.findOneOrFail(cartId);
+    const size = await Size.findOneOrFail(sizeId);
+    const product = await Product.findOneOrFail(productId);
     const cartItem = new CartItem({ cart, product, size, quantity });
 
     await cartItem.save();
@@ -145,7 +145,7 @@ const mutationResolvers: MutationResolvers = {
       .of(productId)
       .add(categoryId);
 
-    const product = (await Product.findOne(productId)) ?? throwNotFound();
+    const product = await Product.findOneOrFail(productId);
 
     return productToGql(product);
   },
@@ -156,7 +156,7 @@ const mutationResolvers: MutationResolvers = {
       .of(productId)
       .add(sizeId);
 
-    const product = (await Product.findOne(productId)) ?? throwNotFound();
+    const product = await Product.findOneOrFail(productId);
 
     return productToGql(product);
   },
@@ -209,18 +209,18 @@ const mutationResolvers: MutationResolvers = {
 
 const productResolvers: ProductResolvers = {
   categories: async parent => {
-    const product = await Product.findOne(parent.id, {
+    const product = await Product.findOneOrFail(parent.id, {
       relations: ["categories"]
     });
-    const categories = product?.categories ?? [];
+    const categories = product.categories ?? [];
 
     return categories.map(categoryToGql);
   },
   sizes: async parent => {
-    const product = await Product.findOne(parent.id, {
+    const product = await Product.findOneOrFail(parent.id, {
       relations: ["sizes"]
     });
-    const sizes = product?.sizes ?? throwNotFound();
+    const sizes = product.sizes ?? throwNotFound();
 
     return sizes.map(sizeToGql);
   }
@@ -228,10 +228,10 @@ const productResolvers: ProductResolvers = {
 
 const categoryResolvers: CategoryResolvers = {
   products: async parent => {
-    const category = await Category.findOne(parent.id, {
+    const category = await Category.findOneOrFail(parent.id, {
       relations: ["products"]
     });
-    const products = category?.products ?? [];
+    const products = category.products ?? [];
 
     return products.map(productToGql);
   }
@@ -239,10 +239,10 @@ const categoryResolvers: CategoryResolvers = {
 
 const orderResolvers: OrderResolvers = {
   items: async parent => {
-    const order = await Order.findOne(parent.id, {
+    const order = await Order.findOneOrFail(parent.id, {
       relations: ["items"]
     });
-    const items = order?.items ?? [];
+    const items = order.items ?? [];
 
     return items.map(orderItemToGql);
   }
@@ -250,28 +250,24 @@ const orderResolvers: OrderResolvers = {
 
 const orderItemResolvers: OrderItemResolvers = {
   product: async parent => {
-    const orderItem = await OrderItem.findOne(parent.id, {
+    const orderItem = await OrderItem.findOneOrFail(parent.id, {
       relations: ["product"]
     });
-    const product = orderItem?.product ?? throwNotFound();
 
-    return productToGql(product);
+    return productToGql(orderItem.product);
   },
   size: async parent => {
-    const orderItem = await OrderItem.findOne(parent.id, {
+    const orderItem = await OrderItem.findOneOrFail(parent.id, {
       relations: ["size"]
     });
-    const size = orderItem?.size ?? throwNotFound();
 
-    return sizeToGql(size);
+    return sizeToGql(orderItem.size);
   }
 };
 
 const cartResolvers: graphql.CartResolvers = {
   items: async parent => {
-    const cart =
-      (await Cart.findOne(parent.id, { relations: ["items"] })) ??
-      throwNotFound();
+    const cart = await Cart.findOneOrFail(parent.id, { relations: ["items"] });
 
     return cart.items.map(cartItemToGql);
   }
@@ -279,15 +275,15 @@ const cartResolvers: graphql.CartResolvers = {
 
 const cartItemResolvers: graphql.CartItemResolvers = {
   product: async parent => {
-    const cartItem =
-      (await CartItem.findOne(parent.id, { relations: ["product"] })) ??
-      throwNotFound();
+    const cartItem = await CartItem.findOneOrFail(parent.id, {
+      relations: ["product"]
+    });
     return productToGql(cartItem.product);
   },
   size: async parent => {
-    const cartitem =
-      (await CartItem.findOne(parent.id, { relations: ["size"] })) ??
-      throwNotFound();
+    const cartitem = await CartItem.findOneOrFail(parent.id, {
+      relations: ["size"]
+    });
     return sizeToGql(cartitem.size);
   }
 };

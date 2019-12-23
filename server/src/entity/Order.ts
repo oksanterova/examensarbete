@@ -26,7 +26,7 @@ export default class Order extends BaseEntity {
     item => item.order,
     { cascade: true }
   )
-  items!: OrderItem[];
+  items?: OrderItem[];
 
   @ManyToOne(
     type => User,
