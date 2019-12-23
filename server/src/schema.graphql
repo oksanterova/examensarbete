@@ -6,6 +6,18 @@ type Product {
   categories: [Category!]
 }
 
+type CartItem {
+  id: ID!
+  product: Product!
+  quantity: Int!
+  size: Size!
+}
+
+type Cart {
+  id: ID!
+  items: [CartItem!]
+}
+
 type Category {
   id: ID!
   name: String!
@@ -33,7 +45,8 @@ type Order {
   address: String!
 }
 
-input CreateOrderItemInput {
+input CreateCartItemInput {
+  cartId: ID!
   productId: ID!
   quantity: Int!
   sizeId: ID!
@@ -41,8 +54,7 @@ input CreateOrderItemInput {
 
 input CreateOrderInput {
   address: String!
-  productIds: [ID!]!
-  items: [CreateOrderItemInput!]!
+  cartId: ID!
 }
 
 type User {
@@ -55,6 +67,7 @@ type User {
 }
 
 type Query {
+  cart(id: ID!): Cart!
   products: [Product!]!
   product(id: ID!): Product!
   user(id: ID!): User!
@@ -66,9 +79,12 @@ type Query {
 
 type Mutation {
   addCategoryToProduct(productId: ID!, categoryId: ID!): Product!
+  addCartItem(input: CreateCartItemInput!): Boolean
   addSizeToProduct(productId: ID!, sizeId: ID!): Product!
-  createSize(name: String!): Size!
-  createProduct(name: String!): Product!
+
+  createCart: Cart!
   createCategory(name: String!): Category!
   createOrder(input: CreateOrderInput!): Order!
+  createProduct(name: String!): Product!
+  createSize(name: String!): Size!
 }
