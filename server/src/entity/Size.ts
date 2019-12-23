@@ -1,15 +1,18 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
 @Entity()
 export default class Size extends BaseEntity {
   @PrimaryGeneratedColumn()
-  size!: number;
+  id!: number;
 
-  constructor(params: { size: number }) {
+  @Column()
+  name!: string;
+
+  constructor(params: { name: string }) {
     super();
 
     if (params) {
-      this.size = params.size;
+      this.name = params.name;
     }
   }
 }

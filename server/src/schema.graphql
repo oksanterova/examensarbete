@@ -13,12 +13,14 @@ type Category {
 }
 
 type Size {
-  size: String!
+  id: ID!
+  name: String!
 }
 
 scalar Date
 
 type OrderItem {
+  id: ID!
   size: Size!
   product: Product!
   quantity: Int!
@@ -31,15 +33,25 @@ type Order {
   address: String!
 }
 
+input CreateOrderItemInput {
+  productId: ID!
+  quantity: Int!
+  sizeId: ID!
+}
+
 input CreateOrderInput {
+  address: String!
   productIds: [ID!]!
+  items: [CreateOrderItemInput!]!
 }
 
 type User {
   id: ID!
-  name: String!
-  orders: [Order!]
+  firstname: String!
+  lastname: String!
+  email: String!
   address: String!
+  orders: [Order!]
 }
 
 type Query {
@@ -48,11 +60,14 @@ type Query {
   user(id: ID!): User!
   orders: [Order!]!
   order(id: ID!): Order!
+  sizes: [Size!]!
+  size(id: ID!): Size!
 }
 
 type Mutation {
   addCategoryToProduct(productId: ID!, categoryId: ID!): Product!
-
+  addSizeToProduct(productId: ID!, sizeId: ID!): Product!
+  createSize(name: String!): Size!
   createProduct(name: String!): Product!
   createCategory(name: String!): Category!
   createOrder(input: CreateOrderInput!): Order!

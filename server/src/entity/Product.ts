@@ -2,7 +2,6 @@ import {
   BaseEntity,
   Entity,
   Column,
-  OneToMany,
   ManyToMany,
   JoinTable,
   PrimaryGeneratedColumn
@@ -19,6 +18,7 @@ export default class Product extends BaseEntity {
   name!: string;
 
   @ManyToMany(type => Size)
+  @JoinTable()
   sizes?: Size[];
 
   @Column()

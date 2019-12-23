@@ -19,13 +19,23 @@ export type Category = {
 };
 
 export type CreateOrderInput = {
+  address: Scalars['String'],
   productIds: Array<Scalars['ID']>,
+  items: Array<CreateOrderItemInput>,
+};
+
+export type CreateOrderItemInput = {
+  productId: Scalars['ID'],
+  quantity: Scalars['Int'],
+  sizeId: Scalars['ID'],
 };
 
 
 export type Mutation = {
    __typename?: 'Mutation',
   addCategoryToProduct: Product,
+  addSizeToProduct: Product,
+  createSize: Size,
   createProduct: Product,
   createCategory: Category,
   createOrder: Order,
@@ -35,6 +45,17 @@ export type Mutation = {
 export type MutationAddCategoryToProductArgs = {
   productId: Scalars['ID'],
   categoryId: Scalars['ID']
+};
+
+
+export type MutationAddSizeToProductArgs = {
+  productId: Scalars['ID'],
+  sizeId: Scalars['ID']
+};
+
+
+export type MutationCreateSizeArgs = {
+  name: Scalars['String']
 };
 
 
@@ -56,7 +77,16 @@ export type Order = {
    __typename?: 'Order',
   id: Scalars['ID'],
   createdAt: Scalars['Date'],
-  products?: Maybe<Array<Product>>,
+  items?: Maybe<Array<OrderItem>>,
+  address: Scalars['String'],
+};
+
+export type OrderItem = {
+   __typename?: 'OrderItem',
+  id: Scalars['ID'],
+  size: Size,
+  product: Product,
+  quantity: Scalars['Int'],
 };
 
 export type Product = {
@@ -70,11 +100,13 @@ export type Product = {
 
 export type Query = {
    __typename?: 'Query',
-  products?: Maybe<Array<Product>>,
+  products: Array<Product>,
   product: Product,
   user: User,
-  orders?: Maybe<Array<Order>>,
+  orders: Array<Order>,
   order: Order,
+  sizes: Array<Size>,
+  size: Size,
 };
 
 
@@ -92,17 +124,25 @@ export type QueryOrderArgs = {
   id: Scalars['ID']
 };
 
+
+export type QuerySizeArgs = {
+  id: Scalars['ID']
+};
+
 export type Size = {
    __typename?: 'Size',
-  size: Scalars['Int'],
+  id: Scalars['ID'],
+  name: Scalars['String'],
 };
 
 export type User = {
    __typename?: 'User',
   id: Scalars['ID'],
-  name: Scalars['String'],
-  orders?: Maybe<Array<Order>>,
+  firstname: Scalars['String'],
+  lastname: Scalars['String'],
+  email: Scalars['String'],
   address: Scalars['String'],
+  orders?: Maybe<Array<Order>>,
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -187,8 +227,10 @@ export type ResolversTypes = ResolversObject<{
   User: ResolverTypeWrapper<User>,
   Order: ResolverTypeWrapper<Order>,
   Date: ResolverTypeWrapper<Scalars['Date']>,
+  OrderItem: ResolverTypeWrapper<OrderItem>,
   Mutation: ResolverTypeWrapper<{}>,
   CreateOrderInput: CreateOrderInput,
+  CreateOrderItemInput: CreateOrderItemInput,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
 }>;
 
@@ -204,8 +246,10 @@ export type ResolversParentTypes = ResolversObject<{
   User: User,
   Order: Order,
   Date: Scalars['Date'],
+  OrderItem: OrderItem,
   Mutation: {},
   CreateOrderInput: CreateOrderInput,
+  CreateOrderItemInput: CreateOrderItemInput,
   Boolean: Scalars['Boolean'],
 }>;
 
@@ -221,6 +265,8 @@ export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   addCategoryToProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationAddCategoryToProductArgs, 'productId' | 'categoryId'>>,
+  addSizeToProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationAddSizeToProductArgs, 'productId' | 'sizeId'>>,
+  createSize?: Resolver<ResolversTypes['Size'], ParentType, ContextType, RequireFields<MutationCreateSizeArgs, 'name'>>,
   createProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationCreateProductArgs, 'name'>>,
   createCategory?: Resolver<ResolversTypes['Category'], ParentType, ContextType, RequireFields<MutationCreateCategoryArgs, 'name'>>,
   createOrder?: Resolver<ResolversTypes['Order'], ParentType, ContextType, RequireFields<MutationCreateOrderArgs, 'input'>>,
@@ -229,7 +275,15 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 export type OrderResolvers<ContextType = any, ParentType extends ResolversParentTypes['Order'] = ResolversParentTypes['Order']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>,
-  products?: Resolver<Maybe<Array<ResolversTypes['Product']>>, ParentType, ContextType>,
+  items?: Resolver<Maybe<Array<ResolversTypes['OrderItem']>>, ParentType, ContextType>,
+  address?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+}>;
+
+export type OrderItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['OrderItem'] = ResolversParentTypes['OrderItem']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  size?: Resolver<ResolversTypes['Size'], ParentType, ContextType>,
+  product?: Resolver<ResolversTypes['Product'], ParentType, ContextType>,
+  quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
 }>;
 
 export type ProductResolvers<ContextType = any, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = ResolversObject<{
@@ -241,22 +295,27 @@ export type ProductResolvers<ContextType = any, ParentType extends ResolversPare
 }>;
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  products?: Resolver<Maybe<Array<ResolversTypes['Product']>>, ParentType, ContextType>,
+  products?: Resolver<Array<ResolversTypes['Product']>, ParentType, ContextType>,
   product?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<QueryProductArgs, 'id'>>,
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>,
-  orders?: Resolver<Maybe<Array<ResolversTypes['Order']>>, ParentType, ContextType>,
+  orders?: Resolver<Array<ResolversTypes['Order']>, ParentType, ContextType>,
   order?: Resolver<ResolversTypes['Order'], ParentType, ContextType, RequireFields<QueryOrderArgs, 'id'>>,
+  sizes?: Resolver<Array<ResolversTypes['Size']>, ParentType, ContextType>,
+  size?: Resolver<ResolversTypes['Size'], ParentType, ContextType, RequireFields<QuerySizeArgs, 'id'>>,
 }>;
 
 export type SizeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Size'] = ResolversParentTypes['Size']> = ResolversObject<{
-  size?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
 }>;
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  orders?: Resolver<Maybe<Array<ResolversTypes['Order']>>, ParentType, ContextType>,
+  firstname?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  lastname?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   address?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  orders?: Resolver<Maybe<Array<ResolversTypes['Order']>>, ParentType, ContextType>,
 }>;
 
 export type Resolvers<ContextType = any> = ResolversObject<{
@@ -264,6 +323,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Date?: GraphQLScalarType,
   Mutation?: MutationResolvers<ContextType>,
   Order?: OrderResolvers<ContextType>,
+  OrderItem?: OrderItemResolvers<ContextType>,
   Product?: ProductResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
   Size?: SizeResolvers<ContextType>,
