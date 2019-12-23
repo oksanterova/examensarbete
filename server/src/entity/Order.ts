@@ -23,7 +23,8 @@ export default class Order extends BaseEntity {
 
   @OneToMany(
     type => OrderItem,
-    item => item.order
+    item => item.order,
+    { cascade: true }
   )
   items!: OrderItem[];
 

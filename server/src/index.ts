@@ -35,7 +35,7 @@ function productToGql({
   ...rest
 }: Product): graphql.Product {
   return {
-    id: id.toString(),
+    id: id?.toString(),
     categories: categories?.map(categoryToGql),
     sizes: sizes?.map(sizeToGql),
     ...rest
@@ -44,13 +44,13 @@ function productToGql({
 
 function sizeToGql({ id, ...rest }: Size): graphql.Size {
   return {
-    id: id.toString(),
+    id: id?.toString(),
     ...rest
   };
 }
 
 function categoryToGql({ id, products, ...rest }: Category): graphql.Category {
-  return { id: id.toString(), products: products?.map(productToGql), ...rest };
+  return { id: id?.toString(), products: products?.map(productToGql), ...rest };
 }
 
 function cartToGql({ items, ...rest }: Cart): graphql.Cart {
@@ -72,7 +72,7 @@ function orderItemToGql({
   ...rest
 }: OrderItem): graphql.OrderItem {
   return {
-    id: id.toString(),
+    id: id?.toString(),
     product: product && productToGql(product),
     size: size && sizeToGql(size),
     ...rest
@@ -80,7 +80,7 @@ function orderItemToGql({
 }
 
 function orderToGql({ id, items, ...rest }: Order): graphql.Order {
-  return { id: id.toString(), items: items?.map(orderItemToGql), ...rest };
+  return { id: id?.toString(), items: items?.map(orderItemToGql), ...rest };
 }
 
 const queryResolvers: QueryResolvers = {
@@ -188,13 +188,19 @@ const mutationResolvers: MutationResolvers = {
     return categoryToGql(await category.save());
   },
   createOrder: async (_, { input }) => {
-    const { address } = input;
+    const { address, cartId } = input;
     const createdAt = new Date();
+
+    const cart = await Cart.findOneOrFail(cartId, {
+      relations: ["items", "items.product", "items.size"]
+    });
+
+    const items = cart.items.map(item => new OrderItem(item));
 
     const order = new Order({
       address,
       createdAt,
-      items: []
+      items
     });
 
     return orderToGql(await order.save());
