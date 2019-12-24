@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { createConnection, getConnection } from "typeorm";
+import { createConnection, getConnection, In } from "typeorm";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { importSchema } from "graphql-import";
@@ -172,10 +172,17 @@ const mutationResolvers: MutationResolvers = {
 
     return sizeToGql(await size.save());
   },
-  createProduct: async (_, { name }) => {
+  createProduct: async (_, { input }) => {
+    const { description, name, sizeIds, categoryIds } = input;
+
+    const categories = await Category.find({ id: In(categoryIds) });
+    const sizes = await Category.find({ id: In(sizeIds) });
+
     const product = new Product({
-      name: name,
-      quantity: 1
+      name,
+      description,
+      categories,
+      sizes
     });
 
     return productToGql(await product.save());

@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import Homepage from "./pages/Homepage";
+import Paper from "@material-ui/core/Paper";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -16,7 +17,28 @@ import CreateProductPage from "./pages/CreateProductPage";
 const theme = createMuiTheme();
 
 const Main = styled.main`
+  width: auto;
   padding-top: ${props => props.theme.spacing(8)}px;
+  margin-left: ${props => props.theme.spacing(2)}px;
+  margin-right: ${props => props.theme.spacing(2)}px;
+
+  ${props => theme.breakpoints.up(600 + theme.spacing(3) * 2)} {
+    width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+`;
+
+const StyledPaper = styled(Paper)`
+  margin-top: ${props => props.theme.spacing(3)}px;
+  margin-bottom: ${props => props.theme.spacing(3)}px;
+  padding: ${props => props.theme.spacing(2)}px;
+
+  ${props => theme.breakpoints.up(600 + theme.spacing(3) * 2)} {
+    margin-top: ${props => props.theme.spacing(6)}px;
+    margin-bottom: ${props => props.theme.spacing(6)}px;
+    padding: ${props => props.theme.spacing(3)}px;
+  }
 `;
 
 const client = new ApolloClient({
@@ -37,15 +59,17 @@ const App: React.FC = () => {
               </Toolbar>
             </AppBar>
             <Main>
-              <Router>
-                <Route exact path="/" component={Homepage} />
-                <Route exact path="/cart" component={Cart} />
-                <Route
-                  exact
-                  path="/create-product"
-                  component={CreateProductPage}
-                />
-              </Router>
+              <StyledPaper>
+                <Router>
+                  <Route exact path="/" component={Homepage} />
+                  <Route exact path="/cart" component={Cart} />
+                  <Route
+                    exact
+                    path="/create-product"
+                    component={CreateProductPage}
+                  />
+                </Router>
+              </StyledPaper>
             </Main>
           </ApolloProvider>
         </ThemeProvider>

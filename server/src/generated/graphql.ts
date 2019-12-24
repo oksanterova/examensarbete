@@ -44,6 +44,13 @@ export type CreateOrderInput = {
   cartId: Scalars['ID'],
 };
 
+export type CreateProductInput = {
+  name: Scalars['String'],
+  description: Scalars['String'],
+  sizeIds: Array<Scalars['ID']>,
+  categoryIds: Array<Scalars['ID']>,
+};
+
 
 export type Mutation = {
    __typename?: 'Mutation',
@@ -86,7 +93,7 @@ export type MutationCreateOrderArgs = {
 
 
 export type MutationCreateProductArgs = {
-  name: Scalars['String']
+  input: CreateProductInput
 };
 
 
@@ -114,8 +121,8 @@ export type Product = {
    __typename?: 'Product',
   id: Scalars['ID'],
   name: Scalars['String'],
+  description: Scalars['String'],
   sizes?: Maybe<Array<Size>>,
-  quantity: Scalars['Int'],
   categories?: Maybe<Array<Category>>,
 };
 
@@ -252,8 +259,8 @@ export type ResolversTypes = ResolversObject<{
   Product: ResolverTypeWrapper<Product>,
   String: ResolverTypeWrapper<Scalars['String']>,
   Size: ResolverTypeWrapper<Size>,
-  Int: ResolverTypeWrapper<Scalars['Int']>,
   Category: ResolverTypeWrapper<Category>,
+  Int: ResolverTypeWrapper<Scalars['Int']>,
   User: ResolverTypeWrapper<User>,
   Order: ResolverTypeWrapper<Order>,
   Date: ResolverTypeWrapper<Scalars['Date']>,
@@ -262,6 +269,7 @@ export type ResolversTypes = ResolversObject<{
   CreateCartItemInput: CreateCartItemInput,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   CreateOrderInput: CreateOrderInput,
+  CreateProductInput: CreateProductInput,
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -273,8 +281,8 @@ export type ResolversParentTypes = ResolversObject<{
   Product: Product,
   String: Scalars['String'],
   Size: Size,
-  Int: Scalars['Int'],
   Category: Category,
+  Int: Scalars['Int'],
   User: User,
   Order: Order,
   Date: Scalars['Date'],
@@ -283,6 +291,7 @@ export type ResolversParentTypes = ResolversObject<{
   CreateCartItemInput: CreateCartItemInput,
   Boolean: Scalars['Boolean'],
   CreateOrderInput: CreateOrderInput,
+  CreateProductInput: CreateProductInput,
 }>;
 
 export type CartResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cart'] = ResolversParentTypes['Cart']> = ResolversObject<{
@@ -314,7 +323,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createCart?: Resolver<ResolversTypes['Cart'], ParentType, ContextType>,
   createCategory?: Resolver<ResolversTypes['Category'], ParentType, ContextType, RequireFields<MutationCreateCategoryArgs, 'name'>>,
   createOrder?: Resolver<ResolversTypes['Order'], ParentType, ContextType, RequireFields<MutationCreateOrderArgs, 'input'>>,
-  createProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationCreateProductArgs, 'name'>>,
+  createProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationCreateProductArgs, 'input'>>,
   createSize?: Resolver<ResolversTypes['Size'], ParentType, ContextType, RequireFields<MutationCreateSizeArgs, 'name'>>,
 }>;
 
@@ -335,8 +344,8 @@ export type OrderItemResolvers<ContextType = any, ParentType extends ResolversPa
 export type ProductResolvers<ContextType = any, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   sizes?: Resolver<Maybe<Array<ResolversTypes['Size']>>, ParentType, ContextType>,
-  quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   categories?: Resolver<Maybe<Array<ResolversTypes['Category']>>, ParentType, ContextType>,
 }>;
 

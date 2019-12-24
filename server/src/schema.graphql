@@ -1,8 +1,8 @@
 type Product {
   id: ID!
   name: String!
+  description: String!
   sizes: [Size!]
-  quantity: Int!
   categories: [Category!]
 }
 
@@ -57,6 +57,13 @@ input CreateOrderInput {
   cartId: ID!
 }
 
+input CreateProductInput {
+  name: String!
+  description: String!
+  sizeIds: [ID!]!
+  categoryIds: [ID!]!
+}
+
 type User {
   id: ID!
   firstname: String!
@@ -86,6 +93,6 @@ type Mutation {
   createCart: Cart!
   createCategory(name: String!): Category!
   createOrder(input: CreateOrderInput!): Order!
-  createProduct(name: String!): Product!
+  createProduct(input: CreateProductInput!): Product!
   createSize(name: String!): Size!
 }

@@ -27,7 +27,7 @@ const MultiSelectField: React.FC<MultiSelectProps> = ({
 }) => {
   const nameById = new Map(options.map(({ id, name }) => [id, name]));
 
-  const SelectProps: Partial<SelectProps> = {
+  const selectProps: Partial<SelectProps> = {
     multiple: true,
     renderValue: value => {
       const selectedIds = (value as string[]) ?? [];
@@ -63,7 +63,7 @@ const MultiSelectField: React.FC<MultiSelectProps> = ({
       label={label}
       required={required}
       fullWidth={fullWidth}
-      SelectProps={SelectProps}
+      SelectProps={selectProps}
       value={value.map(({ id }) => id)}
     >
       {options.map(({ id, name }) => (

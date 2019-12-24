@@ -2,11 +2,11 @@ query GetProducts {
   products {
     id
     name
+    description
     sizes {
       id
       name
     }
-    quantity
     categories {
       id
       name
@@ -51,4 +51,10 @@ query GetCart($cartId: ID!) {
 
 mutation AddCartItem($input: CreateCartItemInput!) {
   addCartItem(input: $input)
+}
+
+mutation CreateProduct($input: CreateProductInput!) {
+  createProduct(input: $input) {
+    id
+  }
 }
