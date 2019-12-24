@@ -6,9 +6,8 @@ import {
   CreateCartItemInput,
   GetCartDocument
 } from "../generated/graphql";
-import AppBar from "@material-ui/core/AppBar";
+
 import {
-  Toolbar,
   Typography,
   CardContent,
   Container,
@@ -21,12 +20,6 @@ import {
 } from "@material-ui/core";
 import styled from "styled-components";
 import CartContext from "../CartContext";
-import Cart from "./Cart";
-import AddProductForm from "./AddProductForm";
-
-const Main = styled.main`
-  padding-top: ${props => props.theme.spacing(8)}px;
-`;
 
 const CardGrid = styled(Container)`
   padding-top: ${props => props.theme.spacing(8)}px;
@@ -53,10 +46,7 @@ const ProductCard: React.FC<Product> = product => {
     quantity: 1
   };
 
-  const [
-    addCartItemMutation,
-    { data, loading, error }
-  ] = useAddCartItemMutation({
+  const [addCartItemMutation, { loading }] = useAddCartItemMutation({
     variables: {
       input
     },
@@ -105,29 +95,15 @@ const Homepage: React.FC = () => {
   }
 
   return (
-    <>
-      <AppBar>
-        <Toolbar>
-          <Typography variant="h6" color="inherit" noWrap>
-            Album layout
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Main>
-        <CardGrid maxWidth="md">
-          <Grid container spacing={4}>
-            {data?.products.map(product => (
-              <Grid item key={product.id} xs={12} sm={6} md={4}>
-                <ProductCard {...product} />
-              </Grid>
-            ))}
+    <CardGrid maxWidth="md">
+      <Grid container spacing={4}>
+        {data?.products.map(product => (
+          <Grid item key={product.id} xs={12} sm={6} md={4}>
+            <ProductCard {...product} />
           </Grid>
-        </CardGrid>
-        <Cart />
-
-        <AddProductForm />
-      </Main>
-    </>
+        ))}
+      </Grid>
+    </CardGrid>
   );
 };
 
