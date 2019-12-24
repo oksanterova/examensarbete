@@ -276,6 +276,32 @@ export type CreateProductMutation = (
   ) }
 );
 
+export type CreateCategoryMutationVariables = {
+  name: Scalars['String']
+};
+
+
+export type CreateCategoryMutation = (
+  { __typename?: 'Mutation' }
+  & { createCategory: (
+    { __typename?: 'Category' }
+    & Pick<Category, 'id'>
+  ) }
+);
+
+export type CreateSizeMutationVariables = {
+  name: Scalars['String']
+};
+
+
+export type CreateSizeMutation = (
+  { __typename?: 'Mutation' }
+  & { createSize: (
+    { __typename?: 'Size' }
+    & Pick<Size, 'id'>
+  ) }
+);
+
 
 export const GetProductsDocument = gql`
     query GetProducts {
@@ -597,3 +623,101 @@ export function useCreateProductMutation(baseOptions?: ApolloReactHooks.Mutation
 export type CreateProductMutationHookResult = ReturnType<typeof useCreateProductMutation>;
 export type CreateProductMutationResult = ApolloReactCommon.MutationResult<CreateProductMutation>;
 export type CreateProductMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateProductMutation, CreateProductMutationVariables>;
+export const CreateCategoryDocument = gql`
+    mutation CreateCategory($name: String!) {
+  createCategory(name: $name) {
+    id
+  }
+}
+    `;
+export type CreateCategoryMutationFn = ApolloReactCommon.MutationFunction<CreateCategoryMutation, CreateCategoryMutationVariables>;
+export type CreateCategoryComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<CreateCategoryMutation, CreateCategoryMutationVariables>, 'mutation'>;
+
+    export const CreateCategoryComponent = (props: CreateCategoryComponentProps) => (
+      <ApolloReactComponents.Mutation<CreateCategoryMutation, CreateCategoryMutationVariables> mutation={CreateCategoryDocument} {...props} />
+    );
+    
+export type CreateCategoryProps<TChildProps = {}> = ApolloReactHoc.MutateProps<CreateCategoryMutation, CreateCategoryMutationVariables> | TChildProps;
+export function withCreateCategory<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  CreateCategoryMutation,
+  CreateCategoryMutationVariables,
+  CreateCategoryProps<TChildProps>>) {
+    return ApolloReactHoc.withMutation<TProps, CreateCategoryMutation, CreateCategoryMutationVariables, CreateCategoryProps<TChildProps>>(CreateCategoryDocument, {
+      alias: 'createCategory',
+      ...operationOptions
+    });
+};
+
+/**
+ * __useCreateCategoryMutation__
+ *
+ * To run a mutation, you first call `useCreateCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCategoryMutation, { data, loading, error }] = useCreateCategoryMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useCreateCategoryMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateCategoryMutation, CreateCategoryMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateCategoryMutation, CreateCategoryMutationVariables>(CreateCategoryDocument, baseOptions);
+      }
+export type CreateCategoryMutationHookResult = ReturnType<typeof useCreateCategoryMutation>;
+export type CreateCategoryMutationResult = ApolloReactCommon.MutationResult<CreateCategoryMutation>;
+export type CreateCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateCategoryMutation, CreateCategoryMutationVariables>;
+export const CreateSizeDocument = gql`
+    mutation CreateSize($name: String!) {
+  createSize(name: $name) {
+    id
+  }
+}
+    `;
+export type CreateSizeMutationFn = ApolloReactCommon.MutationFunction<CreateSizeMutation, CreateSizeMutationVariables>;
+export type CreateSizeComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<CreateSizeMutation, CreateSizeMutationVariables>, 'mutation'>;
+
+    export const CreateSizeComponent = (props: CreateSizeComponentProps) => (
+      <ApolloReactComponents.Mutation<CreateSizeMutation, CreateSizeMutationVariables> mutation={CreateSizeDocument} {...props} />
+    );
+    
+export type CreateSizeProps<TChildProps = {}> = ApolloReactHoc.MutateProps<CreateSizeMutation, CreateSizeMutationVariables> | TChildProps;
+export function withCreateSize<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  CreateSizeMutation,
+  CreateSizeMutationVariables,
+  CreateSizeProps<TChildProps>>) {
+    return ApolloReactHoc.withMutation<TProps, CreateSizeMutation, CreateSizeMutationVariables, CreateSizeProps<TChildProps>>(CreateSizeDocument, {
+      alias: 'createSize',
+      ...operationOptions
+    });
+};
+
+/**
+ * __useCreateSizeMutation__
+ *
+ * To run a mutation, you first call `useCreateSizeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateSizeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createSizeMutation, { data, loading, error }] = useCreateSizeMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useCreateSizeMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateSizeMutation, CreateSizeMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateSizeMutation, CreateSizeMutationVariables>(CreateSizeDocument, baseOptions);
+      }
+export type CreateSizeMutationHookResult = ReturnType<typeof useCreateSizeMutation>;
+export type CreateSizeMutationResult = ApolloReactCommon.MutationResult<CreateSizeMutation>;
+export type CreateSizeMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateSizeMutation, CreateSizeMutationVariables>;

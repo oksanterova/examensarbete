@@ -58,3 +58,15 @@ mutation CreateProduct($input: CreateProductInput!) {
     id
   }
 }
+
+mutation CreateCategory($name: String!) {
+  createCategory(name: $name) {
+    id
+  }
+}
+
+mutation CreateSize($name: String!) {
+  createSize(name: $name) {
+    id
+  }
+}

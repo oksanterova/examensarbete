@@ -13,6 +13,8 @@ import styled, { ThemeProvider } from "styled-components";
 import { StylesProvider } from "@material-ui/styles";
 import Cart from "./components/Cart";
 import CreateProductPage from "./pages/CreateProductPage";
+import CreateCategoryPage from "./pages/CreateCategoryPage";
+import CreateSizePage from "./pages/CreateSizePage";
 
 const theme = createMuiTheme();
 
@@ -68,6 +70,12 @@ const App: React.FC = () => {
                     path="/create-product"
                     component={CreateProductPage}
                   />
+                  <Route
+                    exact
+                    path="/create-category"
+                    component={CreateCategoryPage}
+                  />
+                  <Route exact path="/create-size" component={CreateSizePage} />
                 </Router>
               </StyledPaper>
             </Main>
