@@ -22,6 +22,7 @@ import {
 import styled from "styled-components";
 import CartContext from "../CartContext";
 import Cart from "./Cart";
+import AddProductForm from "./AddProductForm";
 
 const Main = styled.main`
   padding-top: ${props => props.theme.spacing(8)}px;
@@ -123,6 +124,8 @@ const Homepage: React.FC = () => {
           </Grid>
         </CardGrid>
         <Cart />
+
+        <AddProductForm />
       </Main>
     </>
   );

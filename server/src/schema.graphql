@@ -68,6 +68,7 @@ type User {
 
 type Query {
   cart(id: ID!): Cart!
+  categories: [Category!]!
   products: [Product!]!
   product(id: ID!): Product!
   user(id: ID!): User!

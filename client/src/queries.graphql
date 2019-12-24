@@ -14,6 +14,20 @@ query GetProducts {
   }
 }
 
+query GetSizes {
+  sizes {
+    id
+    name
+  }
+}
+
+query GetCategories {
+  categories {
+    id
+    name
+  }
+}
+
 query GetCart($cartId: ID!) {
   cart(id: $cartId) {
     id

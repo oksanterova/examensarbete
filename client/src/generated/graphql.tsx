@@ -127,6 +127,7 @@ export type Product = {
 export type Query = {
    __typename?: 'Query',
   cart: Cart,
+  categories: Array<Category>,
   products: Array<Product>,
   product: Product,
   user: User,
@@ -192,6 +193,28 @@ export type GetProductsQuery = (
       { __typename?: 'Category' }
       & Pick<Category, 'id' | 'name'>
     )>> }
+  )> }
+);
+
+export type GetSizesQueryVariables = {};
+
+
+export type GetSizesQuery = (
+  { __typename?: 'Query' }
+  & { sizes: Array<(
+    { __typename?: 'Size' }
+    & Pick<Size, 'id' | 'name'>
+  )> }
+);
+
+export type GetCategoriesQueryVariables = {};
+
+
+export type GetCategoriesQuery = (
+  { __typename?: 'Query' }
+  & { categories: Array<(
+    { __typename?: 'Category' }
+    & Pick<Category, 'id' | 'name'>
   )> }
 );
 
@@ -293,6 +316,106 @@ export function useGetProductsLazyQuery(baseOptions?: ApolloReactHooks.LazyQuery
 export type GetProductsQueryHookResult = ReturnType<typeof useGetProductsQuery>;
 export type GetProductsLazyQueryHookResult = ReturnType<typeof useGetProductsLazyQuery>;
 export type GetProductsQueryResult = ApolloReactCommon.QueryResult<GetProductsQuery, GetProductsQueryVariables>;
+export const GetSizesDocument = gql`
+    query GetSizes {
+  sizes {
+    id
+    name
+  }
+}
+    `;
+export type GetSizesComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetSizesQuery, GetSizesQueryVariables>, 'query'>;
+
+    export const GetSizesComponent = (props: GetSizesComponentProps) => (
+      <ApolloReactComponents.Query<GetSizesQuery, GetSizesQueryVariables> query={GetSizesDocument} {...props} />
+    );
+    
+export type GetSizesProps<TChildProps = {}> = ApolloReactHoc.DataProps<GetSizesQuery, GetSizesQueryVariables> | TChildProps;
+export function withGetSizes<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  GetSizesQuery,
+  GetSizesQueryVariables,
+  GetSizesProps<TChildProps>>) {
+    return ApolloReactHoc.withQuery<TProps, GetSizesQuery, GetSizesQueryVariables, GetSizesProps<TChildProps>>(GetSizesDocument, {
+      alias: 'getSizes',
+      ...operationOptions
+    });
+};
+
+/**
+ * __useGetSizesQuery__
+ *
+ * To run a query within a React component, call `useGetSizesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSizesQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSizesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetSizesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetSizesQuery, GetSizesQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetSizesQuery, GetSizesQueryVariables>(GetSizesDocument, baseOptions);
+      }
+export function useGetSizesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetSizesQuery, GetSizesQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetSizesQuery, GetSizesQueryVariables>(GetSizesDocument, baseOptions);
+        }
+export type GetSizesQueryHookResult = ReturnType<typeof useGetSizesQuery>;
+export type GetSizesLazyQueryHookResult = ReturnType<typeof useGetSizesLazyQuery>;
+export type GetSizesQueryResult = ApolloReactCommon.QueryResult<GetSizesQuery, GetSizesQueryVariables>;
+export const GetCategoriesDocument = gql`
+    query GetCategories {
+  categories {
+    id
+    name
+  }
+}
+    `;
+export type GetCategoriesComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetCategoriesQuery, GetCategoriesQueryVariables>, 'query'>;
+
+    export const GetCategoriesComponent = (props: GetCategoriesComponentProps) => (
+      <ApolloReactComponents.Query<GetCategoriesQuery, GetCategoriesQueryVariables> query={GetCategoriesDocument} {...props} />
+    );
+    
+export type GetCategoriesProps<TChildProps = {}> = ApolloReactHoc.DataProps<GetCategoriesQuery, GetCategoriesQueryVariables> | TChildProps;
+export function withGetCategories<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  GetCategoriesQuery,
+  GetCategoriesQueryVariables,
+  GetCategoriesProps<TChildProps>>) {
+    return ApolloReactHoc.withQuery<TProps, GetCategoriesQuery, GetCategoriesQueryVariables, GetCategoriesProps<TChildProps>>(GetCategoriesDocument, {
+      alias: 'getCategories',
+      ...operationOptions
+    });
+};
+
+/**
+ * __useGetCategoriesQuery__
+ *
+ * To run a query within a React component, call `useGetCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCategoriesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCategoriesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetCategoriesQuery, GetCategoriesQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(GetCategoriesDocument, baseOptions);
+      }
+export function useGetCategoriesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetCategoriesQuery, GetCategoriesQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(GetCategoriesDocument, baseOptions);
+        }
+export type GetCategoriesQueryHookResult = ReturnType<typeof useGetCategoriesQuery>;
+export type GetCategoriesLazyQueryHookResult = ReturnType<typeof useGetCategoriesLazyQuery>;
+export type GetCategoriesQueryResult = ApolloReactCommon.QueryResult<GetCategoriesQuery, GetCategoriesQueryVariables>;
 export const GetCartDocument = gql`
     query GetCart($cartId: ID!) {
   cart(id: $cartId) {

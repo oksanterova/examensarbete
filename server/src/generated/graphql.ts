@@ -122,6 +122,7 @@ export type Product = {
 export type Query = {
    __typename?: 'Query',
   cart: Cart,
+  categories: Array<Category>,
   products: Array<Product>,
   product: Product,
   user: User,
@@ -341,6 +342,7 @@ export type ProductResolvers<ContextType = any, ParentType extends ResolversPare
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   cart?: Resolver<ResolversTypes['Cart'], ParentType, ContextType, RequireFields<QueryCartArgs, 'id'>>,
+  categories?: Resolver<Array<ResolversTypes['Category']>, ParentType, ContextType>,
   products?: Resolver<Array<ResolversTypes['Product']>, ParentType, ContextType>,
   product?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<QueryProductArgs, 'id'>>,
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<QueryUserArgs, 'id'>>,

@@ -89,6 +89,11 @@ const queryResolvers: QueryResolvers = {
 
     return cartToGql(cart);
   },
+  categories: async () => {
+    const categories = await Category.find();
+
+    return categories.map(categoryToGql);
+  },
   products: async () => {
     const products = await Product.find();
 
