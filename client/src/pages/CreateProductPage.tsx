@@ -1,8 +1,15 @@
 import React from "react";
-import AddProductForm from "../components/AddProductForm";
+import ProductForm from "../components/ProductForm";
+import { ProductInput, useCreateProductMutation } from "../generated/graphql";
 
 const CreateProductPage = () => {
-  return <AddProductForm />;
+  const [createProductMutation] = useCreateProductMutation();
+
+  async function submit(input: ProductInput): Promise<void> {
+    await createProductMutation({ variables: { input } });
+  }
+
+  return <ProductForm submit={submit} />;
 };
 
 export default CreateProductPage;

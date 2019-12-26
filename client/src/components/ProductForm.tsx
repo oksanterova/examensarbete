@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import { Grid, Typography, TextField, Button } from "@material-ui/core";
 import {
   useGetSizesQuery,
   useGetCategoriesQuery,
-  useCreateProductMutation,
-  CreateProductInput
+  ProductInput,
+  Product
 } from "../generated/graphql";
 import MultiSelectField from "./MultiSelectField";
 
@@ -13,22 +14,27 @@ type MultiSelectValue = {
   name: string;
 };
 
-const AddProductForm: React.FC = () => {
-  const [sizes, setSizes] = useState<MultiSelectValue[]>([]);
-  const [categories, setCategories] = useState<MultiSelectValue[]>([]);
-  const [name, setName] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const input: CreateProductInput = {
+type ProductFormProps = {
+  product?: Partial<Product>;
+  submit: (input: ProductInput) => Promise<void>;
+};
+
+const ProductForm: React.FC<ProductFormProps> = ({ product, submit }) => {
+  const history = useHistory();
+  const [sizes, setSizes] = useState<MultiSelectValue[]>(product?.sizes ?? []);
+  const [categories, setCategories] = useState<MultiSelectValue[]>(
+    product?.categories ?? []
+  );
+  const [name, setName] = useState<string>(product?.name ?? "");
+  const [description, setDescription] = useState<string>(
+    product?.description ?? ""
+  );
+  const input: ProductInput = {
     name,
     description,
     categoryIds: categories.map(category => category.id),
     sizeIds: sizes.map(size => size.id)
   };
-  const [createProductMutation] = useCreateProductMutation({
-    variables: {
-      input: input
-    }
-  });
 
   const {
     data: sizeData,
@@ -47,7 +53,13 @@ const AddProductForm: React.FC = () => {
   if (sizeError || categoryError) return <h1>Error</h1>;
 
   return (
-    <form onSubmit={e => createProductMutation()}>
+    <form
+      onSubmit={async e => {
+        e.preventDefault();
+        await submit(input);
+        history.push("/list-products");
+      }}
+    >
       <Typography variant="h6" gutterBottom>
         Product Creation
       </Typography>
@@ -107,4 +119,4 @@ const AddProductForm: React.FC = () => {
   );
 };
 
-export default AddProductForm;
+export default ProductForm;

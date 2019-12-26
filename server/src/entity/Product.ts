@@ -20,7 +20,7 @@ export default class Product extends BaseEntity {
   @ManyToMany(
     type => Size,
     size => size.products,
-    { cascade: ["insert"] }
+    { cascade: ["insert", "remove"] }
   )
   @JoinTable()
   sizes?: Size[];
@@ -31,7 +31,7 @@ export default class Product extends BaseEntity {
   @ManyToMany(
     type => Category,
     category => category.products,
-    { cascade: ["insert"] }
+    { cascade: ["insert", "remove"] }
   )
   @JoinTable()
   categories?: Category[];

@@ -1,5 +1,11 @@
 import "reflect-metadata";
-import { createConnection, getConnection, In } from "typeorm";
+import {
+  createConnection,
+  getConnection,
+  In,
+  FindOperator,
+  IsNull
+} from "typeorm";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { importSchema } from "graphql-import";
@@ -36,8 +42,8 @@ function productToGql({
 }: Product): graphql.Product {
   return {
     id: id?.toString(),
-    categories: categories?.map(categoryToGql),
-    sizes: sizes?.map(sizeToGql),
+    categories: categories?.map(categoryToGql) ?? [],
+    sizes: sizes?.map(sizeToGql) ?? [],
     ...rest
   };
 }
@@ -130,6 +136,14 @@ function throwNotFound(): never {
   throw new Error("not found");
 }
 
+function FixedIn<T>(values: T[]): FindOperator<any> {
+  if (values.length == 0) {
+    return IsNull();
+  } else {
+    return In(values);
+  }
+}
+
 const mutationResolvers: MutationResolvers = {
   addCartItem: async (_, { input }) => {
     const { productId, cartId, quantity, sizeId } = input;
@@ -175,8 +189,8 @@ const mutationResolvers: MutationResolvers = {
   createProduct: async (_, { input }) => {
     const { description, name, sizeIds, categoryIds } = input;
 
-    const categories = await Category.find({ id: In(categoryIds) });
-    const sizes = await Category.find({ id: In(sizeIds) });
+    const categories = await Category.find({ id: FixedIn(categoryIds) });
+    const sizes = await Category.find({ id: FixedIn(sizeIds) });
 
     const product = new Product({
       name,
@@ -186,6 +200,30 @@ const mutationResolvers: MutationResolvers = {
     });
 
     return productToGql(await product.save());
+  },
+  updateProduct: async (_, { id, input }) => {
+    const { description, name, sizeIds, categoryIds } = input;
+    const categories = await Category.find({ id: FixedIn(categoryIds) });
+    const sizes = await Category.find({ id: FixedIn(sizeIds) });
+
+    const product = await Product.findOneOrFail(id, {
+      relations: ["categories", "sizes"]
+    });
+
+    product.name = name;
+    product.description = description;
+    product.categories = categories;
+    product.sizes = sizes;
+
+    return productToGql(await product.save());
+  },
+  deleteProduct: async (_, { id }) => {
+    const product = await Product.findOneOrFail(id, {
+      relations: ["categories", "sizes"]
+    });
+    await product.remove();
+
+    return true;
   },
   createCart: async (_, {}) => {
     const cart = new Cart();

@@ -2,8 +2,8 @@ type Product {
   id: ID!
   name: String!
   description: String!
-  sizes: [Size!]
-  categories: [Category!]
+  sizes: [Size!]!
+  categories: [Category!]!
 }
 
 type CartItem {
@@ -57,7 +57,7 @@ input CreateOrderInput {
   cartId: ID!
 }
 
-input CreateProductInput {
+input ProductInput {
   name: String!
   description: String!
   sizeIds: [ID!]!
@@ -93,6 +93,10 @@ type Mutation {
   createCart: Cart!
   createCategory(name: String!): Category!
   createOrder(input: CreateOrderInput!): Order!
-  createProduct(input: CreateProductInput!): Product!
+
+  createProduct(input: ProductInput!): Product!
+  deleteProduct(id: ID!): Boolean
+  updateProduct(id: ID!, input: ProductInput!): Product!
+
   createSize(name: String!): Size!
 }

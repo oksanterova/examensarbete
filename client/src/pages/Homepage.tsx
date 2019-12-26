@@ -50,7 +50,7 @@ const ProductCard: React.FC<Product> = product => {
     variables: {
       input
     },
-    refetchQueries: () => [{ query: GetCartDocument, variables: { cartId } }],
+    refetchQueries: [{ query: GetCartDocument, variables: { cartId } }],
     awaitRefetchQueries: true
   });
 

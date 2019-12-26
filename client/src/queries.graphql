@@ -28,6 +28,22 @@ query GetCategories {
   }
 }
 
+query GetProduct($id: ID!) {
+  product(id: $id) {
+    id
+    name
+    description
+    sizes {
+      id
+      name
+    }
+    categories {
+      id
+      name
+    }
+  }
+}
+
 query GetCart($cartId: ID!) {
   cart(id: $cartId) {
     id
@@ -53,10 +69,20 @@ mutation AddCartItem($input: CreateCartItemInput!) {
   addCartItem(input: $input)
 }
 
-mutation CreateProduct($input: CreateProductInput!) {
+mutation CreateProduct($input: ProductInput!) {
   createProduct(input: $input) {
     id
   }
+}
+
+mutation UpdateProduct($id: ID!, $input: ProductInput!) {
+  updateProduct(id: $id, input: $input) {
+    id
+  }
+}
+
+mutation DeleteProduct($id: ID!) {
+  deleteProduct(id: $id)
 }
 
 mutation CreateCategory($name: String!) {

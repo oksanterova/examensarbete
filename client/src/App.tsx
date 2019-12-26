@@ -15,6 +15,8 @@ import Cart from "./components/Cart";
 import CreateProductPage from "./pages/CreateProductPage";
 import CreateCategoryPage from "./pages/CreateCategoryPage";
 import CreateSizePage from "./pages/CreateSizePage";
+import ListProductsPage from "./pages/ListProductsPage";
+import EditProductPage from "./pages/EditProductPage";
 
 const theme = createMuiTheme();
 
@@ -72,10 +74,20 @@ const App: React.FC = () => {
                   />
                   <Route
                     exact
+                    path="/update-product/:id"
+                    component={EditProductPage}
+                  />
+                  <Route
+                    exact
                     path="/create-category"
                     component={CreateCategoryPage}
                   />
                   <Route exact path="/create-size" component={CreateSizePage} />
+                  <Route
+                    exact
+                    path="/list-products"
+                    component={ListProductsPage}
+                  />
                 </Router>
               </StyledPaper>
             </Main>
