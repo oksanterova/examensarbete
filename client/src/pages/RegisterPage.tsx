@@ -20,9 +20,15 @@ const RegisterPage = () => {
 
   async function handleSubmit(): Promise<void> {
     if (validateForm()) {
-      await signUpMutation({ variables: { email, password } });
-      client.writeData({ data: { isLoggedIn: true } });
-      history.push("/");
+      const { data } = await signUpMutation({ variables: { email, password } });
+
+      const token = data?.signUp.token;
+
+      if (token !== undefined) {
+        localStorage.setItem("token", token);
+        client.writeData({ data: { isLoggedIn: true } });
+        history.push("/");
+      }
     }
   }
 
@@ -60,6 +66,7 @@ const RegisterPage = () => {
             id="email"
             name="email"
             value={email}
+            type="email"
             label="Enter your email"
             onChange={e => setEmail(e.target.value)}
             fullWidth

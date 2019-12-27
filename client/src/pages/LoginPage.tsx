@@ -17,7 +17,7 @@ const LoginPage = () => {
     const token = data?.signIn?.token;
 
     if (token !== undefined) {
-      localStorage.setItem("token", token!);
+      localStorage.setItem("token", token);
       client.writeData({ data: { isLoggedIn: true } });
       history.push("/");
     }
@@ -40,6 +40,7 @@ const LoginPage = () => {
             id="email"
             name="email"
             value={email}
+            type="email"
             label="Enter your email"
             onChange={e => setEmail(e.target.value)}
             fullWidth
@@ -48,10 +49,10 @@ const LoginPage = () => {
         <Grid item xs={12}>
           <TextField
             required
-            multiline
             id="password"
             name="password"
             value={password}
+            type="password"
             label="Enter your password"
             onChange={e => setPassword(e.target.value)}
             fullWidth
