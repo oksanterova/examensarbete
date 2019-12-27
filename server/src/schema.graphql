@@ -73,6 +73,10 @@ type User {
   orders: [Order!]
 }
 
+type Token {
+  token: String!
+}
+
 type Query {
   cart(id: ID!): Cart!
   categories: [Category!]!
@@ -99,4 +103,7 @@ type Mutation {
   updateProduct(id: ID!, input: ProductInput!): Product!
 
   createSize(name: String!): Size!
+
+  signUp(email: String!, password: String!): Token!
+  signIn(email: String!, password: String!): Token!
 }

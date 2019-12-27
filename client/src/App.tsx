@@ -5,9 +5,12 @@ import Paper from "@material-ui/core/Paper";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import { ApolloProvider } from "@apollo/react-hooks";
-import ApolloClient from "apollo-boost";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { ApolloProvider } from "react-apollo";
+import {
+  ApolloProvider as ApolloHooksProvider,
+  useQuery
+} from "@apollo/react-hooks";
 import { createMuiTheme } from "@material-ui/core/styles";
 import styled, { ThemeProvider } from "styled-components";
 import { StylesProvider } from "@material-ui/styles";
@@ -17,6 +20,9 @@ import CreateCategoryPage from "./pages/CreateCategoryPage";
 import CreateSizePage from "./pages/CreateSizePage";
 import ListProductsPage from "./pages/ListProductsPage";
 import EditProductPage from "./pages/EditProductPage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import client, { IS_LOGGED_IN } from "./client";
 
 const theme = createMuiTheme();
 
@@ -45,52 +51,60 @@ const StyledPaper = styled(Paper)`
   }
 `;
 
-const client = new ApolloClient({
-  uri: "/graphql"
-});
-
 const App: React.FC = () => {
+  const { data } = useQuery<{ isLoggedIn: boolean }>(IS_LOGGED_IN, { client });
+  const isLoggedIn = data?.isLoggedIn ?? false;
+
   return (
     <div className="App">
       <StylesProvider injectFirst>
         <ThemeProvider theme={theme}>
           <ApolloProvider client={client}>
-            <AppBar>
-              <Toolbar>
-                <Typography variant="h6" color="inherit" noWrap>
-                  Album layout
-                </Typography>
-              </Toolbar>
-            </AppBar>
-            <Main>
-              <StyledPaper>
-                <Router>
-                  <Route exact path="/" component={Homepage} />
-                  <Route exact path="/cart" component={Cart} />
-                  <Route
-                    exact
-                    path="/create-product"
-                    component={CreateProductPage}
-                  />
-                  <Route
-                    exact
-                    path="/update-product/:id"
-                    component={EditProductPage}
-                  />
-                  <Route
-                    exact
-                    path="/create-category"
-                    component={CreateCategoryPage}
-                  />
-                  <Route exact path="/create-size" component={CreateSizePage} />
-                  <Route
-                    exact
-                    path="/list-products"
-                    component={ListProductsPage}
-                  />
-                </Router>
-              </StyledPaper>
-            </Main>
+            <ApolloHooksProvider client={client}>
+              <Router>
+                <AppBar>
+                  <Toolbar>
+                    <Typography variant="h6" color="inherit" noWrap>
+                      {isLoggedIn ? "logged in" : "not logged in"}
+                    </Typography>
+                    <Link to="/login">Login</Link>
+                  </Toolbar>
+                </AppBar>
+                <Main>
+                  <StyledPaper>
+                    <Route exact path="/" component={Homepage} />
+                    <Route exact path="/login" component={LoginPage} />
+                    <Route exact path="/register" component={RegisterPage} />
+                    <Route exact path="/cart" component={Cart} />
+                    <Route
+                      exact
+                      path="/create-product"
+                      component={CreateProductPage}
+                    />
+                    <Route
+                      exact
+                      path="/update-product/:id"
+                      component={EditProductPage}
+                    />
+                    <Route
+                      exact
+                      path="/create-category"
+                      component={CreateCategoryPage}
+                    />
+                    <Route
+                      exact
+                      path="/create-size"
+                      component={CreateSizePage}
+                    />
+                    <Route
+                      exact
+                      path="/list-products"
+                      component={ListProductsPage}
+                    />
+                  </StyledPaper>
+                </Main>
+              </Router>
+            </ApolloHooksProvider>
           </ApolloProvider>
         </ThemeProvider>
       </StylesProvider>

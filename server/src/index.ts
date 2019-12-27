@@ -7,7 +7,7 @@ import {
   IsNull
 } from "typeorm";
 import express from "express";
-import { ApolloServer } from "apollo-server-express";
+import { ApolloServer, ForbiddenError } from "apollo-server-express";
 import { importSchema } from "graphql-import";
 import {
   Resolvers,
@@ -29,10 +29,32 @@ import Size from "./entity/Size";
 import OrderItem from "./entity/OrderItem";
 import Cart from "./entity/Cart";
 import CartItem from "./entity/CartItem";
+import User from "./entity/User";
+import jwt from "jsonwebtoken";
+import * as bcrypt from "bcrypt";
+
+require("dotenv").config();
 
 let config = {
-  port: process.env.PORT || 4000
+  port: process.env.PORT || 4000,
+  secret: process.env.SECRET,
+  saltRounds: 10
 };
+
+type MyContext = {
+  secret: string;
+};
+
+async function createToken(
+  user: User,
+  secret: string,
+  expiresIn: string
+): Promise<string> {
+  const { id, email } = user;
+  return jwt.sign({ id, email }, secret, {
+    expiresIn
+  });
+}
 
 function productToGql({
   id,
@@ -144,7 +166,37 @@ function FixedIn<T>(values: T[]): FindOperator<any> {
   }
 }
 
-const mutationResolvers: MutationResolvers = {
+const mutationResolvers: MutationResolvers<MyContext> = {
+  signUp: async (_, { email, password }, { secret }) => {
+    const user = new User({
+      email,
+      password: await bcrypt.hash(password, config.saltRounds)
+    });
+
+    await user.save();
+
+    const token = await createToken(user, secret, "1d");
+
+    return { token };
+  },
+  signIn: async (_, { email, password }, { secret }) => {
+    const users = await User.find({ email });
+
+    if (users.length !== 1) {
+      throw new ForbiddenError("invalid username or password");
+    }
+
+    const user = users[0];
+    const valid = await bcrypt.compare(password, user.password);
+
+    if (valid) {
+      const token = await createToken(user, secret, "1d");
+
+      return { token };
+    } else {
+      throw new ForbiddenError("invalid username or password");
+    }
+  },
   addCartItem: async (_, { input }) => {
     const { productId, cartId, quantity, sizeId } = input;
 
@@ -370,9 +422,14 @@ const resolverMap = {
 
 createConnection().then(async connection => {
   const app = express();
+  const context: MyContext = {
+    secret: config.secret!
+  };
+
   const server = new ApolloServer({
     typeDefs: importSchema("./src/schema.graphql"),
-    resolvers
+    resolvers,
+    context
   });
 
   server.applyMiddleware({ app, path: "/graphql" });

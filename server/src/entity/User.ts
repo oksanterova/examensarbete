@@ -12,39 +12,33 @@ export default class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
-  firstname!: string;
+  @Column({ nullable: true })
+  firstname?: string;
 
-  @Column()
-  lastname!: string;
+  @Column({ nullable: true })
+  lastname?: string;
 
-  @Column()
+  @Column({ unique: true })
   email!: string;
 
   @Column()
-  address!: string;
+  password!: string;
+
+  @Column({ nullable: true })
+  address?: string;
 
   @OneToMany(
     type => Order,
     order => order.user
   )
-  orders!: Order[];
+  orders?: Order[];
 
-  constructor(params: {
-    firstname: string;
-    lastname: string;
-    email: string;
-    address: string;
-    orders: Order[];
-  }) {
+  constructor(params: { email: string; password: string }) {
     super();
 
     if (params) {
-      this.firstname = params.firstname;
-      this.lastname = params.lastname;
       this.email = params.email;
-      this.address = params.address;
-      this.orders = params.orders;
+      this.password = params.password;
     }
   }
 }

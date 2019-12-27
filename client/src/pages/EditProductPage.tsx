@@ -12,8 +12,6 @@ const EditProductPage: React.FC = () => {
   const { id }: { id: string } = useParams();
   const [updateProductMutation] = useUpdateProductMutation();
 
-  console.log("EditProductPage");
-
   const { data, loading, error } = useGetProductQuery({
     variables: { id: id }
   });

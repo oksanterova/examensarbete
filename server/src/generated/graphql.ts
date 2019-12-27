@@ -57,6 +57,8 @@ export type Mutation = {
   deleteProduct?: Maybe<Scalars['Boolean']>,
   updateProduct: Product,
   createSize: Size,
+  signUp: Token,
+  signIn: Token,
 };
 
 
@@ -105,6 +107,18 @@ export type MutationUpdateProductArgs = {
 
 export type MutationCreateSizeArgs = {
   name: Scalars['String']
+};
+
+
+export type MutationSignUpArgs = {
+  email: Scalars['String'],
+  password: Scalars['String']
+};
+
+
+export type MutationSignInArgs = {
+  email: Scalars['String'],
+  password: Scalars['String']
 };
 
 export type Order = {
@@ -181,6 +195,11 @@ export type Size = {
    __typename?: 'Size',
   id: Scalars['ID'],
   name: Scalars['String'],
+};
+
+export type Token = {
+   __typename?: 'Token',
+  token: Scalars['String'],
 };
 
 export type User = {
@@ -283,6 +302,7 @@ export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   CreateOrderInput: CreateOrderInput,
   ProductInput: ProductInput,
+  Token: ResolverTypeWrapper<Token>,
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -305,6 +325,7 @@ export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean'],
   CreateOrderInput: CreateOrderInput,
   ProductInput: ProductInput,
+  Token: Token,
 }>;
 
 export type CartResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cart'] = ResolversParentTypes['Cart']> = ResolversObject<{
@@ -340,6 +361,8 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   deleteProduct?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteProductArgs, 'id'>>,
   updateProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationUpdateProductArgs, 'id' | 'input'>>,
   createSize?: Resolver<ResolversTypes['Size'], ParentType, ContextType, RequireFields<MutationCreateSizeArgs, 'name'>>,
+  signUp?: Resolver<ResolversTypes['Token'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'email' | 'password'>>,
+  signIn?: Resolver<ResolversTypes['Token'], ParentType, ContextType, RequireFields<MutationSignInArgs, 'email' | 'password'>>,
 }>;
 
 export type OrderResolvers<ContextType = any, ParentType extends ResolversParentTypes['Order'] = ResolversParentTypes['Order']> = ResolversObject<{
@@ -381,6 +404,10 @@ export type SizeResolvers<ContextType = any, ParentType extends ResolversParentT
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
 }>;
 
+export type TokenResolvers<ContextType = any, ParentType extends ResolversParentTypes['Token'] = ResolversParentTypes['Token']> = ResolversObject<{
+  token?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+}>;
+
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   firstname?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
@@ -401,6 +428,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Product?: ProductResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
   Size?: SizeResolvers<ContextType>,
+  Token?: TokenResolvers<ContextType>,
   User?: UserResolvers<ContextType>,
 }>;
 
