@@ -20,6 +20,7 @@ import {
 } from "@material-ui/core";
 import styled from "styled-components";
 import CartContext from "../CartContext";
+import LoadingButton from "../components/LoadingButton";
 
 const CardGrid = styled(Container)`
   padding-top: ${props => props.theme.spacing(8)}px;
@@ -67,17 +68,14 @@ const ProductCard: React.FC<Product> = product => {
         <Typography>{JSON.stringify(product)}</Typography>
       </CardContent>
       <CardActions>
-        <Button
+        <LoadingButton
           size="small"
           color="primary"
           onClick={() => addCartItemMutation()}
+          loading={loading}
         >
-          {loading ? (
-            <CircularProgress size={14} />
-          ) : (
-            <Typography>Add to Cart</Typography>
-          )}
-        </Button>
+          <Typography>Add to Cart</Typography>
+        </LoadingButton>
       </CardActions>
     </CustomCard>
   );

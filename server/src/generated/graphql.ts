@@ -164,6 +164,7 @@ export type Query = {
   order: Order,
   sizes: Array<Size>,
   size: Size,
+  me: User,
 };
 
 
@@ -205,10 +206,10 @@ export type Token = {
 export type User = {
    __typename?: 'User',
   id: Scalars['ID'],
-  firstname: Scalars['String'],
-  lastname: Scalars['String'],
+  firstname?: Maybe<Scalars['String']>,
+  lastname?: Maybe<Scalars['String']>,
   email: Scalars['String'],
-  address: Scalars['String'],
+  address?: Maybe<Scalars['String']>,
   orders?: Maybe<Array<Order>>,
 };
 
@@ -397,6 +398,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   order?: Resolver<ResolversTypes['Order'], ParentType, ContextType, RequireFields<QueryOrderArgs, 'id'>>,
   sizes?: Resolver<Array<ResolversTypes['Size']>, ParentType, ContextType>,
   size?: Resolver<ResolversTypes['Size'], ParentType, ContextType, RequireFields<QuerySizeArgs, 'id'>>,
+  me?: Resolver<ResolversTypes['User'], ParentType, ContextType>,
 }>;
 
 export type SizeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Size'] = ResolversParentTypes['Size']> = ResolversObject<{
@@ -410,10 +412,10 @@ export type TokenResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
-  firstname?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  lastname?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  firstname?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  lastname?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  address?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   orders?: Resolver<Maybe<Array<ResolversTypes['Order']>>, ParentType, ContextType>,
 }>;
 

@@ -1,11 +1,12 @@
 import React, { useState, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import { useSignUpMutation } from "../generated/graphql";
-import { Grid, Typography, TextField, Button } from "@material-ui/core";
+import { Grid, Typography, TextField } from "@material-ui/core";
 import { useApolloClient } from "@apollo/react-hooks";
+import LoadingButton from "../components/LoadingButton";
 
 const RegisterPage = () => {
-  const [signUpMutation] = useSignUpMutation();
+  const [signUpMutation, { loading }] = useSignUpMutation();
   const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -91,9 +92,14 @@ const RegisterPage = () => {
           />
         </Grid>
         <Grid item xs={12}>
-          <Button variant="contained" color="primary" type="submit">
-            Register
-          </Button>
+          <LoadingButton
+            variant="contained"
+            color="primary"
+            type="submit"
+            loading={loading}
+          >
+            <Typography>Login</Typography>
+          </LoadingButton>
         </Grid>
       </Grid>
     </form>

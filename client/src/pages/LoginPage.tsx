@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useSignInMutation } from "../generated/graphql";
-import { Grid, Typography, TextField, Button } from "@material-ui/core";
+import { Grid, Typography, TextField } from "@material-ui/core";
 import { useApolloClient } from "@apollo/react-hooks";
+import LoadingButton from "../components/LoadingButton";
 
 const LoginPage = () => {
-  const [signInMutation] = useSignInMutation();
+  const [signInMutation, { loading }] = useSignInMutation();
   const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -57,9 +58,14 @@ const LoginPage = () => {
           />
         </Grid>
         <Grid item xs={12}>
-          <Button variant="contained" color="primary" type="submit">
-            Login
-          </Button>
+          <LoadingButton
+            variant="contained"
+            color="primary"
+            type="submit"
+            loading={loading}
+          >
+            <Typography>Login</Typography>
+          </LoadingButton>
         </Grid>
       </Grid>
     </form>

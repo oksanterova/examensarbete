@@ -7,7 +7,11 @@ import {
   IsNull
 } from "typeorm";
 import express from "express";
-import { ApolloServer, ForbiddenError } from "apollo-server-express";
+import {
+  ApolloServer,
+  ForbiddenError,
+  AuthenticationError
+} from "apollo-server-express";
 import { importSchema } from "graphql-import";
 import {
   Resolvers,
@@ -32,17 +36,20 @@ import CartItem from "./entity/CartItem";
 import User from "./entity/User";
 import jwt from "jsonwebtoken";
 import * as bcrypt from "bcrypt";
+import { ExpressContext } from "apollo-server-express/dist/ApolloServer";
+import { Request } from "express";
 
 require("dotenv").config();
 
 let config = {
   port: process.env.PORT || 4000,
-  secret: process.env.SECRET,
+  secret: process.env.SECRET!,
   saltRounds: 10
 };
 
 type MyContext = {
   secret: string;
+  me?: User;
 };
 
 async function createToken(
@@ -111,7 +118,11 @@ function orderToGql({ id, items, ...rest }: Order): graphql.Order {
   return { id: id?.toString(), items: items?.map(orderItemToGql), ...rest };
 }
 
-const queryResolvers: QueryResolvers = {
+function userToGql({ id, orders, ...rest }: User): graphql.User {
+  return { id: id.toString(), orders: orders?.map(orderToGql), ...rest };
+}
+
+const queryResolvers: QueryResolvers<MyContext> = {
   cart: async (_, { id }) => {
     const cart = await Cart.findOneOrFail(id);
 
@@ -151,11 +162,20 @@ const queryResolvers: QueryResolvers = {
     const size = await Size.findOneOrFail(id);
 
     return sizeToGql(size);
+  },
+  me: async (_, {}, { me }) => {
+    if (!me) throwForbiddenError();
+
+    return userToGql(await User.findOneOrFail(me.id));
   }
 };
 
 function throwNotFound(): never {
   throw new Error("not found");
+}
+
+function throwForbiddenError(): never {
+  throw new ForbiddenError("not authorized");
 }
 
 function FixedIn<T>(values: T[]): FindOperator<any> {
@@ -422,14 +442,36 @@ const resolverMap = {
 
 createConnection().then(async connection => {
   const app = express();
-  const context: MyContext = {
-    secret: config.secret!
-  };
+
+  async function getMe(req: Request): Promise<User | undefined> {
+    const token = req.header("x-token");
+
+    if (token) {
+      try {
+        const { id } = (await jwt.verify(token, config.secret)) as {
+          id: number;
+        };
+
+        return User.findOneOrFail(id);
+      } catch (e) {
+        throw new AuthenticationError("Your session expired. Sign in again.");
+      }
+    }
+
+    return undefined;
+  }
+
+  async function getContext(ctx: ExpressContext): Promise<MyContext> {
+    return {
+      secret: config.secret,
+      me: await getMe(ctx.req)
+    };
+  }
 
   const server = new ApolloServer({
     typeDefs: importSchema("./src/schema.graphql"),
     resolvers,
-    context
+    context: getContext
   });
 
   server.applyMiddleware({ app, path: "/graphql" });

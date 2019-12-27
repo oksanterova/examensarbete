@@ -65,9 +65,9 @@ const App: React.FC = () => {
                 <AppBar>
                   <Toolbar>
                     <Typography variant="h6" color="inherit" noWrap>
-                      {isLoggedIn ? "logged in" : "not logged in"}
+                      {isLoggedIn && <Link to="/login">Login</Link>}
+                      {isLoggedIn && <Link to="/register">Sign Up</Link>}
                     </Typography>
-                    <Link to="/login">Login</Link>
                   </Toolbar>
                 </AppBar>
                 <Main>

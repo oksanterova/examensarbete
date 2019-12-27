@@ -66,10 +66,10 @@ input ProductInput {
 
 type User {
   id: ID!
-  firstname: String!
-  lastname: String!
+  firstname: String
+  lastname: String
   email: String!
-  address: String!
+  address: String
   orders: [Order!]
 }
 
@@ -87,6 +87,7 @@ type Query {
   order(id: ID!): Order!
   sizes: [Size!]!
   size(id: ID!): Size!
+  me: User!
 }
 
 type Mutation {
