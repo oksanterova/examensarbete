@@ -24,6 +24,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ProfilePage from "./pages/ProfilePage";
 import client, { IS_LOGGED_IN } from "./client";
+import { CartContextProvider } from "./CartContext";
 
 const theme = createMuiTheme();
 
@@ -62,53 +63,55 @@ const App: React.FC = () => {
         <ThemeProvider theme={theme}>
           <ApolloProvider client={client}>
             <ApolloHooksProvider client={client}>
-              <Router>
-                <AppBar>
-                  <Toolbar>
-                    <Typography variant="h6" color="inherit" noWrap>
-                      {!isLoggedIn && <Link to="/login">Login</Link>}
-                      {!isLoggedIn && <Link to="/register">Sign Up</Link>}
-                      {isLoggedIn && <Link to="/logout">Logout</Link>}
-                    </Typography>
-                  </Toolbar>
-                </AppBar>
-                <Main>
-                  <StyledPaper>
-                    {isLoggedIn && (
-                      <Route exact path="/profile" component={ProfilePage} />
-                    )}
-                    <Route exact path="/" component={Homepage} />
-                    <Route exact path="/login" component={LoginPage} />
-                    <Route exact path="/register" component={RegisterPage} />
-                    <Route exact path="/cart" component={Cart} />
-                    <Route
-                      exact
-                      path="/create-product"
-                      component={CreateProductPage}
-                    />
-                    <Route
-                      exact
-                      path="/update-product/:id"
-                      component={EditProductPage}
-                    />
-                    <Route
-                      exact
-                      path="/create-category"
-                      component={CreateCategoryPage}
-                    />
-                    <Route
-                      exact
-                      path="/create-size"
-                      component={CreateSizePage}
-                    />
-                    <Route
-                      exact
-                      path="/list-products"
-                      component={ListProductsPage}
-                    />
-                  </StyledPaper>
-                </Main>
-              </Router>
+              <CartContextProvider>
+                <Router>
+                  <AppBar>
+                    <Toolbar>
+                      <Typography variant="h6" color="inherit" noWrap>
+                        {!isLoggedIn && <Link to="/login">Login</Link>}
+                        {!isLoggedIn && <Link to="/register">Sign Up</Link>}
+                        {isLoggedIn && <Link to="/logout">Logout</Link>}
+                      </Typography>
+                    </Toolbar>
+                  </AppBar>
+                  <Main>
+                    <StyledPaper>
+                      {isLoggedIn && (
+                        <Route exact path="/profile" component={ProfilePage} />
+                      )}
+                      <Route exact path="/" component={Homepage} />
+                      <Route exact path="/login" component={LoginPage} />
+                      <Route exact path="/register" component={RegisterPage} />
+                      <Route exact path="/cart" component={Cart} />
+                      <Route
+                        exact
+                        path="/create-product"
+                        component={CreateProductPage}
+                      />
+                      <Route
+                        exact
+                        path="/update-product/:id"
+                        component={EditProductPage}
+                      />
+                      <Route
+                        exact
+                        path="/create-category"
+                        component={CreateCategoryPage}
+                      />
+                      <Route
+                        exact
+                        path="/create-size"
+                        component={CreateSizePage}
+                      />
+                      <Route
+                        exact
+                        path="/list-products"
+                        component={ListProductsPage}
+                      />
+                    </StyledPaper>
+                  </Main>
+                </Router>
+              </CartContextProvider>
             </ApolloHooksProvider>
           </ApolloProvider>
         </ThemeProvider>

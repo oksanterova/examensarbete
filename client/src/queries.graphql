@@ -114,6 +114,12 @@ mutation DeleteProduct($id: ID!) {
   deleteProduct(id: $id)
 }
 
+mutation CreateCart {
+  createCart {
+    id
+  }
+}
+
 mutation CreateCategory($name: String!) {
   createCategory(name: $name) {
     id

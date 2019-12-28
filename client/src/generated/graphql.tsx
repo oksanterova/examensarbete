@@ -401,6 +401,17 @@ export type DeleteProductMutation = (
   & Pick<Mutation, 'deleteProduct'>
 );
 
+export type CreateCartMutationVariables = {};
+
+
+export type CreateCartMutation = (
+  { __typename?: 'Mutation' }
+  & { createCart: (
+    { __typename?: 'Cart' }
+    & Pick<Cart, 'id'>
+  ) }
+);
+
 export type CreateCategoryMutationVariables = {
   name: Scalars['String']
 };
@@ -1061,6 +1072,54 @@ export function useDeleteProductMutation(baseOptions?: ApolloReactHooks.Mutation
 export type DeleteProductMutationHookResult = ReturnType<typeof useDeleteProductMutation>;
 export type DeleteProductMutationResult = ApolloReactCommon.MutationResult<DeleteProductMutation>;
 export type DeleteProductMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteProductMutation, DeleteProductMutationVariables>;
+export const CreateCartDocument = gql`
+    mutation CreateCart {
+  createCart {
+    id
+  }
+}
+    `;
+export type CreateCartMutationFn = ApolloReactCommon.MutationFunction<CreateCartMutation, CreateCartMutationVariables>;
+export type CreateCartComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<CreateCartMutation, CreateCartMutationVariables>, 'mutation'>;
+
+    export const CreateCartComponent = (props: CreateCartComponentProps) => (
+      <ApolloReactComponents.Mutation<CreateCartMutation, CreateCartMutationVariables> mutation={CreateCartDocument} {...props} />
+    );
+    
+export type CreateCartProps<TChildProps = {}> = ApolloReactHoc.MutateProps<CreateCartMutation, CreateCartMutationVariables> | TChildProps;
+export function withCreateCart<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  CreateCartMutation,
+  CreateCartMutationVariables,
+  CreateCartProps<TChildProps>>) {
+    return ApolloReactHoc.withMutation<TProps, CreateCartMutation, CreateCartMutationVariables, CreateCartProps<TChildProps>>(CreateCartDocument, {
+      alias: 'createCart',
+      ...operationOptions
+    });
+};
+
+/**
+ * __useCreateCartMutation__
+ *
+ * To run a mutation, you first call `useCreateCartMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCartMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCartMutation, { data, loading, error }] = useCreateCartMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCreateCartMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateCartMutation, CreateCartMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateCartMutation, CreateCartMutationVariables>(CreateCartDocument, baseOptions);
+      }
+export type CreateCartMutationHookResult = ReturnType<typeof useCreateCartMutation>;
+export type CreateCartMutationResult = ApolloReactCommon.MutationResult<CreateCartMutation>;
+export type CreateCartMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateCartMutation, CreateCartMutationVariables>;
 export const CreateCategoryDocument = gql`
     mutation CreateCategory($name: String!) {
   createCategory(name: $name) {
