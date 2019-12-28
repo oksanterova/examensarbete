@@ -64,6 +64,7 @@ export type Mutation = {
   createSize: Size,
   signUp: Token,
   signIn: Token,
+  updateMe: User,
 };
 
 
@@ -126,6 +127,11 @@ export type MutationSignInArgs = {
   password: Scalars['String']
 };
 
+
+export type MutationUpdateMeArgs = {
+  input: ProfileInput
+};
+
 export type Order = {
    __typename?: 'Order',
   id: Scalars['ID'],
@@ -156,6 +162,12 @@ export type ProductInput = {
   description: Scalars['String'],
   sizeIds: Array<Scalars['ID']>,
   categoryIds: Array<Scalars['ID']>,
+};
+
+export type ProfileInput = {
+  firstname?: Maybe<Scalars['String']>,
+  lastname?: Maybe<Scalars['String']>,
+  address?: Maybe<Scalars['String']>,
 };
 
 export type Query = {
@@ -440,6 +452,19 @@ export type SignInMutation = (
   & { signIn: (
     { __typename?: 'Token' }
     & Pick<Token, 'token'>
+  ) }
+);
+
+export type UpdateMeMutationVariables = {
+  input: ProfileInput
+};
+
+
+export type UpdateMeMutation = (
+  { __typename?: 'Mutation' }
+  & { updateMe: (
+    { __typename?: 'User' }
+    & Pick<User, 'firstname' | 'lastname' | 'address'>
   ) }
 );
 
@@ -1234,3 +1259,54 @@ export function useSignInMutation(baseOptions?: ApolloReactHooks.MutationHookOpt
 export type SignInMutationHookResult = ReturnType<typeof useSignInMutation>;
 export type SignInMutationResult = ApolloReactCommon.MutationResult<SignInMutation>;
 export type SignInMutationOptions = ApolloReactCommon.BaseMutationOptions<SignInMutation, SignInMutationVariables>;
+export const UpdateMeDocument = gql`
+    mutation UpdateMe($input: ProfileInput!) {
+  updateMe(input: $input) {
+    firstname
+    lastname
+    address
+  }
+}
+    `;
+export type UpdateMeMutationFn = ApolloReactCommon.MutationFunction<UpdateMeMutation, UpdateMeMutationVariables>;
+export type UpdateMeComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<UpdateMeMutation, UpdateMeMutationVariables>, 'mutation'>;
+
+    export const UpdateMeComponent = (props: UpdateMeComponentProps) => (
+      <ApolloReactComponents.Mutation<UpdateMeMutation, UpdateMeMutationVariables> mutation={UpdateMeDocument} {...props} />
+    );
+    
+export type UpdateMeProps<TChildProps = {}> = ApolloReactHoc.MutateProps<UpdateMeMutation, UpdateMeMutationVariables> | TChildProps;
+export function withUpdateMe<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  UpdateMeMutation,
+  UpdateMeMutationVariables,
+  UpdateMeProps<TChildProps>>) {
+    return ApolloReactHoc.withMutation<TProps, UpdateMeMutation, UpdateMeMutationVariables, UpdateMeProps<TChildProps>>(UpdateMeDocument, {
+      alias: 'updateMe',
+      ...operationOptions
+    });
+};
+
+/**
+ * __useUpdateMeMutation__
+ *
+ * To run a mutation, you first call `useUpdateMeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateMeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateMeMutation, { data, loading, error }] = useUpdateMeMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateMeMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateMeMutation, UpdateMeMutationVariables>) {
+        return ApolloReactHooks.useMutation<UpdateMeMutation, UpdateMeMutationVariables>(UpdateMeDocument, baseOptions);
+      }
+export type UpdateMeMutationHookResult = ReturnType<typeof useUpdateMeMutation>;
+export type UpdateMeMutationResult = ApolloReactCommon.MutationResult<UpdateMeMutation>;
+export type UpdateMeMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateMeMutation, UpdateMeMutationVariables>;

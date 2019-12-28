@@ -59,6 +59,7 @@ export type Mutation = {
   createSize: Size,
   signUp: Token,
   signIn: Token,
+  updateMe: User,
 };
 
 
@@ -121,6 +122,11 @@ export type MutationSignInArgs = {
   password: Scalars['String']
 };
 
+
+export type MutationUpdateMeArgs = {
+  input: ProfileInput
+};
+
 export type Order = {
    __typename?: 'Order',
   id: Scalars['ID'],
@@ -151,6 +157,12 @@ export type ProductInput = {
   description: Scalars['String'],
   sizeIds: Array<Scalars['ID']>,
   categoryIds: Array<Scalars['ID']>,
+};
+
+export type ProfileInput = {
+  firstname?: Maybe<Scalars['String']>,
+  lastname?: Maybe<Scalars['String']>,
+  address?: Maybe<Scalars['String']>,
 };
 
 export type Query = {
@@ -304,6 +316,7 @@ export type ResolversTypes = ResolversObject<{
   CreateOrderInput: CreateOrderInput,
   ProductInput: ProductInput,
   Token: ResolverTypeWrapper<Token>,
+  ProfileInput: ProfileInput,
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -327,6 +340,7 @@ export type ResolversParentTypes = ResolversObject<{
   CreateOrderInput: CreateOrderInput,
   ProductInput: ProductInput,
   Token: Token,
+  ProfileInput: ProfileInput,
 }>;
 
 export type CartResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cart'] = ResolversParentTypes['Cart']> = ResolversObject<{
@@ -364,6 +378,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createSize?: Resolver<ResolversTypes['Size'], ParentType, ContextType, RequireFields<MutationCreateSizeArgs, 'name'>>,
   signUp?: Resolver<ResolversTypes['Token'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'email' | 'password'>>,
   signIn?: Resolver<ResolversTypes['Token'], ParentType, ContextType, RequireFields<MutationSignInArgs, 'email' | 'password'>>,
+  updateMe?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateMeArgs, 'input'>>,
 }>;
 
 export type OrderResolvers<ContextType = any, ParentType extends ResolversParentTypes['Order'] = ResolversParentTypes['Order']> = ResolversObject<{

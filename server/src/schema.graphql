@@ -73,6 +73,12 @@ type User {
   orders: [Order!]
 }
 
+input ProfileInput {
+  firstname: String
+  lastname: String
+  address: String
+}
+
 type Token {
   token: String!
 }
@@ -107,4 +113,6 @@ type Mutation {
 
   signUp(email: String!, password: String!): Token!
   signIn(email: String!, password: String!): Token!
+
+  updateMe(input: ProfileInput!): User!
 }

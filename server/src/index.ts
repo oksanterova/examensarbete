@@ -188,6 +188,17 @@ function FixedIn<T>(values: T[]): FindOperator<any> {
 }
 
 const mutationResolvers: MutationResolvers<MyContext> = {
+  updateMe: async (_, { input }, { me }) => {
+    const { firstname, lastname, address } = input;
+
+    if (me === undefined) throwForbiddenError();
+
+    me.firstname = firstname ?? me.firstname;
+    me.lastname = lastname ?? me.lastname;
+    me.address = address ?? me.address;
+
+    return userToGql(await me.save());
+  },
   signUp: async (_, { email, password }, { secret }) => {
     const user = new User({
       email,

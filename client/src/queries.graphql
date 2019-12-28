@@ -137,3 +137,11 @@ mutation SignIn($email: String!, $password: String!) {
     token
   }
 }
+
+mutation UpdateMe($input: ProfileInput!) {
+  updateMe(input: $input) {
+    firstname
+    lastname
+    address
+  }
+}
