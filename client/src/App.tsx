@@ -22,6 +22,7 @@ import ListProductsPage from "./pages/ListProductsPage";
 import EditProductPage from "./pages/EditProductPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import ProfilePage from "./pages/ProfilePage";
 import client, { IS_LOGGED_IN } from "./client";
 
 const theme = createMuiTheme();
@@ -73,6 +74,9 @@ const App: React.FC = () => {
                 </AppBar>
                 <Main>
                   <StyledPaper>
+                    {isLoggedIn && (
+                      <Route exact path="/profile" component={ProfilePage} />
+                    )}
                     <Route exact path="/" component={Homepage} />
                     <Route exact path="/login" component={LoginPage} />
                     <Route exact path="/register" component={RegisterPage} />

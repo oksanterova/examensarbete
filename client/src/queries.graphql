@@ -65,6 +65,35 @@ query GetCart($cartId: ID!) {
   }
 }
 
+query GetMe {
+  me {
+    email
+    firstname
+    lastname
+    address
+  }
+}
+
+query GetMyOrders {
+  me {
+    orders {
+      id
+      items {
+        id
+        product {
+          id
+          name
+        }
+        size {
+          id
+          name
+        }
+        quantity
+      }
+    }
+  }
+}
+
 mutation AddCartItem($input: CreateCartItemInput!) {
   addCartItem(input: $input)
 }

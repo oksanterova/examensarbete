@@ -169,6 +169,7 @@ export type Query = {
   order: Order,
   sizes: Array<Size>,
   size: Size,
+  me: User,
 };
 
 
@@ -210,10 +211,10 @@ export type Token = {
 export type User = {
    __typename?: 'User',
   id: Scalars['ID'],
-  firstname: Scalars['String'],
-  lastname: Scalars['String'],
+  firstname?: Maybe<Scalars['String']>,
+  lastname?: Maybe<Scalars['String']>,
   email: Scalars['String'],
-  address: Scalars['String'],
+  address?: Maybe<Scalars['String']>,
   orders?: Maybe<Array<Order>>,
 };
 
@@ -301,6 +302,42 @@ export type GetCartQuery = (
         { __typename?: 'Size' }
         & Pick<Size, 'id' | 'name'>
       ) }
+    )>> }
+  ) }
+);
+
+export type GetMeQueryVariables = {};
+
+
+export type GetMeQuery = (
+  { __typename?: 'Query' }
+  & { me: (
+    { __typename?: 'User' }
+    & Pick<User, 'email' | 'firstname' | 'lastname' | 'address'>
+  ) }
+);
+
+export type GetMyOrdersQueryVariables = {};
+
+
+export type GetMyOrdersQuery = (
+  { __typename?: 'Query' }
+  & { me: (
+    { __typename?: 'User' }
+    & { orders: Maybe<Array<(
+      { __typename?: 'Order' }
+      & Pick<Order, 'id'>
+      & { items: Maybe<Array<(
+        { __typename?: 'OrderItem' }
+        & Pick<OrderItem, 'id' | 'quantity'>
+        & { product: (
+          { __typename?: 'Product' }
+          & Pick<Product, 'id' | 'name'>
+        ), size: (
+          { __typename?: 'Size' }
+          & Pick<Size, 'id' | 'name'>
+        ) }
+      )>> }
     )>> }
   ) }
 );
@@ -691,6 +728,121 @@ export function useGetCartLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHook
 export type GetCartQueryHookResult = ReturnType<typeof useGetCartQuery>;
 export type GetCartLazyQueryHookResult = ReturnType<typeof useGetCartLazyQuery>;
 export type GetCartQueryResult = ApolloReactCommon.QueryResult<GetCartQuery, GetCartQueryVariables>;
+export const GetMeDocument = gql`
+    query GetMe {
+  me {
+    email
+    firstname
+    lastname
+    address
+  }
+}
+    `;
+export type GetMeComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetMeQuery, GetMeQueryVariables>, 'query'>;
+
+    export const GetMeComponent = (props: GetMeComponentProps) => (
+      <ApolloReactComponents.Query<GetMeQuery, GetMeQueryVariables> query={GetMeDocument} {...props} />
+    );
+    
+export type GetMeProps<TChildProps = {}> = ApolloReactHoc.DataProps<GetMeQuery, GetMeQueryVariables> | TChildProps;
+export function withGetMe<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  GetMeQuery,
+  GetMeQueryVariables,
+  GetMeProps<TChildProps>>) {
+    return ApolloReactHoc.withQuery<TProps, GetMeQuery, GetMeQueryVariables, GetMeProps<TChildProps>>(GetMeDocument, {
+      alias: 'getMe',
+      ...operationOptions
+    });
+};
+
+/**
+ * __useGetMeQuery__
+ *
+ * To run a query within a React component, call `useGetMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMeQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMeQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetMeQuery, GetMeQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetMeQuery, GetMeQueryVariables>(GetMeDocument, baseOptions);
+      }
+export function useGetMeLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetMeQuery, GetMeQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetMeQuery, GetMeQueryVariables>(GetMeDocument, baseOptions);
+        }
+export type GetMeQueryHookResult = ReturnType<typeof useGetMeQuery>;
+export type GetMeLazyQueryHookResult = ReturnType<typeof useGetMeLazyQuery>;
+export type GetMeQueryResult = ApolloReactCommon.QueryResult<GetMeQuery, GetMeQueryVariables>;
+export const GetMyOrdersDocument = gql`
+    query GetMyOrders {
+  me {
+    orders {
+      id
+      items {
+        id
+        product {
+          id
+          name
+        }
+        size {
+          id
+          name
+        }
+        quantity
+      }
+    }
+  }
+}
+    `;
+export type GetMyOrdersComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<GetMyOrdersQuery, GetMyOrdersQueryVariables>, 'query'>;
+
+    export const GetMyOrdersComponent = (props: GetMyOrdersComponentProps) => (
+      <ApolloReactComponents.Query<GetMyOrdersQuery, GetMyOrdersQueryVariables> query={GetMyOrdersDocument} {...props} />
+    );
+    
+export type GetMyOrdersProps<TChildProps = {}> = ApolloReactHoc.DataProps<GetMyOrdersQuery, GetMyOrdersQueryVariables> | TChildProps;
+export function withGetMyOrders<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  GetMyOrdersQuery,
+  GetMyOrdersQueryVariables,
+  GetMyOrdersProps<TChildProps>>) {
+    return ApolloReactHoc.withQuery<TProps, GetMyOrdersQuery, GetMyOrdersQueryVariables, GetMyOrdersProps<TChildProps>>(GetMyOrdersDocument, {
+      alias: 'getMyOrders',
+      ...operationOptions
+    });
+};
+
+/**
+ * __useGetMyOrdersQuery__
+ *
+ * To run a query within a React component, call `useGetMyOrdersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMyOrdersQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMyOrdersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMyOrdersQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetMyOrdersQuery, GetMyOrdersQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetMyOrdersQuery, GetMyOrdersQueryVariables>(GetMyOrdersDocument, baseOptions);
+      }
+export function useGetMyOrdersLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetMyOrdersQuery, GetMyOrdersQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetMyOrdersQuery, GetMyOrdersQueryVariables>(GetMyOrdersDocument, baseOptions);
+        }
+export type GetMyOrdersQueryHookResult = ReturnType<typeof useGetMyOrdersQuery>;
+export type GetMyOrdersLazyQueryHookResult = ReturnType<typeof useGetMyOrdersLazyQuery>;
+export type GetMyOrdersQueryResult = ApolloReactCommon.QueryResult<GetMyOrdersQuery, GetMyOrdersQueryVariables>;
 export const AddCartItemDocument = gql`
     mutation AddCartItem($input: CreateCartItemInput!) {
   addCartItem(input: $input)

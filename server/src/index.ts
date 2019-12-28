@@ -20,7 +20,8 @@ import {
   ProductResolvers,
   CategoryResolvers,
   OrderResolvers,
-  OrderItemResolvers
+  OrderItemResolvers,
+  UserResolvers
 } from "./generated/graphql";
 import * as graphql from "./generated/graphql";
 import { join } from "path";
@@ -329,6 +330,17 @@ const mutationResolvers: MutationResolvers<MyContext> = {
   }
 };
 
+const userResolvers: UserResolvers = {
+  orders: async parent => {
+    const user = await User.findOneOrFail(parent.id, {
+      relations: ["orders"]
+    });
+    const orders = user.orders ?? throwNotFound();
+
+    return orders.map(orderToGql);
+  }
+};
+
 const productResolvers: ProductResolvers = {
   categories: async parent => {
     const product = await Product.findOneOrFail(parent.id, {
@@ -418,7 +430,8 @@ const resolvers: Resolvers = {
   Order: orderResolvers,
   OrderItem: orderItemResolvers,
   Cart: cartResolvers,
-  CartItem: cartItemResolvers
+  CartItem: cartItemResolvers,
+  User: userResolvers
 };
 
 const resolverMap = {
