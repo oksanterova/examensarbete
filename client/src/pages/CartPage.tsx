@@ -47,6 +47,10 @@ const CartPage: React.FC = () => {
     return <h1>Error</h1>;
   }
 
+  if (items?.length === 0) {
+    return <h1>Your cart is empty</h1>;
+  }
+
   return (
     <>
       <Typography gutterBottom variant="h5" component="h2">
