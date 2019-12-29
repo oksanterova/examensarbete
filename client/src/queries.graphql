@@ -131,6 +131,12 @@ mutation CreateCart {
   }
 }
 
+mutation CreateOrder($input: CreateOrderInput!) {
+  createOrder(input: $input) {
+    id
+  }
+}
+
 mutation CreateCategory($name: String!) {
   createCategory(name: $name) {
     id

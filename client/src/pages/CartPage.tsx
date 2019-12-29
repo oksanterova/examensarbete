@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { useHistory } from "react-router-dom";
 import CartContext from "../CartContext";
 import {
   Typography,
@@ -12,6 +13,7 @@ import {
   IconButton
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
+import LoadingButton from "../components/LoadingButton";
 
 import {
   useGetCartQuery,
@@ -20,7 +22,8 @@ import {
   GetCartDocument
 } from "../generated/graphql";
 
-const Cart: React.FC = () => {
+const CartPage: React.FC = () => {
+  const history = useHistory();
   const { cartId } = useContext(CartContext);
   const { data, loading, error } = useGetCartQuery({
     variables: {
@@ -107,8 +110,16 @@ const Cart: React.FC = () => {
           ))}
         </TableBody>
       </Table>
+      <LoadingButton
+        loading={loading}
+        variant="contained"
+        color="primary"
+        onClick={event => history.push("/order")}
+      >
+        Go to checkout
+      </LoadingButton>
     </>
   );
 };
 
-export default Cart;
+export default CartPage;

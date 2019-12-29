@@ -449,6 +449,19 @@ export type CreateCartMutation = (
   ) }
 );
 
+export type CreateOrderMutationVariables = {
+  input: CreateOrderInput
+};
+
+
+export type CreateOrderMutation = (
+  { __typename?: 'Mutation' }
+  & { createOrder: (
+    { __typename?: 'Order' }
+    & Pick<Order, 'id'>
+  ) }
+);
+
 export type CreateCategoryMutationVariables = {
   name: Scalars['String']
 };
@@ -1255,6 +1268,55 @@ export function useCreateCartMutation(baseOptions?: ApolloReactHooks.MutationHoo
 export type CreateCartMutationHookResult = ReturnType<typeof useCreateCartMutation>;
 export type CreateCartMutationResult = ApolloReactCommon.MutationResult<CreateCartMutation>;
 export type CreateCartMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateCartMutation, CreateCartMutationVariables>;
+export const CreateOrderDocument = gql`
+    mutation CreateOrder($input: CreateOrderInput!) {
+  createOrder(input: $input) {
+    id
+  }
+}
+    `;
+export type CreateOrderMutationFn = ApolloReactCommon.MutationFunction<CreateOrderMutation, CreateOrderMutationVariables>;
+export type CreateOrderComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<CreateOrderMutation, CreateOrderMutationVariables>, 'mutation'>;
+
+    export const CreateOrderComponent = (props: CreateOrderComponentProps) => (
+      <ApolloReactComponents.Mutation<CreateOrderMutation, CreateOrderMutationVariables> mutation={CreateOrderDocument} {...props} />
+    );
+    
+export type CreateOrderProps<TChildProps = {}> = ApolloReactHoc.MutateProps<CreateOrderMutation, CreateOrderMutationVariables> | TChildProps;
+export function withCreateOrder<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  CreateOrderMutation,
+  CreateOrderMutationVariables,
+  CreateOrderProps<TChildProps>>) {
+    return ApolloReactHoc.withMutation<TProps, CreateOrderMutation, CreateOrderMutationVariables, CreateOrderProps<TChildProps>>(CreateOrderDocument, {
+      alias: 'createOrder',
+      ...operationOptions
+    });
+};
+
+/**
+ * __useCreateOrderMutation__
+ *
+ * To run a mutation, you first call `useCreateOrderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOrderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createOrderMutation, { data, loading, error }] = useCreateOrderMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateOrderMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateOrderMutation, CreateOrderMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateOrderMutation, CreateOrderMutationVariables>(CreateOrderDocument, baseOptions);
+      }
+export type CreateOrderMutationHookResult = ReturnType<typeof useCreateOrderMutation>;
+export type CreateOrderMutationResult = ApolloReactCommon.MutationResult<CreateOrderMutation>;
+export type CreateOrderMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateOrderMutation, CreateOrderMutationVariables>;
 export const CreateCategoryDocument = gql`
     mutation CreateCategory($name: String!) {
   createCategory(name: $name) {
