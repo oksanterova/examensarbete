@@ -102,6 +102,8 @@ type Mutation {
   addSizeToProduct(productId: ID!, sizeId: ID!): Product!
 
   createCart: Cart!
+  updateCartItem(id: ID!, quantity: Int!): CartItem!
+  deleteCartItem(id: ID!): Boolean!
   createCategory(name: String!): Category!
   createOrder(input: CreateOrderInput!): Order!
 

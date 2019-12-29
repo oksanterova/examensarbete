@@ -241,6 +241,17 @@ const mutationResolvers: MutationResolvers<MyContext> = {
 
     return true;
   },
+  updateCartItem: async (_, { id, quantity }) => {
+    const cartItem = await CartItem.findOneOrFail(id);
+    cartItem.quantity = quantity;
+    await cartItem.save();
+    return cartItemToGql(cartItem);
+  },
+  deleteCartItem: async (_, { id }) => {
+    const cartItem = await CartItem.findOneOrFail(id);
+    await cartItem.remove();
+    return true;
+  },
   addCategoryToProduct: async (_, { categoryId, productId }) => {
     await getConnection()
       .createQueryBuilder()

@@ -1,8 +1,24 @@
 import React, { useContext } from "react";
 import CartContext from "../CartContext";
-import { Card, Typography, CardContent } from "@material-ui/core";
+import {
+  Typography,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Select,
+  MenuItem,
+  IconButton
+} from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
 
-import { useGetCartQuery } from "../generated/graphql";
+import {
+  useGetCartQuery,
+  useDeleteCartItemMutation,
+  useUpdateCartItemMutation,
+  GetCartDocument
+} from "../generated/graphql";
 
 const Cart: React.FC = () => {
   const { cartId } = useContext(CartContext);
@@ -11,6 +27,14 @@ const Cart: React.FC = () => {
       cartId
     }
   });
+
+  const [deleteCartItemMutation] = useDeleteCartItemMutation();
+
+  const [updateCartItemMutation] = useUpdateCartItemMutation();
+
+  const items = data?.cart.items;
+
+  const quantities = [1, 2, 3, 4, 5];
 
   if (loading) {
     return <h1>Loading</h1>;
@@ -22,14 +46,67 @@ const Cart: React.FC = () => {
 
   return (
     <>
-      <Card>
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            Cart
-          </Typography>
-          <Typography>{JSON.stringify(data?.cart)}</Typography>
-        </CardContent>
-      </Card>
+      <Typography gutterBottom variant="h5" component="h2">
+        Cart
+      </Typography>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Name</TableCell>
+            <TableCell>Size</TableCell>
+            <TableCell>Quantity</TableCell>
+            <TableCell></TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {items?.map(item => (
+            <TableRow key={item.id}>
+              <TableCell>{item.product.name}</TableCell>
+              <TableCell>{item.size.name}</TableCell>
+              <TableCell>
+                <Select
+                  required
+                  value={item.quantity}
+                  onChange={e =>
+                    updateCartItemMutation({
+                      variables: {
+                        id: item.id,
+                        quantity: e.target.value as number
+                      },
+                      refetchQueries: [
+                        { query: GetCartDocument, variables: { cartId } }
+                      ],
+                      awaitRefetchQueries: true
+                    })
+                  }
+                >
+                  {quantities.map(quantity => (
+                    <MenuItem key={quantity} value={quantity}>
+                      {quantity}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </TableCell>
+              <TableCell>
+                {" "}
+                <IconButton
+                  onClick={() =>
+                    deleteCartItemMutation({
+                      variables: { id: item.id },
+                      refetchQueries: [
+                        { query: GetCartDocument, variables: { cartId } }
+                      ],
+                      awaitRefetchQueries: true
+                    })
+                  }
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </>
   );
 };

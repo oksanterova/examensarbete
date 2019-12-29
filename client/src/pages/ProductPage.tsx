@@ -24,11 +24,12 @@ const ProductPage = () => {
   });
 
   const { cartId } = useContext(CartContext);
+  const [sizeId, setSizeId] = useState<string>("");
 
   const input: CreateCartItemInput = {
     cartId,
     productId: id,
-    sizeId: "1",
+    sizeId,
     quantity: 1
   };
 
@@ -42,8 +43,6 @@ const ProductPage = () => {
     refetchQueries: [{ query: GetCartDocument, variables: { cartId } }],
     awaitRefetchQueries: true
   });
-
-  const [sizeId, setSizeId] = useState<string>("");
 
   if (loading) return <h1>Loading</h1>;
 

@@ -51,6 +51,7 @@ query GetCart($cartId: ID!) {
       id
       quantity
       product {
+        name
         id
         sizes {
           id
@@ -96,6 +97,16 @@ query GetMyOrders {
 
 mutation AddCartItem($input: CreateCartItemInput!) {
   addCartItem(input: $input)
+}
+
+mutation DeleteCartItem($id: ID!) {
+  deleteCartItem(id: $id)
+}
+
+mutation UpdateCartItem($id: ID!, $quantity: Int!) {
+  updateCartItem(id: $id, quantity: $quantity) {
+    id
+  }
 }
 
 mutation CreateProduct($input: ProductInput!) {
