@@ -23,6 +23,7 @@ import EditProductPage from "./pages/EditProductPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ProfilePage from "./pages/ProfilePage";
+import ProductPage from "./pages/ProductPage";
 import client, { IS_LOGGED_IN } from "./client";
 import { CartContextProvider } from "./CartContext";
 
@@ -79,6 +80,11 @@ const App: React.FC = () => {
                       {isLoggedIn && (
                         <Route exact path="/profile" component={ProfilePage} />
                       )}
+                      <Route
+                        exact
+                        path="/product/:id"
+                        component={ProductPage}
+                      />
                       <Route exact path="/" component={Homepage} />
                       <Route exact path="/login" component={LoginPage} />
                       <Route exact path="/register" component={RegisterPage} />
