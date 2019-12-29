@@ -20,6 +20,7 @@ import CreateSizePage from "./pages/CreateSizePage";
 import ListProductsPage from "./pages/ListProductsPage";
 import EditProductPage from "./pages/EditProductPage";
 import LoginPage from "./pages/LoginPage";
+import LogOutPage from "./pages/LogOutPage";
 import RegisterPage from "./pages/RegisterPage";
 import ProfilePage from "./pages/ProfilePage";
 import ProductPage from "./pages/ProductPage";
@@ -61,6 +62,7 @@ const AppMain: React.FC = () => {
     <Main>
       <StyledPaper>
         {me && <Route exact path="/profile" component={ProfilePage} />}
+        {me && <Route exact path="/logout" component={LogOutPage} />}
         <Route exact path="/product/:id" component={ProductPage} />
         <Route exact path="/" component={Homepage} />
         <Route exact path="/login" component={LoginPage} />
