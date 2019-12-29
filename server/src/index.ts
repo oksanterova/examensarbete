@@ -423,9 +423,16 @@ const orderItemResolvers: OrderItemResolvers = {
 
 const cartResolvers: graphql.CartResolvers = {
   items: async parent => {
-    const cart = await Cart.findOneOrFail(parent.id, { relations: ["items"] });
+    const items = await getConnection()
+      .getRepository(CartItem)
+      .createQueryBuilder("item")
+      .where('item."cartId" = :cartId', { cartId: parent.id })
+      .orderBy({
+        "item.id": "ASC"
+      })
+      .getMany();
 
-    return cart.items.map(cartItemToGql);
+    return items.map(cartItemToGql);
   }
 };
 
