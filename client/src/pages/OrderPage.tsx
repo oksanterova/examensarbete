@@ -9,7 +9,9 @@ import {
   TableCell,
   TableBody,
   Table,
-  TextField
+  TextField,
+  Grid,
+  Box
 } from "@material-ui/core";
 import { useGetCartQuery, useCreateOrderMutation } from "../generated/graphql";
 import MeContext from "../MeContext";
@@ -37,53 +39,70 @@ const OrderPage = () => {
     <form
       onSubmit={async e => {
         e.preventDefault();
-        await createOrderMutation({
+
+        const { data } = await createOrderMutation({
           variables: { input: { address, cartId } }
         });
-        history.push("/order-confirmation");
+        const orderId = data!.createOrder.id;
+
+        history.push(`/order-confirmation/${orderId}`);
       }}
     >
-      <Typography gutterBottom variant="h5" component="h2">
-        Cart
-      </Typography>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>Size</TableCell>
-            <TableCell>Quantity</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {items?.map(item => (
-            <TableRow key={item.id}>
-              <TableCell>{item.product.name}</TableCell>
-              <TableCell>{item.size.name}</TableCell>
-              <TableCell>{item.quantity}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <Typography gutterBottom variant="h5" component="h2">
-        Address
-      </Typography>
-      <TextField
-        required
-        id="address"
-        name="address"
-        value={address}
-        label="Delivery address"
-        onChange={e => setAddress(e.target.value as string)}
-        fullWidth
-      />
-      <LoadingButton
-        loading={loading}
-        variant="contained"
-        color="primary"
-        type="submit"
-      >
-        Create order
-      </LoadingButton>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <Typography variant="h5" component="h2">
+            Cart
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell>Size</TableCell>
+                <TableCell>Quantity</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {items?.map(item => (
+                <TableRow key={item.id}>
+                  <TableCell>{item.product.name}</TableCell>
+                  <TableCell>{item.size.name}</TableCell>
+                  <TableCell>{item.quantity}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography gutterBottom variant="h5" component="h2">
+            Address
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            required
+            id="address"
+            name="address"
+            value={address}
+            label="Delivery address"
+            onChange={e => setAddress(e.target.value as string)}
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Box marginTop={2}>
+            <LoadingButton
+              loading={loading}
+              variant="contained"
+              color="primary"
+              type="submit"
+            >
+              Create order
+            </LoadingButton>
+          </Box>
+        </Grid>
+      </Grid>
     </form>
   );
 };

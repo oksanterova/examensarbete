@@ -44,6 +44,30 @@ query GetProduct($id: ID!) {
   }
 }
 
+query GetOrder($id: ID!) {
+  order(id: $id) {
+    id
+    createdAt
+    items {
+      id
+      quantity
+      product {
+        name
+        id
+        sizes {
+          id
+          name
+        }
+      }
+      size {
+        id
+        name
+      }
+    }
+    address
+  }
+}
+
 query GetCart($cartId: ID!) {
   cart(id: $cartId) {
     id

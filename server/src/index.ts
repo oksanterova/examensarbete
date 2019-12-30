@@ -460,10 +460,7 @@ const resolvers: Resolvers = {
   OrderItem: orderItemResolvers,
   Cart: cartResolvers,
   CartItem: cartItemResolvers,
-  User: userResolvers
-};
-
-const resolverMap = {
+  User: userResolvers,
   Date: new GraphQLScalarType({
     name: "Date",
     description: "Date custom scalar type",

@@ -51,6 +51,13 @@ const theme = createMuiTheme({
     background: {
       default: "#fff"
     }
+  },
+  overrides: {
+    MuiTypography: {
+      gutterBottom: {
+        marginBottom: 16
+      }
+    }
   }
 });
 
@@ -102,7 +109,11 @@ const AppMain: React.FC = () => {
         <Route exact path="/register" component={RegisterPage} />
         <Route exact path="/cart" component={CartPage} />
         <Route exact path="/order" component={OrderPage} />
-        <Route exact path="/order-confirmation" component={OrderConfirmation} />
+        <Route
+          exact
+          path="/order-confirmation/:id"
+          component={OrderConfirmation}
+        />
         <Route exact path="/create-product" component={CreateProductPage} />
         <Route exact path="/update-product/:id" component={EditProductPage} />
         <Route exact path="/create-category" component={CreateCategoryPage} />
@@ -132,7 +143,9 @@ const AppHeader: React.FC = () => {
     <AppBar>
       <StyledToolbar>
         <Button color="inherit" onClick={() => history.push("/")}>
-          <Typography variant="h6">Black Sheep</Typography>
+          <Typography variant="h6" component="h1">
+            Black Sheep
+          </Typography>
         </Button>
 
         <FlexGrow />
@@ -175,11 +188,11 @@ const AppHeader: React.FC = () => {
           open={open}
           onClose={handleClose}
           anchorOrigin={{
-            vertical: "bottom",
+            vertical: "top",
             horizontal: "right"
           }}
           transformOrigin={{
-            vertical: "bottom",
+            vertical: "top",
             horizontal: "right"
           }}
         >
