@@ -332,7 +332,7 @@ const mutationResolvers: MutationResolvers<MyContext> = {
 
     return categoryToGql(await category.save());
   },
-  createOrder: async (_, { input }) => {
+  createOrder: async (_, { input }, { me }) => {
     const { address, cartId } = input;
     const createdAt = new Date();
 
@@ -343,6 +343,7 @@ const mutationResolvers: MutationResolvers<MyContext> = {
     const items = cart.items.map(item => new OrderItem(item));
 
     const order = new Order({
+      user: me,
       address,
       createdAt,
       items

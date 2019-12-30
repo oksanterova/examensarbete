@@ -19,7 +19,7 @@ import MeContext from "../MeContext";
 const OrderPage = () => {
   const history = useHistory();
   const me = useContext(MeContext);
-  const { cartId } = useContext(CartContext);
+  const { cartId, resetCart } = useContext(CartContext);
 
   const { data, loading, error } = useGetCartQuery({
     variables: {
@@ -44,6 +44,8 @@ const OrderPage = () => {
           variables: { input: { address, cartId } }
         });
         const orderId = data!.createOrder.id;
+
+        await resetCart();
 
         history.push(`/order-confirmation/${orderId}`);
       }}

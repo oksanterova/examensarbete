@@ -3,7 +3,6 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
-  JoinTable,
   BaseEntity,
   OneToMany
 } from "typeorm";
@@ -32,9 +31,10 @@ export default class Order extends BaseEntity {
     type => User,
     user => user.orders
   )
-  user!: User;
+  user?: User;
 
   constructor(params: {
+    user?: User;
     address: string;
     createdAt: Date;
     items: OrderItem[];
@@ -42,6 +42,7 @@ export default class Order extends BaseEntity {
     super();
 
     if (params) {
+      this.user = params.user;
       this.address = params.address;
       this.createdAt = params.createdAt;
       this.items = params.items;

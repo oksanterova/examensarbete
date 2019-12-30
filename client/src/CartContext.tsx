@@ -1,8 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useCreateCartMutation } from "./generated/graphql";
 
-const CartContext = React.createContext<{ cartId: string }>({
-  cartId: ""
+const CartContext = React.createContext<{
+  cartId: string;
+  resetCart: () => Promise<void>;
+}>({
+  cartId: "",
+  resetCart: async () => {}
 });
 
 export const CartContextProvider: React.FC<{
@@ -11,30 +15,32 @@ export const CartContextProvider: React.FC<{
   const [cartId, setCartId] = useState<string | null>(null);
   const [createCartMutation] = useCreateCartMutation();
 
+  const resetCart = useCallback(async () => {
+    const { data } = await createCartMutation();
+    const cartId = data!.createCart.id;
+
+    localStorage.setItem("cartId", cartId);
+    setCartId(cartId);
+  }, [createCartMutation]);
+
   useEffect(() => {
     const existingCartId = localStorage.getItem("cartId");
-
-    async function fetchData() {
-      const { data } = await createCartMutation();
-      const cartId = data!.createCart.id;
-
-      localStorage.setItem("cartId", cartId);
-      setCartId(cartId);
-    }
 
     if (existingCartId) {
       setCartId(existingCartId);
     } else {
-      fetchData();
+      resetCart();
     }
-  }, [createCartMutation]);
+  }, [resetCart]);
 
   if (cartId === null) {
     return <h1>Loading</h1>;
   }
 
   return (
-    <CartContext.Provider value={{ cartId }}>{children}</CartContext.Provider>
+    <CartContext.Provider value={{ cartId, resetCart }}>
+      {children}
+    </CartContext.Provider>
   );
 };
 
