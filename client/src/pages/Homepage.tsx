@@ -1,11 +1,5 @@
-import React, { useContext } from "react";
-import {
-  useGetProductsQuery,
-  useAddCartItemMutation,
-  Product,
-  CreateCartItemInput,
-  GetCartDocument
-} from "../generated/graphql";
+import React from "react";
+import { useGetProductsQuery, Product } from "../generated/graphql";
 
 import {
   Typography,
@@ -13,12 +7,10 @@ import {
   Container,
   Grid,
   Card,
-  CardActions,
   CardMedia
 } from "@material-ui/core";
 import styled from "styled-components";
-import CartContext from "../CartContext";
-import LoadingButton from "../components/LoadingButton";
+import StyledMain from "../components/StyledMain";
 
 const CardGrid = styled(Container)`
   padding-top: ${props => props.theme.spacing(8)}px;
@@ -32,49 +24,21 @@ const CustomCard = styled(Card)`
 `;
 
 const ProductMedia = styled(CardMedia)`
-  paddingtop: "56.25%"; // 16:9
+  padding-top: 100%;
 `;
 
 const ProductCard: React.FC<Product> = product => {
-  const { cartId } = useContext(CartContext);
-
-  const input: CreateCartItemInput = {
-    cartId,
-    productId: product.id,
-    sizeId: "1",
-    quantity: 1
-  };
-
-  const [addCartItemMutation, { loading }] = useAddCartItemMutation({
-    variables: {
-      input
-    },
-    refetchQueries: [{ query: GetCartDocument, variables: { cartId } }],
-    awaitRefetchQueries: true
-  });
-
   return (
     <CustomCard>
       <ProductMedia
-        image="https://source.unsplash.com/random"
+        image="http://placekitten.com/200/300"
         title="Image title"
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="h2">
+        <Typography variant="h5" component="h2">
           {product.name}
         </Typography>
-        <Typography>{JSON.stringify(product)}</Typography>
       </CardContent>
-      <CardActions>
-        <LoadingButton
-          size="small"
-          color="primary"
-          onClick={() => addCartItemMutation()}
-          loading={loading}
-        >
-          <Typography>Add to Cart</Typography>
-        </LoadingButton>
-      </CardActions>
     </CustomCard>
   );
 };
@@ -91,15 +55,17 @@ const Homepage: React.FC = () => {
   }
 
   return (
-    <CardGrid maxWidth="md">
-      <Grid container spacing={4}>
-        {data?.products.map(product => (
-          <Grid item key={product.id} xs={12} sm={6} md={4}>
-            <ProductCard {...product} />
-          </Grid>
-        ))}
-      </Grid>
-    </CardGrid>
+    <StyledMain fullWidth>
+      <CardGrid maxWidth="xl">
+        <Grid container spacing={4}>
+          {data?.products.map(product => (
+            <Grid item key={product.id} xs={12} sm={4} md={2}>
+              <ProductCard {...product} />
+            </Grid>
+          ))}
+        </Grid>
+      </CardGrid>
+    </StyledMain>
   );
 };
 

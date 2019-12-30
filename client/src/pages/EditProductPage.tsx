@@ -6,6 +6,7 @@ import {
   useGetProductQuery
 } from "../generated/graphql";
 import { useParams } from "react-router-dom";
+import StyledMain from "../components/StyledMain";
 
 const EditProductPage: React.FC = () => {
   // @ts-ignore
@@ -24,7 +25,11 @@ const EditProductPage: React.FC = () => {
 
   if (error) return <h1>Error</h1>;
 
-  return <ProductForm product={data?.product} submit={submit} />;
+  return (
+    <StyledMain>
+      <ProductForm product={data?.product} submit={submit} />
+    </StyledMain>
+  );
 };
 
 export default EditProductPage;

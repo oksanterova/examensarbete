@@ -21,6 +21,7 @@ import {
   useGetMeQuery
 } from "../generated/graphql";
 import LoadingButton from "../components/LoadingButton";
+import StyledMain from "../components/StyledMain";
 
 const Profile = () => {
   const { loading, data, error } = useGetMeQuery();
@@ -194,8 +195,7 @@ const ProfilePage = () => {
   if (error) return <h1>Error</h1>;
 
   return (
-    <>
-      {" "}
+    <StyledMain>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Profile />
@@ -213,7 +213,7 @@ const ProfilePage = () => {
           ))}
         </Grid>
       </Grid>
-    </>
+    </StyledMain>
   );
 };
 

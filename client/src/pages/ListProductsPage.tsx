@@ -7,6 +7,7 @@ import {
   useDeleteProductMutation,
   GetProductsDocument
 } from "../generated/graphql";
+import StyledMain from "../components/StyledMain";
 
 const ListProductsPage: React.FC = () => {
   const history = useHistory();
@@ -26,7 +27,7 @@ const ListProductsPage: React.FC = () => {
   }
 
   return (
-    <div style={{ maxWidth: "100%" }}>
+    <StyledMain fullWidth>
       <MaterialTable
         isLoading={loading}
         editable={{
@@ -76,7 +77,7 @@ const ListProductsPage: React.FC = () => {
         ]}
         title="Demo Title"
       />
-    </div>
+    </StyledMain>
   );
 };
 

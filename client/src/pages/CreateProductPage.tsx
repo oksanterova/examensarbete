@@ -1,6 +1,7 @@
 import React from "react";
 import ProductForm from "../components/ProductForm";
 import { ProductInput, useCreateProductMutation } from "../generated/graphql";
+import StyledMain from "../components/StyledMain";
 
 const CreateProductPage = () => {
   const [createProductMutation] = useCreateProductMutation();
@@ -9,7 +10,11 @@ const CreateProductPage = () => {
     await createProductMutation({ variables: { input } });
   }
 
-  return <ProductForm submit={submit} />;
+  return (
+    <StyledMain>
+      <ProductForm submit={submit} />
+    </StyledMain>
+  );
 };
 
 export default CreateProductPage;

@@ -15,6 +15,7 @@ import {
 import { useParams } from "react-router-dom";
 import LoadingButton from "../components/LoadingButton";
 import CartContext from "../CartContext";
+import StyledMain from "../components/StyledMain";
 
 const ProductPage = () => {
   // @ts-ignore
@@ -51,7 +52,7 @@ const ProductPage = () => {
   const product = data!.product;
 
   return (
-    <>
+    <StyledMain>
       <Typography>{product.name}</Typography>
       <Typography>{product.description}</Typography>
       <TextField
@@ -83,7 +84,7 @@ const ProductPage = () => {
       >
         <Typography>Add to Cart</Typography>
       </LoadingButton>
-    </>
+    </StyledMain>
   );
 };
 

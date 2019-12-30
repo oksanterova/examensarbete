@@ -12,6 +12,7 @@ import {
 } from "@material-ui/core";
 import { useGetOrderQuery } from "../generated/graphql";
 import { useParams } from "react-router-dom";
+import StyledMain from "../components/StyledMain";
 
 const OrderConfirmation = () => {
   const history = useHistory();
@@ -41,7 +42,7 @@ const OrderConfirmation = () => {
   );
 
   return (
-    <>
+    <StyledMain>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Typography variant="h5" component="h2">
@@ -89,7 +90,7 @@ const OrderConfirmation = () => {
           </Button>
         </Grid>
       </Grid>
-    </>
+    </StyledMain>
   );
 };
 
