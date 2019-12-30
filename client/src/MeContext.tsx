@@ -23,7 +23,7 @@ export const MeContextProvider: React.FC<{
     return <h1>Loading</h1>;
   }
 
-  const value = data?.me;
+  const value = isLoggedIn === false ? undefined : data?.me;
 
   return <MeContext.Provider value={value}>{children}</MeContext.Provider>;
 };

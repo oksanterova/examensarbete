@@ -107,7 +107,7 @@ const RegisterPage = () => {
               type="submit"
               loading={loading}
             >
-              <Typography>Login</Typography>
+              <Typography>Register</Typography>
             </LoadingButton>
           </Grid>
         </Grid>

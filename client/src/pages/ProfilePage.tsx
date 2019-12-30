@@ -51,24 +51,27 @@ const Profile = () => {
             onSubmit={() => setEditMode(false)}
           />
         ) : (
-          <List>
-            <ListItem>{firstname}</ListItem>
-            <ListItem>{lastname}</ListItem>
-            <ListItem>{email}</ListItem>
-            <ListItem>{address}</ListItem>
-          </List>
+          <>
+            <List>
+              <ListItem>{firstname}</ListItem>
+              <ListItem>{lastname}</ListItem>
+              <ListItem>{email}</ListItem>
+              <ListItem>{address}</ListItem>
+            </List>
+
+            <Grid item xs={12}>
+              <Box marginBottom={2}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={e => setEditMode(true)}
+                >
+                  Edit information
+                </Button>
+              </Box>
+            </Grid>
+          </>
         )}
-        <Grid item xs={12}>
-          <Box marginBottom={2}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={e => setEditMode(true)}
-            >
-              Edit information
-            </Button>
-          </Box>
-        </Grid>
       </Grid>
     </>
   );

@@ -4,8 +4,13 @@ import { Redirect } from "react-router-dom";
 
 const LogOut = () => {
   useEffect(() => {
-    client.writeData({ data: { isLoggedIn: false } });
-    localStorage.clear();
+    async function clear() {
+      client.writeData({ data: { isLoggedIn: false } });
+      localStorage.clear();
+      await client.clearStore();
+    }
+
+    clear();
   }, []);
 
   return <Redirect to="/" />;

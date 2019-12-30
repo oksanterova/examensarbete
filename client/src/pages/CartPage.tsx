@@ -50,7 +50,11 @@ const CartPage: React.FC = () => {
   }
 
   if (items?.length === 0) {
-    return <h1>Your cart is empty</h1>;
+    return (
+      <StyledMain>
+        <h1>Your cart is empty</h1>
+      </StyledMain>
+    );
   }
 
   return (

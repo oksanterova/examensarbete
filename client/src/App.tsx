@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
 import "./App.css";
 import Homepage from "./pages/Homepage";
-import Paper from "@material-ui/core/Paper";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
@@ -37,19 +36,20 @@ import ProductPage from "./pages/ProductPage";
 import client from "./client";
 import { CartContextProvider } from "./CartContext";
 import MeContext, { MeContextProvider } from "./MeContext";
-import { blue, pink } from "@material-ui/core/colors";
+import { blueGrey, pink, grey } from "@material-ui/core/colors";
 import { Typography } from "@material-ui/core";
 
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: blue[700]
+      main: blueGrey[800]
     },
     secondary: {
       main: darken(pink.A400, 0.1)
     },
     background: {
-      default: "#fff"
+      default: grey[100],
+      paper: grey[200]
     }
   },
   overrides: {
