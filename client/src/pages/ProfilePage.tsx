@@ -35,44 +35,38 @@ const Profile = () => {
 
   return (
     <>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Typography variant="h5" component="h2">
-            My profile:
-          </Typography>
-        </Grid>
-        {editMode ? (
-          <EditProfile
-            profile={{
-              firstname: firstname ?? "",
-              lastname: lastname ?? "",
-              address: address ?? ""
-            }}
-            onSubmit={() => setEditMode(false)}
-          />
-        ) : (
-          <>
-            <List>
-              <ListItem>{firstname}</ListItem>
-              <ListItem>{lastname}</ListItem>
-              <ListItem>{email}</ListItem>
-              <ListItem>{address}</ListItem>
-            </List>
+      <Typography variant="h5" component="h2" gutterBottom>
+        My profile:
+      </Typography>
+      {editMode ? (
+        <EditProfile
+          profile={{
+            firstname: firstname ?? "",
+            lastname: lastname ?? "",
+            address: address ?? ""
+          }}
+          onSubmit={() => setEditMode(false)}
+        />
+      ) : (
+        <>
+          <List>
+            <ListItem>{firstname}</ListItem>
+            <ListItem>{lastname}</ListItem>
+            <ListItem>{email}</ListItem>
+            <ListItem>{address}</ListItem>
+          </List>
 
-            <Grid item xs={12}>
-              <Box marginBottom={2}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={e => setEditMode(true)}
-                >
-                  Edit information
-                </Button>
-              </Box>
-            </Grid>
-          </>
-        )}
-      </Grid>
+          <Box marginBottom={2}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={e => setEditMode(true)}
+            >
+              Edit information
+            </Button>
+          </Box>
+        </>
+      )}
     </>
   );
 };
@@ -164,9 +158,7 @@ type MyOrderProps = NonNullable<GetMyOrdersQuery["me"]["orders"]>[0];
 const MyOrder: React.FC<MyOrderProps> = ({ id, items }) => {
   return (
     <>
-      <Grid item xs={12}>
-        <Typography>Order {id}</Typography>
-      </Grid>
+      <Typography>Order {id}</Typography>
       <Table>
         <TableCell>
           <TableHead>
@@ -199,23 +191,15 @@ const ProfilePage = () => {
 
   return (
     <StyledMain>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Profile />
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h5" component="h2">
-            My orders:
-          </Typography>
-        </Grid>
-        <Grid container spacing={2}>
-          {data?.me?.orders?.map(order => (
-            <Grid item xs={12}>
-              <MyOrder key={order.id} {...order} />
-            </Grid>
-          ))}
-        </Grid>
-      </Grid>
+      <Profile />
+
+      <Typography variant="h5" component="h2" gutterBottom>
+        My orders:
+      </Typography>
+
+      {data?.me?.orders?.map(order => (
+        <MyOrder key={order.id} {...order} />
+      ))}
     </StyledMain>
   );
 };
