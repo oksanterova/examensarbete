@@ -18,6 +18,7 @@ import {
   ThemeProvider as MuiThemeProvider,
   darken
 } from "@material-ui/core/styles";
+import black_sheep from "./assets/black_sheep.png";
 import styled, { ThemeProvider } from "styled-components";
 import { StylesProvider } from "@material-ui/styles";
 import CartPage from "./pages/CartPage";
@@ -60,6 +61,13 @@ const theme = createMuiTheme({
     }
   }
 });
+
+const Logo = styled.div`
+  margin-top: 0px;
+  width: 42px;
+  height: 28px;
+  background: url(${black_sheep}) center left no-repeat;
+`;
 
 const StyledToolbar = styled(Toolbar)`
   display: flex;
@@ -116,6 +124,7 @@ const AppHeader: React.FC = () => {
     <AppBar>
       <StyledToolbar>
         <Button color="inherit" onClick={() => history.push("/")}>
+          <Logo />
           <Typography variant="h6" component="h1">
             Black Sheep
           </Typography>
