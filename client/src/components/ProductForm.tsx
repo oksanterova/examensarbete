@@ -17,9 +17,16 @@ type MultiSelectValue = {
 type ProductFormProps = {
   product?: Partial<Product>;
   submit: (input: ProductInput) => Promise<void>;
+  title: string;
+  buttonAction: string;
 };
 
-const ProductForm: React.FC<ProductFormProps> = ({ product, submit }) => {
+const ProductForm: React.FC<ProductFormProps> = ({
+  product,
+  submit,
+  title,
+  buttonAction
+}) => {
   const history = useHistory();
   const [sizes, setSizes] = useState<MultiSelectValue[]>(product?.sizes ?? []);
   const [categories, setCategories] = useState<MultiSelectValue[]>(
@@ -61,7 +68,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, submit }) => {
       }}
     >
       <Typography variant="h6" gutterBottom>
-        Product Creation
+        {title}
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12}>
@@ -111,7 +118,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, submit }) => {
         </Grid>
         <Grid item xs={12}>
           <Button variant="contained" color="primary" type="submit">
-            Create product
+            {buttonAction}
           </Button>
         </Grid>
       </Grid>

@@ -21,13 +21,21 @@ const EditProductPage: React.FC = () => {
     await updateProductMutation({ variables: { input, id } });
   }
 
+  const buttonAction = "Update product";
+  const title = "Product editing";
+
   if (loading) return <h1>Loading</h1>;
 
   if (error) return <h1>Error</h1>;
 
   return (
     <StyledMain>
-      <ProductForm product={data?.product} submit={submit} />
+      <ProductForm
+        product={data?.product}
+        submit={submit}
+        buttonAction={buttonAction}
+        title={title}
+      />
     </StyledMain>
   );
 };

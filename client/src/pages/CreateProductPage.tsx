@@ -1,18 +1,29 @@
 import React from "react";
 import ProductForm from "../components/ProductForm";
-import { ProductInput, useCreateProductMutation } from "../generated/graphql";
+import {
+  ProductInput,
+  useCreateProductMutation,
+  GetProductsDocument
+} from "../generated/graphql";
 import StyledMain from "../components/StyledMain";
 
 const CreateProductPage = () => {
   const [createProductMutation] = useCreateProductMutation();
 
   async function submit(input: ProductInput): Promise<void> {
-    await createProductMutation({ variables: { input } });
+    await createProductMutation({
+      variables: { input },
+      refetchQueries: [{ query: GetProductsDocument }],
+      awaitRefetchQueries: true
+    });
   }
+
+  const buttonAction = "Create product";
+  const title = "Product creation";
 
   return (
     <StyledMain>
-      <ProductForm submit={submit} />
+      <ProductForm submit={submit} buttonAction={buttonAction} title={title} />
     </StyledMain>
   );
 };
