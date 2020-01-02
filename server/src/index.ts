@@ -281,6 +281,20 @@ const mutationResolvers: MutationResolvers<MyContext> = {
 
     return sizeToGql(await size.save());
   },
+  updateSize: async (_, { id, name }) => {
+    const size = await Size.findOneOrFail(id);
+
+    size.name = name;
+
+    return sizeToGql(await size.save());
+  },
+  deleteSize: async (_, { id }) => {
+    const size = await Size.findOneOrFail(id);
+
+    await size.remove();
+
+    return true;
+  },
   createProduct: async (_, { input }) => {
     const { description, name, sizeIds, categoryIds } = input;
 
@@ -329,6 +343,19 @@ const mutationResolvers: MutationResolvers<MyContext> = {
     const category = new Category({
       name: name
     });
+
+    return categoryToGql(await category.save());
+  },
+  deleteCategory: async (_, { id }) => {
+    const category = await Category.findOneOrFail(id);
+
+    await category.remove();
+    return true;
+  },
+  updateCategory: async (_, { id, name }) => {
+    const category = await Category.findOneOrFail(id);
+
+    category.name = name;
 
     return categoryToGql(await category.save());
   },

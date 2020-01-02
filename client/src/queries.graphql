@@ -167,10 +167,30 @@ mutation CreateCategory($name: String!) {
   }
 }
 
+mutation UpdateCategory($id: ID!, $name: String!) {
+  updateCategory(id: $id, name: $name) {
+    id
+  }
+}
+
+mutation DeleteCategory($id: ID!) {
+  deleteCategory(id: $id)
+}
+
 mutation CreateSize($name: String!) {
   createSize(name: $name) {
     id
   }
+}
+
+mutation UpdateSize($id: ID!, $name: String!) {
+  updateSize(id: $id, name: $name) {
+    id
+  }
+}
+
+mutation DeleteSize($id: ID!) {
+  deleteSize(id: $id)
 }
 
 mutation SignUp($email: String!, $password: String!) {

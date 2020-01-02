@@ -47,21 +47,57 @@ export type CreateOrderInput = {
 
 export type Mutation = {
    __typename?: 'Mutation',
+  createCategory: Category,
+  deleteCategory: Scalars['Boolean'],
+  updateCategory: Category,
+  createSize: Size,
+  deleteSize: Scalars['Boolean'],
+  updateSize: Size,
   addCategoryToProduct: Product,
   addCartItem?: Maybe<Scalars['Boolean']>,
   addSizeToProduct: Product,
   createCart: Cart,
   updateCartItem: CartItem,
   deleteCartItem: Scalars['Boolean'],
-  createCategory: Category,
   createOrder: Order,
   createProduct: Product,
   deleteProduct?: Maybe<Scalars['Boolean']>,
   updateProduct: Product,
-  createSize: Size,
   signUp: Token,
   signIn: Token,
   updateMe: User,
+};
+
+
+export type MutationCreateCategoryArgs = {
+  name: Scalars['String']
+};
+
+
+export type MutationDeleteCategoryArgs = {
+  id: Scalars['ID']
+};
+
+
+export type MutationUpdateCategoryArgs = {
+  id: Scalars['ID'],
+  name: Scalars['String']
+};
+
+
+export type MutationCreateSizeArgs = {
+  name: Scalars['String']
+};
+
+
+export type MutationDeleteSizeArgs = {
+  id: Scalars['ID']
+};
+
+
+export type MutationUpdateSizeArgs = {
+  id: Scalars['ID'],
+  name: Scalars['String']
 };
 
 
@@ -93,11 +129,6 @@ export type MutationDeleteCartItemArgs = {
 };
 
 
-export type MutationCreateCategoryArgs = {
-  name: Scalars['String']
-};
-
-
 export type MutationCreateOrderArgs = {
   input: CreateOrderInput
 };
@@ -116,11 +147,6 @@ export type MutationDeleteProductArgs = {
 export type MutationUpdateProductArgs = {
   id: Scalars['ID'],
   input: ProductInput
-};
-
-
-export type MutationCreateSizeArgs = {
-  name: Scalars['String']
 };
 
 
@@ -324,8 +350,8 @@ export type ResolversTypes = ResolversObject<{
   Date: ResolverTypeWrapper<Scalars['Date']>,
   OrderItem: ResolverTypeWrapper<OrderItem>,
   Mutation: ResolverTypeWrapper<{}>,
-  CreateCartItemInput: CreateCartItemInput,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
+  CreateCartItemInput: CreateCartItemInput,
   CreateOrderInput: CreateOrderInput,
   ProductInput: ProductInput,
   Token: ResolverTypeWrapper<Token>,
@@ -348,8 +374,8 @@ export type ResolversParentTypes = ResolversObject<{
   Date: Scalars['Date'],
   OrderItem: OrderItem,
   Mutation: {},
-  CreateCartItemInput: CreateCartItemInput,
   Boolean: Scalars['Boolean'],
+  CreateCartItemInput: CreateCartItemInput,
   CreateOrderInput: CreateOrderInput,
   ProductInput: ProductInput,
   Token: Token,
@@ -379,18 +405,22 @@ export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 }
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  createCategory?: Resolver<ResolversTypes['Category'], ParentType, ContextType, RequireFields<MutationCreateCategoryArgs, 'name'>>,
+  deleteCategory?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteCategoryArgs, 'id'>>,
+  updateCategory?: Resolver<ResolversTypes['Category'], ParentType, ContextType, RequireFields<MutationUpdateCategoryArgs, 'id' | 'name'>>,
+  createSize?: Resolver<ResolversTypes['Size'], ParentType, ContextType, RequireFields<MutationCreateSizeArgs, 'name'>>,
+  deleteSize?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteSizeArgs, 'id'>>,
+  updateSize?: Resolver<ResolversTypes['Size'], ParentType, ContextType, RequireFields<MutationUpdateSizeArgs, 'id' | 'name'>>,
   addCategoryToProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationAddCategoryToProductArgs, 'productId' | 'categoryId'>>,
   addCartItem?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddCartItemArgs, 'input'>>,
   addSizeToProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationAddSizeToProductArgs, 'productId' | 'sizeId'>>,
   createCart?: Resolver<ResolversTypes['Cart'], ParentType, ContextType>,
   updateCartItem?: Resolver<ResolversTypes['CartItem'], ParentType, ContextType, RequireFields<MutationUpdateCartItemArgs, 'id' | 'quantity'>>,
   deleteCartItem?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteCartItemArgs, 'id'>>,
-  createCategory?: Resolver<ResolversTypes['Category'], ParentType, ContextType, RequireFields<MutationCreateCategoryArgs, 'name'>>,
   createOrder?: Resolver<ResolversTypes['Order'], ParentType, ContextType, RequireFields<MutationCreateOrderArgs, 'input'>>,
   createProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationCreateProductArgs, 'input'>>,
   deleteProduct?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationDeleteProductArgs, 'id'>>,
   updateProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationUpdateProductArgs, 'id' | 'input'>>,
-  createSize?: Resolver<ResolversTypes['Size'], ParentType, ContextType, RequireFields<MutationCreateSizeArgs, 'name'>>,
   signUp?: Resolver<ResolversTypes['Token'], ParentType, ContextType, RequireFields<MutationSignUpArgs, 'email' | 'password'>>,
   signIn?: Resolver<ResolversTypes['Token'], ParentType, ContextType, RequireFields<MutationSignInArgs, 'email' | 'password'>>,
   updateMe?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateMeArgs, 'input'>>,

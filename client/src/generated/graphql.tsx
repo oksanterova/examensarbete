@@ -52,21 +52,57 @@ export type CreateOrderInput = {
 
 export type Mutation = {
    __typename?: 'Mutation',
+  createCategory: Category,
+  deleteCategory: Scalars['Boolean'],
+  updateCategory: Category,
+  createSize: Size,
+  deleteSize: Scalars['Boolean'],
+  updateSize: Size,
   addCategoryToProduct: Product,
   addCartItem?: Maybe<Scalars['Boolean']>,
   addSizeToProduct: Product,
   createCart: Cart,
   updateCartItem: CartItem,
   deleteCartItem: Scalars['Boolean'],
-  createCategory: Category,
   createOrder: Order,
   createProduct: Product,
   deleteProduct?: Maybe<Scalars['Boolean']>,
   updateProduct: Product,
-  createSize: Size,
   signUp: Token,
   signIn: Token,
   updateMe: User,
+};
+
+
+export type MutationCreateCategoryArgs = {
+  name: Scalars['String']
+};
+
+
+export type MutationDeleteCategoryArgs = {
+  id: Scalars['ID']
+};
+
+
+export type MutationUpdateCategoryArgs = {
+  id: Scalars['ID'],
+  name: Scalars['String']
+};
+
+
+export type MutationCreateSizeArgs = {
+  name: Scalars['String']
+};
+
+
+export type MutationDeleteSizeArgs = {
+  id: Scalars['ID']
+};
+
+
+export type MutationUpdateSizeArgs = {
+  id: Scalars['ID'],
+  name: Scalars['String']
 };
 
 
@@ -98,11 +134,6 @@ export type MutationDeleteCartItemArgs = {
 };
 
 
-export type MutationCreateCategoryArgs = {
-  name: Scalars['String']
-};
-
-
 export type MutationCreateOrderArgs = {
   input: CreateOrderInput
 };
@@ -121,11 +152,6 @@ export type MutationDeleteProductArgs = {
 export type MutationUpdateProductArgs = {
   id: Scalars['ID'],
   input: ProductInput
-};
-
-
-export type MutationCreateSizeArgs = {
-  name: Scalars['String']
 };
 
 
@@ -503,6 +529,30 @@ export type CreateCategoryMutation = (
   ) }
 );
 
+export type UpdateCategoryMutationVariables = {
+  id: Scalars['ID'],
+  name: Scalars['String']
+};
+
+
+export type UpdateCategoryMutation = (
+  { __typename?: 'Mutation' }
+  & { updateCategory: (
+    { __typename?: 'Category' }
+    & Pick<Category, 'id'>
+  ) }
+);
+
+export type DeleteCategoryMutationVariables = {
+  id: Scalars['ID']
+};
+
+
+export type DeleteCategoryMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteCategory'>
+);
+
 export type CreateSizeMutationVariables = {
   name: Scalars['String']
 };
@@ -514,6 +564,30 @@ export type CreateSizeMutation = (
     { __typename?: 'Size' }
     & Pick<Size, 'id'>
   ) }
+);
+
+export type UpdateSizeMutationVariables = {
+  id: Scalars['ID'],
+  name: Scalars['String']
+};
+
+
+export type UpdateSizeMutation = (
+  { __typename?: 'Mutation' }
+  & { updateSize: (
+    { __typename?: 'Size' }
+    & Pick<Size, 'id'>
+  ) }
+);
+
+export type DeleteSizeMutationVariables = {
+  id: Scalars['ID']
+};
+
+
+export type DeleteSizeMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteSize'>
 );
 
 export type SignUpMutationVariables = {
@@ -1462,6 +1536,103 @@ export function useCreateCategoryMutation(baseOptions?: ApolloReactHooks.Mutatio
 export type CreateCategoryMutationHookResult = ReturnType<typeof useCreateCategoryMutation>;
 export type CreateCategoryMutationResult = ApolloReactCommon.MutationResult<CreateCategoryMutation>;
 export type CreateCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateCategoryMutation, CreateCategoryMutationVariables>;
+export const UpdateCategoryDocument = gql`
+    mutation UpdateCategory($id: ID!, $name: String!) {
+  updateCategory(id: $id, name: $name) {
+    id
+  }
+}
+    `;
+export type UpdateCategoryMutationFn = ApolloReactCommon.MutationFunction<UpdateCategoryMutation, UpdateCategoryMutationVariables>;
+export type UpdateCategoryComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<UpdateCategoryMutation, UpdateCategoryMutationVariables>, 'mutation'>;
+
+    export const UpdateCategoryComponent = (props: UpdateCategoryComponentProps) => (
+      <ApolloReactComponents.Mutation<UpdateCategoryMutation, UpdateCategoryMutationVariables> mutation={UpdateCategoryDocument} {...props} />
+    );
+    
+export type UpdateCategoryProps<TChildProps = {}> = ApolloReactHoc.MutateProps<UpdateCategoryMutation, UpdateCategoryMutationVariables> | TChildProps;
+export function withUpdateCategory<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  UpdateCategoryMutation,
+  UpdateCategoryMutationVariables,
+  UpdateCategoryProps<TChildProps>>) {
+    return ApolloReactHoc.withMutation<TProps, UpdateCategoryMutation, UpdateCategoryMutationVariables, UpdateCategoryProps<TChildProps>>(UpdateCategoryDocument, {
+      alias: 'updateCategory',
+      ...operationOptions
+    });
+};
+
+/**
+ * __useUpdateCategoryMutation__
+ *
+ * To run a mutation, you first call `useUpdateCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCategoryMutation, { data, loading, error }] = useUpdateCategoryMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useUpdateCategoryMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateCategoryMutation, UpdateCategoryMutationVariables>) {
+        return ApolloReactHooks.useMutation<UpdateCategoryMutation, UpdateCategoryMutationVariables>(UpdateCategoryDocument, baseOptions);
+      }
+export type UpdateCategoryMutationHookResult = ReturnType<typeof useUpdateCategoryMutation>;
+export type UpdateCategoryMutationResult = ApolloReactCommon.MutationResult<UpdateCategoryMutation>;
+export type UpdateCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateCategoryMutation, UpdateCategoryMutationVariables>;
+export const DeleteCategoryDocument = gql`
+    mutation DeleteCategory($id: ID!) {
+  deleteCategory(id: $id)
+}
+    `;
+export type DeleteCategoryMutationFn = ApolloReactCommon.MutationFunction<DeleteCategoryMutation, DeleteCategoryMutationVariables>;
+export type DeleteCategoryComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<DeleteCategoryMutation, DeleteCategoryMutationVariables>, 'mutation'>;
+
+    export const DeleteCategoryComponent = (props: DeleteCategoryComponentProps) => (
+      <ApolloReactComponents.Mutation<DeleteCategoryMutation, DeleteCategoryMutationVariables> mutation={DeleteCategoryDocument} {...props} />
+    );
+    
+export type DeleteCategoryProps<TChildProps = {}> = ApolloReactHoc.MutateProps<DeleteCategoryMutation, DeleteCategoryMutationVariables> | TChildProps;
+export function withDeleteCategory<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  DeleteCategoryMutation,
+  DeleteCategoryMutationVariables,
+  DeleteCategoryProps<TChildProps>>) {
+    return ApolloReactHoc.withMutation<TProps, DeleteCategoryMutation, DeleteCategoryMutationVariables, DeleteCategoryProps<TChildProps>>(DeleteCategoryDocument, {
+      alias: 'deleteCategory',
+      ...operationOptions
+    });
+};
+
+/**
+ * __useDeleteCategoryMutation__
+ *
+ * To run a mutation, you first call `useDeleteCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCategoryMutation, { data, loading, error }] = useDeleteCategoryMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteCategoryMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteCategoryMutation, DeleteCategoryMutationVariables>) {
+        return ApolloReactHooks.useMutation<DeleteCategoryMutation, DeleteCategoryMutationVariables>(DeleteCategoryDocument, baseOptions);
+      }
+export type DeleteCategoryMutationHookResult = ReturnType<typeof useDeleteCategoryMutation>;
+export type DeleteCategoryMutationResult = ApolloReactCommon.MutationResult<DeleteCategoryMutation>;
+export type DeleteCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteCategoryMutation, DeleteCategoryMutationVariables>;
 export const CreateSizeDocument = gql`
     mutation CreateSize($name: String!) {
   createSize(name: $name) {
@@ -1511,6 +1682,103 @@ export function useCreateSizeMutation(baseOptions?: ApolloReactHooks.MutationHoo
 export type CreateSizeMutationHookResult = ReturnType<typeof useCreateSizeMutation>;
 export type CreateSizeMutationResult = ApolloReactCommon.MutationResult<CreateSizeMutation>;
 export type CreateSizeMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateSizeMutation, CreateSizeMutationVariables>;
+export const UpdateSizeDocument = gql`
+    mutation UpdateSize($id: ID!, $name: String!) {
+  updateSize(id: $id, name: $name) {
+    id
+  }
+}
+    `;
+export type UpdateSizeMutationFn = ApolloReactCommon.MutationFunction<UpdateSizeMutation, UpdateSizeMutationVariables>;
+export type UpdateSizeComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<UpdateSizeMutation, UpdateSizeMutationVariables>, 'mutation'>;
+
+    export const UpdateSizeComponent = (props: UpdateSizeComponentProps) => (
+      <ApolloReactComponents.Mutation<UpdateSizeMutation, UpdateSizeMutationVariables> mutation={UpdateSizeDocument} {...props} />
+    );
+    
+export type UpdateSizeProps<TChildProps = {}> = ApolloReactHoc.MutateProps<UpdateSizeMutation, UpdateSizeMutationVariables> | TChildProps;
+export function withUpdateSize<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  UpdateSizeMutation,
+  UpdateSizeMutationVariables,
+  UpdateSizeProps<TChildProps>>) {
+    return ApolloReactHoc.withMutation<TProps, UpdateSizeMutation, UpdateSizeMutationVariables, UpdateSizeProps<TChildProps>>(UpdateSizeDocument, {
+      alias: 'updateSize',
+      ...operationOptions
+    });
+};
+
+/**
+ * __useUpdateSizeMutation__
+ *
+ * To run a mutation, you first call `useUpdateSizeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateSizeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateSizeMutation, { data, loading, error }] = useUpdateSizeMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useUpdateSizeMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateSizeMutation, UpdateSizeMutationVariables>) {
+        return ApolloReactHooks.useMutation<UpdateSizeMutation, UpdateSizeMutationVariables>(UpdateSizeDocument, baseOptions);
+      }
+export type UpdateSizeMutationHookResult = ReturnType<typeof useUpdateSizeMutation>;
+export type UpdateSizeMutationResult = ApolloReactCommon.MutationResult<UpdateSizeMutation>;
+export type UpdateSizeMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateSizeMutation, UpdateSizeMutationVariables>;
+export const DeleteSizeDocument = gql`
+    mutation DeleteSize($id: ID!) {
+  deleteSize(id: $id)
+}
+    `;
+export type DeleteSizeMutationFn = ApolloReactCommon.MutationFunction<DeleteSizeMutation, DeleteSizeMutationVariables>;
+export type DeleteSizeComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<DeleteSizeMutation, DeleteSizeMutationVariables>, 'mutation'>;
+
+    export const DeleteSizeComponent = (props: DeleteSizeComponentProps) => (
+      <ApolloReactComponents.Mutation<DeleteSizeMutation, DeleteSizeMutationVariables> mutation={DeleteSizeDocument} {...props} />
+    );
+    
+export type DeleteSizeProps<TChildProps = {}> = ApolloReactHoc.MutateProps<DeleteSizeMutation, DeleteSizeMutationVariables> | TChildProps;
+export function withDeleteSize<TProps, TChildProps = {}>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  DeleteSizeMutation,
+  DeleteSizeMutationVariables,
+  DeleteSizeProps<TChildProps>>) {
+    return ApolloReactHoc.withMutation<TProps, DeleteSizeMutation, DeleteSizeMutationVariables, DeleteSizeProps<TChildProps>>(DeleteSizeDocument, {
+      alias: 'deleteSize',
+      ...operationOptions
+    });
+};
+
+/**
+ * __useDeleteSizeMutation__
+ *
+ * To run a mutation, you first call `useDeleteSizeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteSizeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteSizeMutation, { data, loading, error }] = useDeleteSizeMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteSizeMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteSizeMutation, DeleteSizeMutationVariables>) {
+        return ApolloReactHooks.useMutation<DeleteSizeMutation, DeleteSizeMutationVariables>(DeleteSizeDocument, baseOptions);
+      }
+export type DeleteSizeMutationHookResult = ReturnType<typeof useDeleteSizeMutation>;
+export type DeleteSizeMutationResult = ApolloReactCommon.MutationResult<DeleteSizeMutation>;
+export type DeleteSizeMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteSizeMutation, DeleteSizeMutationVariables>;
 export const SignUpDocument = gql`
     mutation SignUp($email: String!, $password: String!) {
   signUp(email: $email, password: $password) {

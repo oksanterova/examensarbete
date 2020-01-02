@@ -9,7 +9,7 @@ import {
 } from "../generated/graphql";
 import StyledMain from "../components/StyledMain";
 
-const ListProductsPage: React.FC = () => {
+const ProductManager: React.FC = () => {
   const history = useHistory();
   const {
     data: { products } = { products: [] },
@@ -27,7 +27,7 @@ const ListProductsPage: React.FC = () => {
   }
 
   return (
-    <StyledMain fullWidth>
+    <StyledMain>
       <MaterialTable
         isLoading={loading}
         editable={{
@@ -72,13 +72,17 @@ const ListProductsPage: React.FC = () => {
             icon: "edit",
             tooltip: "Edit Product",
             isFreeAction: false,
-            onClick: event => history.push("/update-product")
+            onClick: (event, rowData) => {
+              // @ts-ignore
+              const productId = rowData.id;
+              history.push(`/update-product/${productId}`);
+            }
           }
         ]}
-        title="Demo Title"
+        title="Product manager"
       />
     </StyledMain>
   );
 };
 
-export default ListProductsPage;
+export default ProductManager;

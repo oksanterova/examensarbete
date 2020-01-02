@@ -8,7 +8,10 @@ import {
 import StyledMain from "../components/StyledMain";
 
 const CreateProductPage = () => {
-  const [createProductMutation] = useCreateProductMutation();
+  const [createProductMutation] = useCreateProductMutation({
+    refetchQueries: [{ query: GetProductsDocument }],
+    awaitRefetchQueries: true
+  });
 
   async function submit(input: ProductInput): Promise<void> {
     await createProductMutation({

@@ -25,9 +25,9 @@ import CartPage from "./pages/CartPage";
 import OrderPage from "./pages/OrderPage";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import CreateProductPage from "./pages/CreateProductPage";
-import CreateCategoryPage from "./pages/CreateCategoryPage";
-import CreateSizePage from "./pages/CreateSizePage";
-import ListProductsPage from "./pages/ListProductsPage";
+import CategoryManager from "./pages/CategoryManager";
+import SizeManager from "./pages/SizeManager";
+import ProductManager from "./pages/ProductManager";
 import EditProductPage from "./pages/EditProductPage";
 import LoginPage from "./pages/LoginPage";
 import LogOutPage from "./pages/LogOutPage";
@@ -98,9 +98,9 @@ const AppMain: React.FC = () => {
       />
       <Route exact path="/create-product" component={CreateProductPage} />
       <Route exact path="/update-product/:id" component={EditProductPage} />
-      <Route exact path="/create-category" component={CreateCategoryPage} />
-      <Route exact path="/create-size" component={CreateSizePage} />
-      <Route exact path="/list-products" component={ListProductsPage} />
+      <Route exact path="/product-manager" component={ProductManager} />
+      <Route exact path="/category-manager" component={CategoryManager} />
+      <Route exact path="/size-manager" component={SizeManager} />
     </>
   );
 };

@@ -64,7 +64,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
       onSubmit={async e => {
         e.preventDefault();
         await submit(input);
-        history.push("/list-products");
+        history.push("/product-manager");
       }}
     >
       <Typography variant="h6" gutterBottom>

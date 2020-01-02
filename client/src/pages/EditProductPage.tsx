@@ -3,7 +3,8 @@ import ProductForm from "../components/ProductForm";
 import {
   useUpdateProductMutation,
   ProductInput,
-  useGetProductQuery
+  useGetProductQuery,
+  GetProductsDocument
 } from "../generated/graphql";
 import { useParams } from "react-router-dom";
 import StyledMain from "../components/StyledMain";
@@ -11,7 +12,10 @@ import StyledMain from "../components/StyledMain";
 const EditProductPage: React.FC = () => {
   // @ts-ignore
   const { id }: { id: string } = useParams();
-  const [updateProductMutation] = useUpdateProductMutation();
+  const [updateProductMutation] = useUpdateProductMutation({
+    refetchQueries: [{ query: GetProductsDocument }],
+    awaitRefetchQueries: true
+  });
 
   const { data, loading, error } = useGetProductQuery({
     variables: { id: id }
