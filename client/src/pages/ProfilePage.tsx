@@ -35,7 +35,7 @@ const Profile = () => {
 
   return (
     <>
-      <Typography variant="h5" component="h2" gutterBottom>
+      <Typography variant="h6" gutterBottom>
         My profile:
       </Typography>
       {editMode ? (
@@ -56,7 +56,7 @@ const Profile = () => {
             <ListItem>{address}</ListItem>
           </List>
 
-          <Box marginBottom={2}>
+          <Box marginBottom={4}>
             <Button
               variant="contained"
               color="primary"
@@ -137,7 +137,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ profile, onSubmit }) => {
           />
         </Grid>
         <Grid item xs={12}>
-          <Box m={2}>
+          <Box marginBottom={4}>
             <LoadingButton
               loading={loading}
               variant="contained"
@@ -192,10 +192,15 @@ const ProfilePage = () => {
   return (
     <StyledMain>
       <Profile />
-
-      <Typography variant="h5" component="h2" gutterBottom>
-        My orders:
-      </Typography>
+      {data?.me?.orders?.length === 0 ? (
+        <Typography variant="h6" gutterBottom>
+          You don't have any order yet
+        </Typography>
+      ) : (
+        <Typography variant="h6" gutterBottom>
+          My orders:
+        </Typography>
+      )}
 
       {data?.me?.orders?.map(order => (
         <MyOrder key={order.id} {...order} />

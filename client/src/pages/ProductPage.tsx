@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { useHistory } from "react-router-dom";
 import {
   useGetProductQuery,
   useAddCartItemMutation,
@@ -10,7 +11,8 @@ import {
   List,
   ListItem,
   MenuItem,
-  TextField
+  TextField,
+  Grid
 } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 import LoadingButton from "../components/LoadingButton";
@@ -18,6 +20,7 @@ import CartContext from "../CartContext";
 import StyledMain from "../components/StyledMain";
 
 const ProductPage = () => {
+  const history = useHistory();
   // @ts-ignore
   const { id }: { id: string } = useParams();
   const { loading, data, error } = useGetProductQuery({
@@ -53,37 +56,50 @@ const ProductPage = () => {
 
   return (
     <StyledMain>
-      <Typography>{product.name}</Typography>
-      <Typography>{product.description}</Typography>
-      <TextField
-        select
-        required
-        fullWidth
-        value={sizeId}
-        label="Size:"
-        onChange={e => setSizeId(e.target.value as string)}
-      >
-        {product.sizes.map(size => (
-          <MenuItem key={size.id} value={size.id}>
-            {size.name}
-          </MenuItem>
-        ))}
-      </TextField>
-      <Typography>Categories:</Typography>
-      <List>
-        {product.categories.map(category => (
-          <ListItem key={category.id}>{category.name}</ListItem>
-        ))}
-      </List>
-      <LoadingButton
-        variant="contained"
-        size="small"
-        color="primary"
-        onClick={() => addCartItemMutation()}
-        loading={addCartItemLoading}
-      >
-        <Typography>Add to Cart</Typography>
-      </LoadingButton>
+      <Typography variant="h6" gutterBottom>
+        {product.name}
+      </Typography>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <Typography gutterBottom>{product.description}</Typography>
+          <TextField
+            required
+            select
+            fullWidth
+            value={sizeId}
+            label="Select size:"
+            onChange={e => setSizeId(e.target.value as string)}
+          >
+            {product.sizes.map(size => (
+              <MenuItem key={size.id} value={size.id}>
+                {size.name}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography gutterBottom>Categories:</Typography>
+          <List>
+            {product.categories.map(category => (
+              <ListItem key={category.id}>{category.name}</ListItem>
+            ))}
+          </List>
+        </Grid>
+        <Grid item xs={12}>
+          <LoadingButton
+            variant="contained"
+            color="primary"
+            type="submit"
+            onClick={() => {
+              addCartItemMutation();
+              history.push("/");
+            }}
+            loading={addCartItemLoading}
+          >
+            Add to Cart
+          </LoadingButton>
+        </Grid>
+      </Grid>
     </StyledMain>
   );
 };

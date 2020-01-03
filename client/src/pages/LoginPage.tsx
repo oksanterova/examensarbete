@@ -67,7 +67,7 @@ const LoginPage = () => {
               type="submit"
               loading={loading}
             >
-              <Typography>Login</Typography>
+              Login
             </LoadingButton>
           </Grid>
         </Grid>

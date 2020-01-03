@@ -52,7 +52,7 @@ const CartPage: React.FC = () => {
   if (items?.length === 0) {
     return (
       <StyledMain>
-        <h1>Your cart is empty</h1>
+        <Typography variant="h6">Your cart is empty</Typography>
       </StyledMain>
     );
   }
@@ -61,7 +61,7 @@ const CartPage: React.FC = () => {
     <StyledMain>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Typography variant="h5" component="h2">
+          <Typography variant="h6" gutterBottom>
             Cart
           </Typography>
         </Grid>
@@ -126,7 +126,7 @@ const CartPage: React.FC = () => {
           </Table>
         </Grid>
         <Grid item xs={12}>
-          <Box marginTop={2}>
+          <Box marginTop={1}>
             <LoadingButton
               loading={loading}
               variant="contained"

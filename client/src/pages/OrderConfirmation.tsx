@@ -45,14 +45,12 @@ const OrderConfirmation = () => {
     <StyledMain>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Typography variant="h5" component="h2">
+          <Typography variant="h6" gutterBottom>
             Order Confirmation
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <Typography variant="h6" component="h3">
-            Your order number {data?.order.id}
-          </Typography>
+          <Typography>Your order number {data?.order.id}</Typography>
         </Grid>
         <Grid item xs={12}>
           <Table>
@@ -75,7 +73,7 @@ const OrderConfirmation = () => {
           </Table>
         </Grid>
         <Grid item xs={12}>
-          <Typography variant="h6" component="h3">
+          <Typography>
             created on {createdAt} will be shiped to your address:{" "}
             {data?.order.address}
           </Typography>

@@ -35,9 +35,7 @@ const ProductCard: React.FC<Product> = product => {
         title="Image title"
       />
       <CardContent>
-        <Typography variant="h5" component="h2">
-          {product.name}
-        </Typography>
+        <Typography variant="h6">{product.name}</Typography>
       </CardContent>
     </CustomCard>
   );

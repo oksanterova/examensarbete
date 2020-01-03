@@ -6,8 +6,23 @@ import {
   useDeleteCategoryMutation,
   useGetCategoriesQuery
 } from "../generated/graphql";
-import StyledMain from "../components/StyledMain";
 import MaterialTable from "material-table";
+import styled from "styled-components";
+
+const StyledTable = styled.main`
+  width: auto;
+  padding-top: ${props => props.theme.spacing(6)}px;
+  margin-left: ${props => props.theme.spacing(0)}px;
+  margin-right: ${props => props.theme.spacing(0)}px;
+
+  ${props => props.theme.breakpoints.up(600 + props.theme.spacing(3) * 2)} {
+    width: 600px;
+    margin-top: ${props => props.theme.spacing(6)}px;
+    padding-top: ${props => props.theme.spacing(3)}px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+`;
 
 const CategoryManager = () => {
   const [createCategoryMutation] = useCreateCategoryMutation({
@@ -36,7 +51,7 @@ const CategoryManager = () => {
   }
 
   return (
-    <StyledMain>
+    <StyledTable>
       <MaterialTable
         isLoading={loading}
         editable={{
@@ -54,7 +69,7 @@ const CategoryManager = () => {
         data={categories}
         title="Category manager"
       />
-    </StyledMain>
+    </StyledTable>
   );
 };
 

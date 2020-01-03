@@ -54,7 +54,7 @@ const OrderPage = () => {
       >
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography variant="h5" component="h2">
+            <Typography variant="h6" gutterBottom>
               Cart
             </Typography>
           </Grid>
@@ -79,7 +79,7 @@ const OrderPage = () => {
             </Table>
           </Grid>
           <Grid item xs={12}>
-            <Typography gutterBottom variant="h5" component="h2">
+            <Typography variant="h6" gutterBottom>
               Address
             </Typography>
           </Grid>
@@ -95,7 +95,7 @@ const OrderPage = () => {
             />
           </Grid>
           <Grid item xs={12}>
-            <Box marginTop={2}>
+            <Box marginTop={1}>
               <LoadingButton
                 loading={loading}
                 variant="contained"
