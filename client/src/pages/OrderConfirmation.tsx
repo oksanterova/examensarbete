@@ -13,6 +13,7 @@ import {
 import { useGetOrderQuery } from "../generated/graphql";
 import { useParams } from "react-router-dom";
 import StyledMain from "../components/StyledMain";
+import Loader from "../components/Loader";
 
 const OrderConfirmation = () => {
   const history = useHistory();
@@ -27,7 +28,7 @@ const OrderConfirmation = () => {
 
   const items = data?.order.items;
 
-  if (loading) return <h1>Loading</h1>;
+  if (loading) return <Loader />;
   if (error) return <h1>Error</h1>;
 
   let options = {

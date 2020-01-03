@@ -18,6 +18,7 @@ import { useParams } from "react-router-dom";
 import LoadingButton from "../components/LoadingButton";
 import CartContext from "../CartContext";
 import StyledMain from "../components/StyledMain";
+import Loader from "../components/Loader";
 
 const ProductPage = () => {
   const history = useHistory();
@@ -48,7 +49,7 @@ const ProductPage = () => {
     awaitRefetchQueries: true
   });
 
-  if (loading) return <h1>Loading</h1>;
+  if (loading) return <Loader />;
 
   if (error) return <h1>Error</h1>;
 

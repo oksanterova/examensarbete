@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import styled from "styled-components";
 import StyledMain from "../components/StyledMain";
+import Loader from "../components/Loader";
 
 const CardGrid = styled(Container)`
   padding-top: ${props => props.theme.spacing(8)}px;
@@ -45,7 +46,7 @@ const Homepage: React.FC = () => {
   const { loading, data, error } = useGetProductsQuery();
 
   if (loading) {
-    return <h1>Loading</h1>;
+    return <Loader />;
   }
 
   if (error) {

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useCreateCartMutation } from "./generated/graphql";
+import Loader from "./components/Loader";
 
 const CartContext = React.createContext<{
   cartId: string;
@@ -34,7 +35,7 @@ export const CartContextProvider: React.FC<{
   }, [resetCart]);
 
   if (cartId === null) {
-    return <h1>Loading</h1>;
+    return <Loader />;
   }
 
   return (

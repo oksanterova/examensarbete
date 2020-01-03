@@ -2,6 +2,7 @@ import React from "react";
 import { useGetMeQuery } from "./generated/graphql";
 import { useQuery } from "@apollo/react-hooks";
 import { IS_LOGGED_IN } from "./client";
+import Loader from "./components/Loader";
 
 type Me = {
   address?: string | null;
@@ -20,7 +21,7 @@ export const MeContextProvider: React.FC<{
   const { data, loading } = useGetMeQuery({ skip: !isLoggedIn });
 
   if (loggedInLoading || loading) {
-    return <h1>Loading</h1>;
+    return <Loader />;
   }
 
   const value = isLoggedIn === false ? undefined : data?.me;

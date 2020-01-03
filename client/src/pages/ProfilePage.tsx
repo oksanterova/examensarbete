@@ -21,6 +21,7 @@ import {
   useGetMeQuery
 } from "../generated/graphql";
 import LoadingButton from "../components/LoadingButton";
+import Loader from "../components/Loader";
 import StyledMain from "../components/StyledMain";
 
 const Profile = () => {
@@ -28,7 +29,7 @@ const Profile = () => {
 
   const [editMode, setEditMode] = useState(false);
 
-  if (loading) return <h1>Loading</h1>;
+  if (loading) return <Loader />;
   if (error) return <h1>Error</h1>;
 
   const { firstname, lastname, email, address } = data!.me;
@@ -186,7 +187,7 @@ const MyOrder: React.FC<MyOrderProps> = ({ id, items }) => {
 const ProfilePage = () => {
   const { loading, data, error } = useGetMyOrdersQuery();
 
-  if (loading) return <h1>Loading</h1>;
+  if (loading) return <Loader />;
   if (error) return <h1>Error</h1>;
 
   return (

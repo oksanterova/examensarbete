@@ -8,6 +8,7 @@ import {
 } from "../generated/graphql";
 import { useParams } from "react-router-dom";
 import StyledMain from "../components/StyledMain";
+import Loader from "../components/Loader";
 
 const EditProductPage: React.FC = () => {
   // @ts-ignore
@@ -28,7 +29,7 @@ const EditProductPage: React.FC = () => {
   const buttonAction = "Update product";
   const title = "Product editing";
 
-  if (loading) return <h1>Loading</h1>;
+  if (loading) return <Loader />;
 
   if (error) return <h1>Error</h1>;
 

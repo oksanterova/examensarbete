@@ -23,6 +23,7 @@ import {
   GetCartDocument
 } from "../generated/graphql";
 import StyledMain from "../components/StyledMain";
+import Loader from "../components/Loader";
 
 const CartPage: React.FC = () => {
   const history = useHistory();
@@ -42,7 +43,7 @@ const CartPage: React.FC = () => {
   const quantities = [1, 2, 3, 4, 5];
 
   if (loading) {
-    return <h1>Loading</h1>;
+    return <Loader />;
   }
 
   if (error) {

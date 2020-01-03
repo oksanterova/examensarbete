@@ -16,6 +16,7 @@ import {
 import { useGetCartQuery, useCreateOrderMutation } from "../generated/graphql";
 import MeContext from "../MeContext";
 import StyledMain from "../components/StyledMain";
+import Loader from "../components/Loader";
 
 const OrderPage = () => {
   const history = useHistory();
@@ -33,7 +34,7 @@ const OrderPage = () => {
 
   const items = data?.cart.items;
 
-  if (loading) return <h1>Loading</h1>;
+  if (loading) return <Loader />;
   if (error) return <h1>Error</h1>;
 
   return (

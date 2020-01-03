@@ -8,6 +8,7 @@ import {
   Product
 } from "../generated/graphql";
 import MultiSelectField from "./MultiSelectField";
+import Loader from "../components/Loader";
 
 type MultiSelectValue = {
   id: string;
@@ -55,7 +56,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
     error: categoryError
   } = useGetCategoriesQuery();
 
-  if (sizeLoading || categoryLoading) return <h1>Loading</h1>;
+  if (sizeLoading || categoryLoading) return <Loader />;
 
   if (sizeError || categoryError) return <h1>Error</h1>;
 
