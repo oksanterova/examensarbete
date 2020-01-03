@@ -19,6 +19,7 @@ import LoadingButton from "../components/LoadingButton";
 import CartContext from "../CartContext";
 import StyledMain from "../components/StyledMain";
 import Loader from "../components/Loader";
+import Error from "../components/Error";
 
 const ProductPage = () => {
   const history = useHistory();
@@ -51,7 +52,7 @@ const ProductPage = () => {
 
   if (loading) return <Loader />;
 
-  if (error) return <h1>Error</h1>;
+  if (error) return <Error />;
 
   const product = data!.product;
 

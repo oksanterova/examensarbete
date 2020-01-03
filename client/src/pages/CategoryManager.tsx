@@ -8,6 +8,7 @@ import {
 } from "../generated/graphql";
 import MaterialTable from "material-table";
 import styled from "styled-components";
+import Error from "../components/Error";
 
 const StyledTable = styled.main`
   width: auto;
@@ -47,7 +48,7 @@ const CategoryManager = () => {
   } = useGetCategoriesQuery();
 
   if (error) {
-    return <h1>Error</h1>;
+    return <Error />;
   }
 
   return (

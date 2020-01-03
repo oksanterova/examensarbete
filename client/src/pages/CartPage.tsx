@@ -24,6 +24,7 @@ import {
 } from "../generated/graphql";
 import StyledMain from "../components/StyledMain";
 import Loader from "../components/Loader";
+import Error from "../components/Error";
 
 const CartPage: React.FC = () => {
   const history = useHistory();
@@ -47,7 +48,7 @@ const CartPage: React.FC = () => {
   }
 
   if (error) {
-    return <h1>Error</h1>;
+    return <Error />;
   }
 
   if (items?.length === 0) {

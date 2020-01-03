@@ -12,6 +12,7 @@ import {
 import styled from "styled-components";
 import StyledMain from "../components/StyledMain";
 import Loader from "../components/Loader";
+import Error from "../components/Error";
 
 const CardGrid = styled(Container)`
   padding-top: ${props => props.theme.spacing(8)}px;
@@ -50,7 +51,7 @@ const Homepage: React.FC = () => {
   }
 
   if (error) {
-    return <h1>Error</h1>;
+    return <Error />;
   }
 
   return (

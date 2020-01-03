@@ -9,6 +9,7 @@ import {
 import { useParams } from "react-router-dom";
 import StyledMain from "../components/StyledMain";
 import Loader from "../components/Loader";
+import Error from "../components/Error";
 
 const EditProductPage: React.FC = () => {
   // @ts-ignore
@@ -31,7 +32,7 @@ const EditProductPage: React.FC = () => {
 
   if (loading) return <Loader />;
 
-  if (error) return <h1>Error</h1>;
+  if (error) return <Error />;
 
   return (
     <StyledMain>

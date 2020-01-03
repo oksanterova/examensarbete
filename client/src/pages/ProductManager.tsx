@@ -8,6 +8,7 @@ import {
   GetProductsDocument
 } from "../generated/graphql";
 import styled from "styled-components";
+import Error from "../components/Error";
 
 const StyledTable = styled.main`
   width: auto;
@@ -38,7 +39,7 @@ const ProductManager: React.FC = () => {
   });
 
   if (error) {
-    return <h1>Error</h1>;
+    return <Error />;
   }
 
   return (

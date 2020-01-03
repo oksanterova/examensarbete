@@ -9,6 +9,7 @@ import {
 } from "../generated/graphql";
 import MultiSelectField from "./MultiSelectField";
 import Loader from "../components/Loader";
+import Error from "../components/Error";
 
 type MultiSelectValue = {
   id: string;
@@ -58,7 +59,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
 
   if (sizeLoading || categoryLoading) return <Loader />;
 
-  if (sizeError || categoryError) return <h1>Error</h1>;
+  if (sizeError || categoryError) return <Error />;
 
   return (
     <form

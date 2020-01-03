@@ -14,6 +14,7 @@ import { useGetOrderQuery } from "../generated/graphql";
 import { useParams } from "react-router-dom";
 import StyledMain from "../components/StyledMain";
 import Loader from "../components/Loader";
+import Error from "../components/Error";
 
 const OrderConfirmation = () => {
   const history = useHistory();
@@ -29,7 +30,7 @@ const OrderConfirmation = () => {
   const items = data?.order.items;
 
   if (loading) return <Loader />;
-  if (error) return <h1>Error</h1>;
+  if (error) return <Error />;
 
   let options = {
     weekday: "long",

@@ -22,6 +22,7 @@ import {
 } from "../generated/graphql";
 import LoadingButton from "../components/LoadingButton";
 import Loader from "../components/Loader";
+import Error from "../components/Error";
 import StyledMain from "../components/StyledMain";
 
 const Profile = () => {
@@ -30,7 +31,7 @@ const Profile = () => {
   const [editMode, setEditMode] = useState(false);
 
   if (loading) return <Loader />;
-  if (error) return <h1>Error</h1>;
+  if (error) return <Error />;
 
   const { firstname, lastname, email, address } = data!.me;
 
@@ -188,7 +189,7 @@ const ProfilePage = () => {
   const { loading, data, error } = useGetMyOrdersQuery();
 
   if (loading) return <Loader />;
-  if (error) return <h1>Error</h1>;
+  if (error) return <Error />;
 
   return (
     <StyledMain>
