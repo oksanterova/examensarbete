@@ -6,6 +6,7 @@ import {
   useDeleteSizeMutation,
   useGetSizesQuery
 } from "../generated/graphql";
+import { Box } from "@material-ui/core";
 import MaterialTable from "material-table";
 import styled from "styled-components";
 import Error from "../components/Error";
@@ -53,23 +54,25 @@ const SizeManager = () => {
 
   return (
     <StyledTable>
-      <MaterialTable
-        isLoading={loading}
-        editable={{
-          onRowDelete: async ({ id }) => {
-            await deleteSizeMutation({ variables: { id } });
-          },
-          onRowUpdate: async ({ id, name }) => {
-            await updateSizeMutation({ variables: { id, name } });
-          },
-          onRowAdd: async ({ name }) => {
-            await createSizeMutation({ variables: { name } });
-          }
-        }}
-        columns={[{ title: "Name", field: "name" }]}
-        data={sizes}
-        title="Size manager"
-      />
+      <Box m={3}>
+        <MaterialTable
+          isLoading={loading}
+          editable={{
+            onRowDelete: async ({ id }) => {
+              await deleteSizeMutation({ variables: { id } });
+            },
+            onRowUpdate: async ({ id, name }) => {
+              await updateSizeMutation({ variables: { id, name } });
+            },
+            onRowAdd: async ({ name }) => {
+              await createSizeMutation({ variables: { name } });
+            }
+          }}
+          columns={[{ title: "Name", field: "name" }]}
+          data={sizes}
+          title="Size manager"
+        />
+      </Box>
     </StyledTable>
   );
 };

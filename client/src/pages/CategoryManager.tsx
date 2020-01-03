@@ -6,6 +6,7 @@ import {
   useDeleteCategoryMutation,
   useGetCategoriesQuery
 } from "../generated/graphql";
+import { Box } from "@material-ui/core";
 import MaterialTable from "material-table";
 import styled from "styled-components";
 import Error from "../components/Error";
@@ -53,23 +54,25 @@ const CategoryManager = () => {
 
   return (
     <StyledTable>
-      <MaterialTable
-        isLoading={loading}
-        editable={{
-          onRowDelete: async ({ id }) => {
-            await deleteCategoryMutation({ variables: { id } });
-          },
-          onRowUpdate: async ({ id, name }) => {
-            await updateCategoryMutation({ variables: { id, name } });
-          },
-          onRowAdd: async ({ name }) => {
-            await createCategoryMutation({ variables: { name } });
-          }
-        }}
-        columns={[{ title: "Name", field: "name" }]}
-        data={categories}
-        title="Category manager"
-      />
+      <Box m={3}>
+        <MaterialTable
+          isLoading={loading}
+          editable={{
+            onRowDelete: async ({ id }) => {
+              await deleteCategoryMutation({ variables: { id } });
+            },
+            onRowUpdate: async ({ id, name }) => {
+              await updateCategoryMutation({ variables: { id, name } });
+            },
+            onRowAdd: async ({ name }) => {
+              await createCategoryMutation({ variables: { name } });
+            }
+          }}
+          columns={[{ title: "Name", field: "name" }]}
+          data={categories}
+          title="Category manager"
+        />
+      </Box>
     </StyledTable>
   );
 };

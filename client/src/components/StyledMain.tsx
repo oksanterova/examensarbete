@@ -34,8 +34,8 @@ const StyledPaper = styled(Paper)`
   padding: ${props => props.theme.spacing(1)}px;
 
   ${props => props.theme.breakpoints.up(600 + props.theme.spacing(3) * 2)} {
-    margin-top: ${props => props.theme.spacing(0)}px;
-    margin-bottom: ${props => props.theme.spacing(0)}px;
+    margin-top: ${props => props.theme.spacing(3)}px;
+    margin-bottom: ${props => props.theme.spacing(3)}px;
     padding: ${props => props.theme.spacing(3)}px;
   }
 
