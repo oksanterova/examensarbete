@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-import { useHistory } from "react-router-dom";
 import {
   useGetProductQuery,
   useAddCartItemMutation,
@@ -22,7 +21,6 @@ import Loader from "../components/Loader";
 import Error from "../components/Error";
 
 const ProductPage = () => {
-  const history = useHistory();
   // @ts-ignore
   const { id }: { id: string } = useParams();
   const { loading, data, error } = useGetProductQuery({
@@ -94,7 +92,6 @@ const ProductPage = () => {
             type="submit"
             onClick={() => {
               addCartItemMutation();
-              history.push("/");
             }}
             loading={addCartItemLoading}
           >

@@ -66,6 +66,7 @@ input ProductInput {
 
 type User {
   id: ID!
+  isAdmin: Boolean!
   firstname: String
   lastname: String
   email: String!

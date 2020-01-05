@@ -6,6 +6,7 @@ import Loader from "./components/Loader";
 
 type Me = {
   address?: string | null;
+  isAdmin: boolean;
 };
 
 const MeContext = React.createContext<Me | undefined>(undefined);

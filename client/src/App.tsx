@@ -98,11 +98,25 @@ const AppMain: React.FC = () => {
         path="/order-confirmation/:id"
         component={OrderConfirmation}
       />
-      <Route exact path="/create-product" component={CreateProductPage} />
-      <Route exact path="/update-product/:id" component={EditProductPage} />
-      <Route exact path="/product-manager" component={ProductManager} />
-      <Route exact path="/category-manager" component={CategoryManager} />
-      <Route exact path="/size-manager" component={SizeManager} />
+
+      {me?.isAdmin && (
+        <Route exact path="/create-product" component={CreateProductPage} />
+      )}
+      {me?.isAdmin && (
+        <Route exact path="/create-product" component={CreateProductPage} />
+      )}
+      {me?.isAdmin && (
+        <Route exact path="/update-product/:id" component={EditProductPage} />
+      )}
+      {me?.isAdmin && (
+        <Route exact path="/product-manager" component={ProductManager} />
+      )}
+      {me?.isAdmin && (
+        <Route exact path="/category-manager" component={CategoryManager} />
+      )}
+      {me?.isAdmin && (
+        <Route exact path="/size-manager" component={SizeManager} />
+      )}
     </>
   );
 };

@@ -262,6 +262,7 @@ export type Token = {
 export type User = {
    __typename?: 'User',
   id: Scalars['ID'],
+  isAdmin: Scalars['Boolean'],
   firstname?: Maybe<Scalars['String']>,
   lastname?: Maybe<Scalars['String']>,
   email: Scalars['String'],
@@ -392,7 +393,7 @@ export type GetMeQuery = (
   { __typename?: 'Query' }
   & { me: (
     { __typename?: 'User' }
-    & Pick<User, 'email' | 'firstname' | 'lastname' | 'address'>
+    & Pick<User, 'isAdmin' | 'email' | 'firstname' | 'lastname' | 'address'>
   ) }
 );
 
@@ -988,6 +989,7 @@ export type GetCartQueryResult = ApolloReactCommon.QueryResult<GetCartQuery, Get
 export const GetMeDocument = gql`
     query GetMe {
   me {
+    isAdmin
     email
     firstname
     lastname

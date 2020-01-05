@@ -11,8 +11,8 @@ import OrderItem from "./OrderItem";
 
 @Entity()
 export default class Order extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @PrimaryGeneratedColumn("uuid")
+  id!: string;
 
   @Column()
   address!: string;

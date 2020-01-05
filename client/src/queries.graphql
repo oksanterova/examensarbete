@@ -92,6 +92,7 @@ query GetCart($cartId: ID!) {
 
 query GetMe {
   me {
+    isAdmin
     email
     firstname
     lastname

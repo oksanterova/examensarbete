@@ -115,8 +115,8 @@ function orderItemToGql({
   };
 }
 
-function orderToGql({ id, items, ...rest }: Order): graphql.Order {
-  return { id: id?.toString(), items: items?.map(orderItemToGql), ...rest };
+function orderToGql({ items, ...rest }: Order): graphql.Order {
+  return { items: items?.map(orderItemToGql), ...rest };
 }
 
 function userToGql({ id, orders, ...rest }: User): graphql.User {
@@ -144,7 +144,9 @@ const queryResolvers: QueryResolvers<MyContext> = {
 
     return productToGql(product);
   },
-  orders: async () => {
+  orders: async (_, {}, { me }) => {
+    if (!me?.isAdmin) throwForbiddenError();
+
     const orders = await Order.find();
 
     return orders.map(orderToGql);
@@ -201,6 +203,7 @@ const mutationResolvers: MutationResolvers<MyContext> = {
   },
   signUp: async (_, { email, password }, { secret }) => {
     const user = new User({
+      isAdmin: false,
       email,
       password: await bcrypt.hash(password, config.saltRounds)
     });
@@ -252,7 +255,9 @@ const mutationResolvers: MutationResolvers<MyContext> = {
     await cartItem.remove();
     return true;
   },
-  addCategoryToProduct: async (_, { categoryId, productId }) => {
+  addCategoryToProduct: async (_, { categoryId, productId }, { me }) => {
+    if (!me?.isAdmin) throwForbiddenError();
+
     await getConnection()
       .createQueryBuilder()
       .relation(Product, "categories")
@@ -263,7 +268,9 @@ const mutationResolvers: MutationResolvers<MyContext> = {
 
     return productToGql(product);
   },
-  addSizeToProduct: async (_, { productId, sizeId }) => {
+  addSizeToProduct: async (_, { productId, sizeId }, { me }) => {
+    if (!me?.isAdmin) throwForbiddenError();
+
     await getConnection()
       .createQueryBuilder()
       .relation(Product, "sizes")
@@ -274,28 +281,37 @@ const mutationResolvers: MutationResolvers<MyContext> = {
 
     return productToGql(product);
   },
-  createSize: async (_, { name }) => {
+  createSize: async (_, { name }, { me }) => {
+    if (!me?.isAdmin) throwForbiddenError();
+
     const size = new Size({
       name: name
     });
 
     return sizeToGql(await size.save());
   },
-  updateSize: async (_, { id, name }) => {
+  updateSize: async (_, { id, name }, { me }) => {
+    if (!me?.isAdmin) throwForbiddenError();
+
     const size = await Size.findOneOrFail(id);
 
     size.name = name;
 
     return sizeToGql(await size.save());
   },
-  deleteSize: async (_, { id }) => {
+  deleteSize: async (_, { id }, { me }) => {
+    if (!me?.isAdmin) throwForbiddenError();
+
     const size = await Size.findOneOrFail(id);
 
     await size.remove();
 
     return true;
   },
-  createProduct: async (_, { input }) => {
+  createProduct: async (_, { input }, { me }) => {
+    if (!me?.isAdmin) throwForbiddenError();
+    if (!me?.isAdmin) throwForbiddenError();
+
     const { description, name, sizeIds, categoryIds } = input;
 
     const categories = await Category.find({ id: FixedIn(categoryIds) });
@@ -310,7 +326,9 @@ const mutationResolvers: MutationResolvers<MyContext> = {
 
     return productToGql(await product.save());
   },
-  updateProduct: async (_, { id, input }) => {
+  updateProduct: async (_, { id, input }, { me }) => {
+    if (!me?.isAdmin) throwForbiddenError();
+
     const { description, name, sizeIds, categoryIds } = input;
     const categories = await Category.find({ id: FixedIn(categoryIds) });
     const sizes = await Category.find({ id: FixedIn(sizeIds) });
@@ -326,7 +344,9 @@ const mutationResolvers: MutationResolvers<MyContext> = {
 
     return productToGql(await product.save());
   },
-  deleteProduct: async (_, { id }) => {
+  deleteProduct: async (_, { id }, { me }) => {
+    if (!me?.isAdmin) throwForbiddenError();
+
     const product = await Product.findOneOrFail(id, {
       relations: ["categories", "sizes"]
     });
@@ -339,20 +359,26 @@ const mutationResolvers: MutationResolvers<MyContext> = {
 
     return cartToGql(await cart.save());
   },
-  createCategory: async (_, { name }) => {
+  createCategory: async (_, { name }, { me }) => {
+    if (!me?.isAdmin) throwForbiddenError();
+
     const category = new Category({
       name: name
     });
 
     return categoryToGql(await category.save());
   },
-  deleteCategory: async (_, { id }) => {
+  deleteCategory: async (_, { id }, { me }) => {
+    if (!me?.isAdmin) throwForbiddenError();
+
     const category = await Category.findOneOrFail(id);
 
     await category.remove();
     return true;
   },
-  updateCategory: async (_, { id, name }) => {
+  updateCategory: async (_, { id, name }, { me }) => {
+    if (!me?.isAdmin) throwForbiddenError();
+
     const category = await Category.findOneOrFail(id);
 
     category.name = name;
@@ -493,14 +519,14 @@ const resolvers: Resolvers = {
     name: "Date",
     description: "Date custom scalar type",
     parseValue(value) {
-      return new Date(value); // value from the client
+      return new Date(value);
     },
     serialize(value) {
-      return value.getTime(); // value sent to the client
+      return value.getTime();
     },
     parseLiteral(ast) {
       if (ast.kind === Kind.INT) {
-        return parseInt(ast.value, 10); // ast value is always in string format
+        return parseInt(ast.value, 10);
       }
       return null;
     }

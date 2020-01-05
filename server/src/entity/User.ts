@@ -12,6 +12,9 @@ export default class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
+  @Column()
+  isAdmin!: boolean;
+
   @Column({ nullable: true })
   firstname?: string;
 
@@ -33,10 +36,11 @@ export default class User extends BaseEntity {
   )
   orders?: Order[];
 
-  constructor(params: { email: string; password: string }) {
+  constructor(params: { isAdmin: boolean; email: string; password: string }) {
     super();
 
     if (params) {
+      this.isAdmin = params.isAdmin;
       this.email = params.email;
       this.password = params.password;
     }
