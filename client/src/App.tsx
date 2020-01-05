@@ -6,6 +6,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
+import Badge from "@material-ui/core/Badge";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -35,10 +36,11 @@ import RegisterPage from "./pages/RegisterPage";
 import ProfilePage from "./pages/ProfilePage";
 import ProductPage from "./pages/ProductPage";
 import client from "./client";
-import { CartContextProvider } from "./CartContext";
+import CartContext, { CartContextProvider } from "./CartContext";
 import MeContext, { MeContextProvider } from "./MeContext";
 import { blueGrey, pink, grey } from "@material-ui/core/colors";
 import { Typography } from "@material-ui/core";
+import { useGetCartQuery } from "./generated/graphql";
 
 const theme = createMuiTheme({
   palette: {
@@ -46,7 +48,7 @@ const theme = createMuiTheme({
       main: blueGrey[800]
     },
     secondary: {
-      main: darken(pink.A400, 0.1)
+      main: darken(pink.A700, 0.1)
     },
     background: {
       default: grey[100],
@@ -107,7 +109,16 @@ const AppMain: React.FC = () => {
 
 const AppHeader: React.FC = () => {
   const me = useContext(MeContext);
+  const { cartId } = useContext(CartContext);
   const history = useHistory();
+
+  const { data } = useGetCartQuery({
+    variables: {
+      cartId
+    }
+  });
+
+  const items = data?.cart.items;
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = anchorEl !== null;
@@ -158,7 +169,9 @@ const AppHeader: React.FC = () => {
               <AccountCircle />
             </IconButton>
             <IconButton color="inherit" onClick={() => history.push("/cart")}>
-              <ShoppingCartIcon />
+              <Badge badgeContent={items?.length} color="secondary">
+                <ShoppingCartIcon />
+              </Badge>
             </IconButton>
           </>
         )}
