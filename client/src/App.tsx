@@ -213,12 +213,41 @@ const AppHeader: React.FC = () => {
           >
             Profile
           </MenuItem>
+          {me?.isAdmin && (
+            <>
+              <MenuItem
+                onClick={() => {
+                  handleClose();
+                  history.push("/product-manager");
+                }}
+              >
+                Product manager
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  handleClose();
+                  history.push("/category-manager");
+                }}
+              >
+                Category manager
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  handleClose();
+                  history.push("/size-manager");
+                }}
+              >
+                Size manager
+              </MenuItem>
+            </>
+          )}
           <MenuItem
             onClick={() => {
               handleClose();
               history.push("/logout");
             }}
           >
+            {" "}
             Log Out
           </MenuItem>
         </Menu>
