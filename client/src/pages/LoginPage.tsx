@@ -5,6 +5,7 @@ import { Grid, Typography, TextField } from "@material-ui/core";
 import { useApolloClient } from "@apollo/react-hooks";
 import LoadingButton from "../components/LoadingButton";
 import StyledMain from "../components/StyledMain";
+import { IS_LOGGED_IN, UPDATE_IS_LOGGED_IN } from "../client";
 
 const LoginPage = () => {
   const [signInMutation, { loading }] = useSignInMutation();
@@ -19,7 +20,14 @@ const LoginPage = () => {
 
     if (token !== undefined) {
       localStorage.setItem("token", token);
-      client.writeData({ data: { isLoggedIn: true } });
+
+      await client.mutate({
+        mutation: UPDATE_IS_LOGGED_IN,
+        variables: { isLoggedIn: true },
+        refetchQueries: [{ query: IS_LOGGED_IN }],
+        awaitRefetchQueries: true
+      });
+
       history.push("/");
     }
   }

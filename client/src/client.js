@@ -12,6 +12,10 @@ const typeDefs = gql`
   extend type Query {
     isLoggedIn: Boolean!
   }
+
+  extend type Mutation {
+    updateIsLoggedIn(isLoggedIn: Boolean!): Boolean
+  }
 `;
 
 const authLink = setContext((_, { headers }) => {
@@ -67,9 +71,14 @@ const link = ApolloLink.from([authLink, errorLink, httpLink]);
 const client = new ApolloClient({
   link,
   cache,
-  clientState: {
-    typeDefs,
-    resolvers: {}
+  typeDefs,
+  resolvers: {
+    Mutation: {
+      updateIsLoggedIn: (_, { isLoggedIn }, { cache }) => {
+        const data = { isLoggedIn };
+        cache.writeData({ data });
+      }
+    }
   }
 });
 
@@ -78,6 +87,12 @@ client.writeData({ data: { isLoggedIn: !!localStorage.getItem("token") } });
 export const IS_LOGGED_IN = gql`
   query IsUserLoggedIn {
     isLoggedIn @client
+  }
+`;
+
+export const UPDATE_IS_LOGGED_IN = gql`
+  mutation UpdateIsLoggedIn($isLoggedIn: Boolean) {
+    updateIsLoggedIn(isLoggedIn: $isLoggedIn) @client
   }
 `;
 

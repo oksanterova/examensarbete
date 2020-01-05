@@ -1,17 +1,18 @@
 import React, { useEffect } from "react";
 import client from "../client";
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 
 const LogOut = () => {
+  const history = useHistory();
+
   useEffect(() => {
     async function clear() {
-      client.writeData({ data: { isLoggedIn: false } });
       localStorage.clear();
-      await client.clearStore();
+      await client.resetStore();
     }
 
     clear();
-  }, []);
+  }, [history]);
 
   return <Redirect to="/" />;
 };
