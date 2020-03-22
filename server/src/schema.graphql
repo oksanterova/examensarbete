@@ -1,6 +1,7 @@
 type Product {
   id: ID!
   name: String!
+  price: Float!
   description: String!
   sizes: [Size!]!
   categories: [Category!]!
@@ -40,6 +41,7 @@ type OrderItem {
 
 type Order {
   id: ID!
+  amount: Float!
   createdAt: Date!
   items: [OrderItem!]
   address: String!
@@ -59,6 +61,7 @@ input CreateOrderInput {
 
 input ProductInput {
   name: String!
+  price: Float!
   description: String!
   sizeIds: [ID!]!
   categoryIds: [ID!]!

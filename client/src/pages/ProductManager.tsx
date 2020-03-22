@@ -54,6 +54,7 @@ const ProductManager: React.FC = () => {
           }}
           columns={[
             { title: "Name", field: "name" },
+            { title: "Price", field: "price" },
             {
               title: "Sizes",
               field: "sizes",

@@ -103,9 +103,6 @@ const AppMain: React.FC = () => {
         <Route exact path="/create-product" component={CreateProductPage} />
       )}
       {me?.isAdmin && (
-        <Route exact path="/create-product" component={CreateProductPage} />
-      )}
-      {me?.isAdmin && (
         <Route exact path="/update-product/:id" component={EditProductPage} />
       )}
       {me?.isAdmin && (
@@ -214,7 +211,7 @@ const AppHeader: React.FC = () => {
             Profile
           </MenuItem>
           {me?.isAdmin && (
-            <>
+            <div>
               <MenuItem
                 onClick={() => {
                   handleClose();
@@ -239,7 +236,7 @@ const AppHeader: React.FC = () => {
               >
                 Size manager
               </MenuItem>
-            </>
+            </div>
           )}
           <MenuItem
             onClick={() => {

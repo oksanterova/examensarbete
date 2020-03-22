@@ -174,6 +174,7 @@ export type MutationUpdateMeArgs = {
 export type Order = {
    __typename?: 'Order',
   id: Scalars['ID'],
+  amount: Scalars['Float'],
   createdAt: Scalars['Date'],
   items?: Maybe<Array<OrderItem>>,
   address: Scalars['String'],
@@ -191,6 +192,7 @@ export type Product = {
    __typename?: 'Product',
   id: Scalars['ID'],
   name: Scalars['String'],
+  price: Scalars['Float'],
   description: Scalars['String'],
   sizes: Array<Size>,
   categories: Array<Category>,
@@ -198,6 +200,7 @@ export type Product = {
 
 export type ProductInput = {
   name: Scalars['String'],
+  price: Scalars['Float'],
   description: Scalars['String'],
   sizeIds: Array<Scalars['ID']>,
   categoryIds: Array<Scalars['ID']>,
@@ -277,7 +280,7 @@ export type GetProductsQuery = (
   { __typename?: 'Query' }
   & { products: Array<(
     { __typename?: 'Product' }
-    & Pick<Product, 'id' | 'name' | 'description'>
+    & Pick<Product, 'id' | 'name' | 'description' | 'price'>
     & { sizes: Array<(
       { __typename?: 'Size' }
       & Pick<Size, 'id' | 'name'>
@@ -319,7 +322,7 @@ export type GetProductQuery = (
   { __typename?: 'Query' }
   & { product: (
     { __typename?: 'Product' }
-    & Pick<Product, 'id' | 'name' | 'description'>
+    & Pick<Product, 'id' | 'name' | 'price' | 'description'>
     & { sizes: Array<(
       { __typename?: 'Size' }
       & Pick<Size, 'id' | 'name'>
@@ -339,7 +342,7 @@ export type GetOrderQuery = (
   { __typename?: 'Query' }
   & { order: (
     { __typename?: 'Order' }
-    & Pick<Order, 'id' | 'createdAt' | 'address'>
+    & Pick<Order, 'id' | 'amount' | 'createdAt' | 'address'>
     & { items: Maybe<Array<(
       { __typename?: 'OrderItem' }
       & Pick<OrderItem, 'id' | 'quantity'>
@@ -639,6 +642,7 @@ export const GetProductsDocument = gql`
     id
     name
     description
+    price
     sizes {
       id
       name
@@ -797,6 +801,7 @@ export const GetProductDocument = gql`
   product(id: $id) {
     id
     name
+    price
     description
     sizes {
       id
@@ -856,6 +861,7 @@ export const GetOrderDocument = gql`
     query GetOrder($id: ID!) {
   order(id: $id) {
     id
+    amount
     createdAt
     items {
       id

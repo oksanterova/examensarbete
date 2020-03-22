@@ -3,6 +3,7 @@ query GetProducts {
     id
     name
     description
+    price
     sizes {
       id
       name
@@ -32,6 +33,7 @@ query GetProduct($id: ID!) {
   product(id: $id) {
     id
     name
+    price
     description
     sizes {
       id
@@ -47,6 +49,7 @@ query GetProduct($id: ID!) {
 query GetOrder($id: ID!) {
   order(id: $id) {
     id
+    amount
     createdAt
     items {
       id

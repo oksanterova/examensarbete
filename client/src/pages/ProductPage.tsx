@@ -56,9 +56,8 @@ const ProductPage = () => {
 
   return (
     <StyledMain>
-      <Typography variant="h6" gutterBottom>
-        {product.name}
-      </Typography>
+      <Typography variant="h6">{product.name}</Typography>
+      <Typography gutterBottom>{product.price}</Typography>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Typography gutterBottom>{product.description}</Typography>

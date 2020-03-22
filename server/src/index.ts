@@ -312,13 +312,14 @@ const mutationResolvers: MutationResolvers<MyContext> = {
     if (!me?.isAdmin) throwForbiddenError();
     if (!me?.isAdmin) throwForbiddenError();
 
-    const { description, name, sizeIds, categoryIds } = input;
+    const { description, name, price, sizeIds, categoryIds } = input;
 
     const categories = await Category.find({ id: FixedIn(categoryIds) });
     const sizes = await Category.find({ id: FixedIn(sizeIds) });
 
     const product = new Product({
       name,
+      price,
       description,
       categories,
       sizes
@@ -329,7 +330,7 @@ const mutationResolvers: MutationResolvers<MyContext> = {
   updateProduct: async (_, { id, input }, { me }) => {
     if (!me?.isAdmin) throwForbiddenError();
 
-    const { description, name, sizeIds, categoryIds } = input;
+    const { description, price, name, sizeIds, categoryIds } = input;
     const categories = await Category.find({ id: FixedIn(categoryIds) });
     const sizes = await Category.find({ id: FixedIn(sizeIds) });
 
@@ -338,6 +339,7 @@ const mutationResolvers: MutationResolvers<MyContext> = {
     });
 
     product.name = name;
+    product.price = price;
     product.description = description;
     product.categories = categories;
     product.sizes = sizes;
@@ -397,6 +399,7 @@ const mutationResolvers: MutationResolvers<MyContext> = {
 
     const order = new Order({
       user: me,
+      amount: 0,
       address,
       createdAt,
       items

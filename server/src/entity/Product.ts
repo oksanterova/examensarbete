@@ -17,6 +17,9 @@ export default class Product extends BaseEntity {
   @Column()
   name!: string;
 
+  @Column({ default: 0 })
+  price!: number;
+
   @ManyToMany(
     type => Size,
     size => size.products,
@@ -38,6 +41,7 @@ export default class Product extends BaseEntity {
 
   constructor(params: {
     name: string;
+    price: number;
     description: string;
     categories: Category[];
     sizes: Size[];
@@ -46,6 +50,7 @@ export default class Product extends BaseEntity {
 
     if (params) {
       this.name = params.name;
+      this.price = params.price;
       this.description = params.description;
       this.categories = params.categories;
       this.sizes = params.sizes;

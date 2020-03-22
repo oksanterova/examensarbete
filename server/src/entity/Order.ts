@@ -14,6 +14,9 @@ export default class Order extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
+  @Column({ default: 0 })
+  amount!: number;
+
   @Column()
   address!: string;
 
@@ -35,6 +38,7 @@ export default class Order extends BaseEntity {
 
   constructor(params: {
     user?: User;
+    amount: number;
     address: string;
     createdAt: Date;
     items: OrderItem[];
@@ -43,6 +47,7 @@ export default class Order extends BaseEntity {
 
     if (params) {
       this.user = params.user;
+      this.amount = params.amount;
       this.address = params.address;
       this.createdAt = params.createdAt;
       this.items = params.items;

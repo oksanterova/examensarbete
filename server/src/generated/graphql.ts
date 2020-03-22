@@ -169,6 +169,7 @@ export type MutationUpdateMeArgs = {
 export type Order = {
    __typename?: 'Order',
   id: Scalars['ID'],
+  amount: Scalars['Float'],
   createdAt: Scalars['Date'],
   items?: Maybe<Array<OrderItem>>,
   address: Scalars['String'],
@@ -186,6 +187,7 @@ export type Product = {
    __typename?: 'Product',
   id: Scalars['ID'],
   name: Scalars['String'],
+  price: Scalars['Float'],
   description: Scalars['String'],
   sizes: Array<Size>,
   categories: Array<Category>,
@@ -193,6 +195,7 @@ export type Product = {
 
 export type ProductInput = {
   name: Scalars['String'],
+  price: Scalars['Float'],
   description: Scalars['String'],
   sizeIds: Array<Scalars['ID']>,
   categoryIds: Array<Scalars['ID']>,
@@ -343,6 +346,7 @@ export type ResolversTypes = ResolversObject<{
   CartItem: ResolverTypeWrapper<CartItem>,
   Product: ResolverTypeWrapper<Product>,
   String: ResolverTypeWrapper<Scalars['String']>,
+  Float: ResolverTypeWrapper<Scalars['Float']>,
   Size: ResolverTypeWrapper<Size>,
   Category: ResolverTypeWrapper<Category>,
   Int: ResolverTypeWrapper<Scalars['Int']>,
@@ -367,6 +371,7 @@ export type ResolversParentTypes = ResolversObject<{
   CartItem: CartItem,
   Product: Product,
   String: Scalars['String'],
+  Float: Scalars['Float'],
   Size: Size,
   Category: Category,
   Int: Scalars['Int'],
@@ -429,6 +434,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type OrderResolvers<ContextType = any, ParentType extends ResolversParentTypes['Order'] = ResolversParentTypes['Order']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  amount?: Resolver<ResolversTypes['Float'], ParentType, ContextType>,
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>,
   items?: Resolver<Maybe<Array<ResolversTypes['OrderItem']>>, ParentType, ContextType>,
   address?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
@@ -444,6 +450,7 @@ export type OrderItemResolvers<ContextType = any, ParentType extends ResolversPa
 export type ProductResolvers<ContextType = any, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  price?: Resolver<ResolversTypes['Float'], ParentType, ContextType>,
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   sizes?: Resolver<Array<ResolversTypes['Size']>, ParentType, ContextType>,
   categories?: Resolver<Array<ResolversTypes['Category']>, ParentType, ContextType>,

@@ -15,6 +15,9 @@ export default class OrderItem extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
+  @Column({ default: 0 })
+  price!: number;
+
   @ManyToOne(type => Size)
   size!: Size;
 

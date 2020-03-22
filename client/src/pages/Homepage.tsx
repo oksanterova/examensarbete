@@ -1,5 +1,5 @@
 import React from "react";
-import { useGetProductsQuery, Product } from "../generated/graphql";
+import { useGetProductsQuery, GetProductsQuery } from "../generated/graphql";
 
 import {
   Typography,
@@ -45,7 +45,9 @@ const ProductMedia = styled(CardMedia)`
   padding-top: 100%;
 `;
 
-const ProductCard: React.FC<Product> = product => {
+type ProductCardProps = GetProductsQuery["products"][0];
+
+const ProductCard: React.FC<ProductCardProps> = product => {
   const history = useHistory();
 
   return (
@@ -63,6 +65,7 @@ const ProductCard: React.FC<Product> = product => {
         >
           <Typography variant="h6">{product.name}</Typography>
         </Button>
+        <Typography>{product.price}</Typography>
       </CardContent>
     </CustomCard>
   );
