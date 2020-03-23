@@ -47,25 +47,26 @@ const ProductMedia = styled(CardMedia)`
 
 type ProductCardProps = GetProductsQuery["products"][0];
 
-const ProductCard: React.FC<ProductCardProps> = product => {
+const ProductCard: React.FC<ProductCardProps> = ({
+  id,
+  name,
+  productImageId,
+  price
+}) => {
   const history = useHistory();
 
   return (
     <CustomCard>
-      <ProductMedia
-        image="http://placekitten.com/200/300"
-        title={product.name}
-      />
+      <ProductMedia image={`/product-image/${productImageId}`} title={name} />
       <CardContent>
         <Button
           onClick={() => {
-            const productId = product.id;
-            history.push(`/product/${productId}`);
+            history.push(`/product/${id}`);
           }}
         >
-          <Typography variant="h6">{product.name}</Typography>
+          <Typography variant="h6">{name}</Typography>
         </Button>
-        <Typography>{product.price}</Typography>
+        <Typography>{price}</Typography>
       </CardContent>
     </CustomCard>
   );

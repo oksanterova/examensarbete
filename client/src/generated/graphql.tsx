@@ -196,6 +196,7 @@ export type Product = {
   description: Scalars['String'],
   sizes: Array<Size>,
   categories: Array<Category>,
+  productImageId: Scalars['ID'],
 };
 
 export type ProductInput = {
@@ -204,6 +205,7 @@ export type ProductInput = {
   description: Scalars['String'],
   sizeIds: Array<Scalars['ID']>,
   categoryIds: Array<Scalars['ID']>,
+  productImageId: Scalars['ID'],
 };
 
 export type ProfileInput = {
@@ -280,7 +282,7 @@ export type GetProductsQuery = (
   { __typename?: 'Query' }
   & { products: Array<(
     { __typename?: 'Product' }
-    & Pick<Product, 'id' | 'name' | 'description' | 'price'>
+    & Pick<Product, 'id' | 'name' | 'description' | 'price' | 'productImageId'>
     & { sizes: Array<(
       { __typename?: 'Size' }
       & Pick<Size, 'id' | 'name'>
@@ -322,7 +324,7 @@ export type GetProductQuery = (
   { __typename?: 'Query' }
   & { product: (
     { __typename?: 'Product' }
-    & Pick<Product, 'id' | 'name' | 'price' | 'description'>
+    & Pick<Product, 'id' | 'name' | 'price' | 'description' | 'productImageId'>
     & { sizes: Array<(
       { __typename?: 'Size' }
       & Pick<Size, 'id' | 'name'>
@@ -651,6 +653,7 @@ export const GetProductsDocument = gql`
       id
       name
     }
+    productImageId
   }
 }
     `;
@@ -811,6 +814,7 @@ export const GetProductDocument = gql`
       id
       name
     }
+    productImageId
   }
 }
     `;

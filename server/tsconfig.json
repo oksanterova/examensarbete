@@ -15,7 +15,8 @@
     "types": ["node"],
     "esModuleInterop": true,
     "typeRoots": ["node_modules/@types"],
-    "allowSyntheticDefaultImports": true,
+    "lib": ["dom"],
+    "allowSyntheticDefaultImports": true
   },
   "include": ["./src/**/*.ts"],
   "exclude": ["./src/**/*.test.ts", "./src/public/"]

@@ -191,6 +191,7 @@ export type Product = {
   description: Scalars['String'],
   sizes: Array<Size>,
   categories: Array<Category>,
+  productImageId: Scalars['ID'],
 };
 
 export type ProductInput = {
@@ -199,6 +200,7 @@ export type ProductInput = {
   description: Scalars['String'],
   sizeIds: Array<Scalars['ID']>,
   categoryIds: Array<Scalars['ID']>,
+  productImageId: Scalars['ID'],
 };
 
 export type ProfileInput = {
@@ -454,6 +456,7 @@ export type ProductResolvers<ContextType = any, ParentType extends ResolversPare
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   sizes?: Resolver<Array<ResolversTypes['Size']>, ParentType, ContextType>,
   categories?: Resolver<Array<ResolversTypes['Category']>, ParentType, ContextType>,
+  productImageId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
 }>;
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{

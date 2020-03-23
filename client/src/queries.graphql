@@ -12,6 +12,7 @@ query GetProducts {
       id
       name
     }
+    productImageId
   }
 }
 
@@ -43,6 +44,7 @@ query GetProduct($id: ID!) {
       id
       name
     }
+    productImageId
   }
 }
 

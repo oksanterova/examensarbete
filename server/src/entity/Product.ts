@@ -4,10 +4,13 @@ import {
   Column,
   ManyToMany,
   JoinTable,
-  PrimaryGeneratedColumn
+  OneToOne,
+  PrimaryGeneratedColumn,
+  JoinColumn
 } from "typeorm";
 import Size from "./Size";
 import Category from "./Category";
+import ProductImage from "./ProductImage";
 
 @Entity()
 export default class Product extends BaseEntity {
@@ -39,12 +42,20 @@ export default class Product extends BaseEntity {
   @JoinTable()
   categories?: Category[];
 
+  @Column({ nullable: false })
+  productImageId!: string;
+
+  @OneToOne(type => ProductImage)
+  @JoinColumn()
+  productImage!: ProductImage;
+
   constructor(params: {
     name: string;
     price: number;
     description: string;
     categories: Category[];
     sizes: Size[];
+    productImageId: string;
   }) {
     super();
 
@@ -54,6 +65,7 @@ export default class Product extends BaseEntity {
       this.description = params.description;
       this.categories = params.categories;
       this.sizes = params.sizes;
+      this.productImageId = params.productImageId;
     }
   }
 }

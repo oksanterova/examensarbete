@@ -39,6 +39,9 @@ import jwt from "jsonwebtoken";
 import * as bcrypt from "bcrypt";
 import { ExpressContext } from "apollo-server-express/dist/ApolloServer";
 import { Request } from "express";
+import multer from "multer";
+import ProductImage from "./entity/ProductImage";
+import asyncHandler from "express-async-handler";
 
 require("dotenv").config();
 
@@ -312,7 +315,14 @@ const mutationResolvers: MutationResolvers<MyContext> = {
     if (!me?.isAdmin) throwForbiddenError();
     if (!me?.isAdmin) throwForbiddenError();
 
-    const { description, name, price, sizeIds, categoryIds } = input;
+    const {
+      description,
+      name,
+      price,
+      sizeIds,
+      categoryIds,
+      productImageId
+    } = input;
 
     const categories = await Category.find({ id: FixedIn(categoryIds) });
     const sizes = await Category.find({ id: FixedIn(sizeIds) });
@@ -322,7 +332,8 @@ const mutationResolvers: MutationResolvers<MyContext> = {
       price,
       description,
       categories,
-      sizes
+      sizes,
+      productImageId
     });
 
     return productToGql(await product.save());
@@ -330,7 +341,14 @@ const mutationResolvers: MutationResolvers<MyContext> = {
   updateProduct: async (_, { id, input }, { me }) => {
     if (!me?.isAdmin) throwForbiddenError();
 
-    const { description, price, name, sizeIds, categoryIds } = input;
+    const {
+      description,
+      price,
+      name,
+      sizeIds,
+      categoryIds,
+      productImageId
+    } = input;
     const categories = await Category.find({ id: FixedIn(categoryIds) });
     const sizes = await Category.find({ id: FixedIn(sizeIds) });
 
@@ -343,6 +361,7 @@ const mutationResolvers: MutationResolvers<MyContext> = {
     product.description = description;
     product.categories = categories;
     product.sizes = sizes;
+    product.productImageId = productImageId;
 
     return productToGql(await product.save());
   },
@@ -571,6 +590,39 @@ createConnection().then(async connection => {
   });
 
   server.applyMiddleware({ app, path: "/graphql" });
+
+  const upload = multer({ storage: multer.memoryStorage() });
+
+  app.get(
+    "/product-image/:id",
+    asyncHandler(async (req, res) => {
+      const id = req.params.id as string;
+
+      const productImage = await ProductImage.findOneOrFail(id);
+
+      res.send(productImage.buffer);
+    })
+  );
+
+  app.post(
+    "/product-image",
+    upload.single("image"),
+    asyncHandler(async (req, res, next) => {
+      //const blob = new Blob([req.file.buffer]);
+      const buffer = req.file.buffer;
+
+      console.log("req.file", req.file);
+      console.log("req.file.buffer.length", req.file.buffer?.length);
+
+      const productImage = new ProductImage({
+        buffer
+      });
+
+      await productImage.save();
+
+      res.send({ id: productImage.id });
+    })
+  );
 
   app.use(express.static(join(__dirname, "../build")));
 
