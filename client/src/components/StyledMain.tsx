@@ -16,6 +16,7 @@ const GlobalStyle = createGlobalStyle`
 const Main = styled.main<MainProps>`
   width: auto;
   padding-top: ${props => props.theme.spacing(props.fullWidth ? 0 : 6)}px;
+  padding-bottom: ${props => props.theme.spacing(props.fullWidth ? 0 : 1)}px;
   margin-left: ${props => props.theme.spacing(0)}px;
   margin-right: ${props => props.theme.spacing(0)}px;
 
