@@ -350,7 +350,7 @@ const mutationResolvers: MutationResolvers<MyContext> = {
       productImageId
     } = input;
     const categories = await Category.find({ id: FixedIn(categoryIds) });
-    const sizes = await Category.find({ id: FixedIn(sizeIds) });
+    const sizes = await Size.find({ id: FixedIn(sizeIds) });
 
     const product = await Product.findOneOrFail(id, {
       relations: ["categories", "sizes"]
