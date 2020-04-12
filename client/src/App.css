@@ -9,8 +9,10 @@
   margin: 100px auto;
   width: 40px;
   height: 40px;
-  position: relative;
+  position: absolute;
   text-align: center;
+  left: 50%;
+  top: 50px;
 
   -webkit-animation: sk-rotate 2s infinite linear;
   animation: sk-rotate 2s infinite linear;

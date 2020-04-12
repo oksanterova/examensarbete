@@ -65,8 +65,6 @@ const UploadButton: React.FC<UploadButtonProps> = ({
         console.log(e);
         setLoading(false);
       });
-
-    console.log(acceptedFiles);
   }, []);
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop });

@@ -12,9 +12,8 @@ import Error from "../components/Error";
 
 const StyledTable = styled.main`
   width: auto;
-  padding-top: ${props => props.theme.spacing(6)}px;
-  margin-left: ${props => props.theme.spacing(0)}px;
-  margin-right: ${props => props.theme.spacing(0)}px;
+  padding: ${props => props.theme.spacing(6)}px 0;
+  margin: 0;
 
   ${props => props.theme.breakpoints.up(600 + props.theme.spacing(3) * 2)} {
     width: 600px;

@@ -15,24 +15,10 @@ import Loader from "../components/Loader";
 import Error from "../components/Error";
 import { useHistory } from "react-router";
 
-const Main = styled.main`
-  width: auto;
-  padding-top: ${props => props.theme.spacing(0)}px;
-  margin-left: ${props => props.theme.spacing(0)}px;
-  margin-right: ${props => props.theme.spacing(0)}px;
-
-  ${props => props.theme.breakpoints.up(600 + props.theme.spacing(3) * 2)} {
-    width: 100%;
-    margin-top: ${props => props.theme.spacing(0)}px;
-    padding-top: ${props => props.theme.spacing(3)}px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-`;
-
 const CardGrid = styled(Container)`
-  padding-top: ${props => props.theme.spacing(8)}px;
-  padding-bottom: ${props => props.theme.spacing(8)}px;
+  margin: 0;
+  padding-top: ${props => props.theme.spacing(12)}px;
+  padding-bottom: ${props => props.theme.spacing(4)}px;
 `;
 
 const CustomCard = styled(Card)`
@@ -43,6 +29,7 @@ const CustomCard = styled(Card)`
 
 const ProductMedia = styled(CardMedia)`
   padding-top: 100%;
+  cursor: pointer;
 `;
 
 type ProductCardProps = GetProductsQuery["products"][0];
@@ -57,7 +44,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <CustomCard>
-      <ProductMedia image={`/product-image/${productImageId}`} title={name} />
+      <ProductMedia
+        image={`/product-image/${productImageId}`}
+        title={name}
+        onClick={() => {
+          history.push(`/product/${id}`);
+        }}
+      />
       <CardContent>
         <Button
           onClick={() => {
@@ -84,17 +77,15 @@ const Homepage: React.FC = () => {
   }
 
   return (
-    <Main>
-      <CardGrid maxWidth="xl">
-        <Grid container spacing={3}>
-          {data?.products.map(product => (
-            <Grid item key={product.id} xs={12} sm={4} md={2}>
-              <ProductCard {...product} />
-            </Grid>
-          ))}
-        </Grid>
-      </CardGrid>
-    </Main>
+    <CardGrid maxWidth="xl">
+      <Grid container spacing={3}>
+        {data?.products.map(product => (
+          <Grid item key={product.id} xs={6} sm={4} md={2}>
+            <ProductCard {...product} />
+          </Grid>
+        ))}
+      </Grid>
+    </CardGrid>
   );
 };
 
