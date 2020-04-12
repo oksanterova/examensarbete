@@ -24,6 +24,7 @@ import LoadingButton from "../components/LoadingButton";
 import Loader from "../components/Loader";
 import Error from "../components/Error";
 import StyledMain from "../components/StyledMain";
+import styled from "styled-components";
 
 const Profile = () => {
   const { loading, data, error } = useGetMeQuery();
@@ -157,9 +158,20 @@ const EditProfile: React.FC<EditProfileProps> = ({ profile, onSubmit }) => {
 
 type MyOrderProps = NonNullable<GetMyOrdersQuery["me"]["orders"]>[0];
 
+const OrderWrapper = styled.div`
+  width: 100%;
+  padding: ${props => props.theme.spacing(1)}px 0;
+  margin: 0;
+`;
+
 const MyOrder: React.FC<MyOrderProps> = ({ id, items }) => {
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD"
+  });
+
   return (
-    <>
+    <OrderWrapper>
       <Typography>Order {id}</Typography>
       <Table>
         <TableCell>
@@ -168,6 +180,7 @@ const MyOrder: React.FC<MyOrderProps> = ({ id, items }) => {
               <TableCell>Name</TableCell>
               <TableCell>Size</TableCell>
               <TableCell>Quantity</TableCell>
+              <TableCell>Price</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -176,12 +189,15 @@ const MyOrder: React.FC<MyOrderProps> = ({ id, items }) => {
                 <TableCell>{item.product.name}</TableCell>
                 <TableCell>{item.size.name}</TableCell>
                 <TableCell>{item.quantity}</TableCell>
+                <TableCell>
+                  {formatter.format(item.product.price * item.quantity)}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </TableCell>
       </Table>
-    </>
+    </OrderWrapper>
   );
 };
 

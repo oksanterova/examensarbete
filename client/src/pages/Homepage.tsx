@@ -41,6 +41,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
   price
 }) => {
   const history = useHistory();
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD"
+  });
 
   return (
     <CustomCard>
@@ -59,7 +63,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         >
           <Typography variant="h6">{name}</Typography>
         </Button>
-        <Typography>{price}</Typography>
+        <Typography>{formatter.format(price)}</Typography>
       </CardContent>
     </CustomCard>
   );

@@ -35,6 +35,11 @@ const OrderPage = () => {
 
   const items = data?.cart.items;
 
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD"
+  });
+
   if (loading) return <Loader />;
   if (error) return <Error />;
 
@@ -67,6 +72,7 @@ const OrderPage = () => {
                   <TableCell>Name</TableCell>
                   <TableCell>Size</TableCell>
                   <TableCell>Quantity</TableCell>
+                  <TableCell>Price</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -75,6 +81,9 @@ const OrderPage = () => {
                     <TableCell>{item.product.name}</TableCell>
                     <TableCell>{item.size.name}</TableCell>
                     <TableCell>{item.quantity}</TableCell>
+                    <TableCell>
+                      {formatter.format(item.product.price * item.quantity)}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

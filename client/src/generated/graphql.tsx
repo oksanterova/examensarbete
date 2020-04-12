@@ -350,7 +350,7 @@ export type GetOrderQuery = (
       & Pick<OrderItem, 'id' | 'quantity'>
       & { product: (
         { __typename?: 'Product' }
-        & Pick<Product, 'name' | 'id'>
+        & Pick<Product, 'name' | 'id' | 'price'>
         & { sizes: Array<(
           { __typename?: 'Size' }
           & Pick<Size, 'id' | 'name'>
@@ -378,7 +378,7 @@ export type GetCartQuery = (
       & Pick<CartItem, 'id' | 'quantity'>
       & { product: (
         { __typename?: 'Product' }
-        & Pick<Product, 'name' | 'id'>
+        & Pick<Product, 'name' | 'id' | 'price'>
         & { sizes: Array<(
           { __typename?: 'Size' }
           & Pick<Size, 'id' | 'name'>
@@ -417,7 +417,7 @@ export type GetMyOrdersQuery = (
         & Pick<OrderItem, 'id' | 'quantity'>
         & { product: (
           { __typename?: 'Product' }
-          & Pick<Product, 'id' | 'name'>
+          & Pick<Product, 'id' | 'name' | 'price'>
         ), size: (
           { __typename?: 'Size' }
           & Pick<Size, 'id' | 'name'>
@@ -873,6 +873,7 @@ export const GetOrderDocument = gql`
       product {
         name
         id
+        price
         sizes {
           id
           name
@@ -940,6 +941,7 @@ export const GetCartDocument = gql`
       product {
         name
         id
+        price
         sizes {
           id
           name
@@ -1059,6 +1061,7 @@ export const GetMyOrdersDocument = gql`
         product {
           id
           name
+          price
         }
         size {
           id

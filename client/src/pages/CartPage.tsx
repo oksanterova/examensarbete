@@ -43,6 +43,11 @@ const CartPage: React.FC = () => {
 
   const quantities = [1, 2, 3, 4, 5];
 
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD"
+  });
+
   if (loading) {
     return <Loader />;
   }
@@ -74,6 +79,7 @@ const CartPage: React.FC = () => {
                 <TableCell>Name</TableCell>
                 <TableCell>Size</TableCell>
                 <TableCell>Quantity</TableCell>
+                <TableCell>Price</TableCell>
                 <TableCell></TableCell>
               </TableRow>
             </TableHead>
@@ -105,6 +111,9 @@ const CartPage: React.FC = () => {
                         </MenuItem>
                       ))}
                     </Select>
+                  </TableCell>
+                  <TableCell>
+                    {formatter.format(item.product.price * item.quantity)}
                   </TableCell>
                   <TableCell>
                     {" "}

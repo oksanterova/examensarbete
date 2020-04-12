@@ -43,6 +43,11 @@ const OrderConfirmation = () => {
     options
   );
 
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD"
+  });
+
   return (
     <StyledMain>
       <Grid container spacing={2}>
@@ -61,6 +66,7 @@ const OrderConfirmation = () => {
                 <TableCell>Name</TableCell>
                 <TableCell>Size</TableCell>
                 <TableCell>Quantity</TableCell>
+                <TableCell>Price</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -69,6 +75,9 @@ const OrderConfirmation = () => {
                   <TableCell>{item.product.name}</TableCell>
                   <TableCell>{item.size.name}</TableCell>
                   <TableCell>{item.quantity}</TableCell>
+                  <TableCell>
+                    {formatter.format(item.product.price * item.quantity)}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

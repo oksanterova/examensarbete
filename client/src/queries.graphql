@@ -59,6 +59,7 @@ query GetOrder($id: ID!) {
       product {
         name
         id
+        price
         sizes {
           id
           name
@@ -82,6 +83,7 @@ query GetCart($cartId: ID!) {
       product {
         name
         id
+        price
         sizes {
           id
           name
@@ -114,6 +116,7 @@ query GetMyOrders {
         product {
           id
           name
+          price
         }
         size {
           id

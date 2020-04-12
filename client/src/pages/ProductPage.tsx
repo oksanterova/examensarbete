@@ -54,10 +54,15 @@ const ProductPage = () => {
 
   const product = data!.product;
 
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD"
+  });
+
   return (
     <StyledMain>
       <Typography variant="h6">{product.name}</Typography>
-      <Typography gutterBottom>{product.price}</Typography>
+      <Typography gutterBottom>{formatter.format(product.price)}</Typography>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Typography gutterBottom>{product.description}</Typography>
