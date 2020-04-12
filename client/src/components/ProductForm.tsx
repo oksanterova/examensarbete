@@ -167,13 +167,6 @@ const ProductForm: React.FC<ProductFormProps> = ({
         </Grid>
         <Grid item xs={12}>
           <NumberFormat
-            value={price}
-            displayType={"text"}
-            thousandSeparator={true}
-            prefix={"$"}
-            renderText={value => <div>{value}</div>}
-          />
-          <NumberFormat
             required
             id="price"
             name="price"

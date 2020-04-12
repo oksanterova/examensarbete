@@ -74,6 +74,7 @@ const Logo = styled.div`
 const StyledToolbar = styled(Toolbar)`
   display: flex;
   flew-grow: 1;
+  padding: 0;
 `;
 
 const FlexGrow = styled.div`

@@ -10,11 +10,12 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const Main = styled.main`
-  width: auto;
+  width: 100%;
   padding-top: ${props => props.theme.spacing(6)}px;
   padding-bottom: ${props => props.theme.spacing(2)}px;
-  margin-left: ${props => props.theme.spacing(0)}px;
-  margin-right: ${props => props.theme.spacing(0)}px;
+  margin-left: 0;
+  margin-right: 0;
+  overflow-x: scroll;
 
   ${props => props.theme.breakpoints.up(600 + props.theme.spacing(3) * 2)} {
     width: 600px;
@@ -27,17 +28,21 @@ const Main = styled.main`
 `;
 
 const StyledPaper = styled(Paper)`
+  float: left;
+  width: auto;
+  min-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
   margin-top: ${props => props.theme.spacing(3)}px;
   margin-bottom: ${props => props.theme.spacing(3)}px;
-  padding: ${props => props.theme.spacing(1)}px;
+  padding: ${props => props.theme.spacing(2)}px;
+  box-sizing: border-box;
 
   ${props => props.theme.breakpoints.up(600 + props.theme.spacing(3) * 2)} {
     margin-top: ${props => props.theme.spacing(3)}px;
     margin-bottom: ${props => props.theme.spacing(3)}px;
     padding: ${props => props.theme.spacing(3)}px;
   }
-
-  width: 100%;
 `;
 
 const StyledMain: React.FC<{
