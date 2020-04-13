@@ -11,9 +11,11 @@ import {
   ListItem,
   MenuItem,
   TextField,
-  Grid
+  Grid,
+  Box,
+  Button
 } from "@material-ui/core";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import LoadingButton from "../components/LoadingButton";
 import CartContext from "../CartContext";
 import StyledMain from "../components/StyledMain";
@@ -26,7 +28,12 @@ const Image = styled.img`
   height: 250px;
 `;
 
+const FlexGrow = styled.div`
+  flex-grow: 1;
+`;
+
 const ProductPage = () => {
+  const history = useHistory();
   // @ts-ignore
   const { id }: { id: string } = useParams();
   const { loading, data, error } = useGetProductQuery({
@@ -111,6 +118,7 @@ const ProductPage = () => {
                 </MenuItem>
               ))}
             </TextField>
+            <Box marginTop={2} />
             <Typography align="center">Categories:</Typography>
             <List>
               {product.categories.map(category => (
@@ -118,10 +126,30 @@ const ProductPage = () => {
               ))}
             </List>
           </Grid>
-          <Grid item xs={12}>
+          <Box margin={1} />
+          <Grid item>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => history.push("/")}
+            >
+              Resume Shopping
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => history.push("/cart")}
+            >
+              Go to Cart
+            </Button>
+          </Grid>
+          <FlexGrow />
+          <Grid item>
             <LoadingButton
               variant="contained"
-              color="primary"
+              color="secondary"
               type="submit"
               loading={addCartItemLoading}
             >

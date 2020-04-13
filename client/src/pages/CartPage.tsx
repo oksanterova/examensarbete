@@ -12,7 +12,8 @@ import {
   MenuItem,
   IconButton,
   Grid,
-  Box
+  Box,
+  Button
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import LoadingButton from "../components/LoadingButton";
@@ -25,6 +26,11 @@ import {
 import StyledMain from "../components/StyledMain";
 import Loader from "../components/Loader";
 import Error from "../components/Error";
+import styled from "styled-components";
+
+const FlexGrow = styled.div`
+  flex-grow: 1;
+`;
 
 const CartPage: React.FC = () => {
   const history = useHistory();
@@ -138,17 +144,28 @@ const CartPage: React.FC = () => {
             </TableBody>
           </Table>
         </Grid>
-        <Grid item xs={12}>
-          <Box marginTop={1}>
-            <LoadingButton
-              loading={loading}
-              variant="contained"
-              color="primary"
-              onClick={event => history.push("/order")}
-            >
-              Go to checkout
-            </LoadingButton>
-          </Box>
+      </Grid>
+      <Box marginBottom={2} />
+      <Grid container spacing={2}>
+        <Grid item>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={() => history.push("/")}
+          >
+            Resume Shopping
+          </Button>
+        </Grid>
+        <FlexGrow />
+        <Grid item>
+          <LoadingButton
+            loading={loading}
+            variant="contained"
+            color="secondary"
+            onClick={event => history.push("/order")}
+          >
+            Go to checkout
+          </LoadingButton>
         </Grid>
       </Grid>
     </StyledMain>

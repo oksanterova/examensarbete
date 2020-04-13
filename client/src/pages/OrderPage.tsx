@@ -11,13 +11,19 @@ import {
   Table,
   TextField,
   Grid,
-  Box
+  Box,
+  Button
 } from "@material-ui/core";
 import { useGetCartQuery, useCreateOrderMutation } from "../generated/graphql";
 import MeContext from "../MeContext";
 import StyledMain from "../components/StyledMain";
 import Loader from "../components/Loader";
 import Error from "../components/Error";
+import styled from "styled-components";
+
+const FlexGrow = styled.div`
+  flex-grow: 1;
+`;
 
 const OrderPage = () => {
   const history = useHistory();
@@ -108,17 +114,28 @@ const OrderPage = () => {
               fullWidth
             />
           </Grid>
-          <Grid item xs={12}>
-            <Box marginTop={1}>
-              <LoadingButton
-                loading={loading}
-                variant="contained"
-                color="primary"
-                type="submit"
-              >
-                Create order
-              </LoadingButton>
-            </Box>
+        </Grid>
+        <Box marginBottom={2} />
+        <Grid container spacing={2}>
+          <Grid item>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => history.push("/")}
+            >
+              Resume Shopping
+            </Button>
+          </Grid>
+          <FlexGrow />
+          <Grid item>
+            <LoadingButton
+              loading={loading}
+              variant="contained"
+              color="secondary"
+              type="submit"
+            >
+              Create order
+            </LoadingButton>
           </Grid>
         </Grid>
       </form>

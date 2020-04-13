@@ -95,10 +95,10 @@ const OrderConfirmation = () => {
         <Grid item xs={12}>
           <Button
             variant="contained"
-            color="primary"
+            color="secondary"
             onClick={() => history.push("/")}
           >
-            Home
+            Back to Store
           </Button>
         </Grid>
       </Grid>
