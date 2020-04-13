@@ -19,6 +19,12 @@ import CartContext from "../CartContext";
 import StyledMain from "../components/StyledMain";
 import Loader from "../components/Loader";
 import Error from "../components/Error";
+import styled from "styled-components";
+
+const Image = styled.img`
+  width: 250px;
+  height: 250px;
+`;
 
 const ProductPage = () => {
   // @ts-ignore
@@ -50,7 +56,7 @@ const ProductPage = () => {
 
   if (loading) return <Loader />;
 
-  if (error) return <Error />;
+  if (error) return <Error errorMessage="Sorry! Something went wrong... Please try again!"/>;
 
   const product = data!.product;
 
@@ -60,16 +66,25 @@ const ProductPage = () => {
   });
 
   return (
+    <form>
     <StyledMain>
-      <Typography variant="h6">{product.name}</Typography>
-      <Typography gutterBottom>{formatter.format(product.price)}</Typography>
+      <Typography variant="h6" gutterBottom>
+        {product.name}
+      </Typography>
       <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Typography gutterBottom>{product.description}</Typography>
+        <Grid item xs={12} sm={6}>
+          <Image src={`/product-image/${product.productImageId}`} />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Typography gutterBottom>
+            {formatter.format(product.price)}
+          </Typography>
+          <Typography>{product.description}</Typography>
           <TextField
             required
             select
             fullWidth
+            margin="normal"
             value={sizeId}
             label="Select size:"
             onChange={e => setSizeId(e.target.value as string)}
@@ -80,9 +95,7 @@ const ProductPage = () => {
               </MenuItem>
             ))}
           </TextField>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography gutterBottom>Categories:</Typography>
+          <Typography align="center">Categories:</Typography>
           <List>
             {product.categories.map(category => (
               <ListItem key={category.id}>{category.name}</ListItem>
@@ -104,6 +117,7 @@ const ProductPage = () => {
         </Grid>
       </Grid>
     </StyledMain>
+    </form>
   );
 };
 

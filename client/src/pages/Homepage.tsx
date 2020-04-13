@@ -176,11 +176,15 @@ const Homepage: React.FC<{ activeCategories: string[] }> = ({
         </Grid>
       </Grid>
       <Grid container spacing={3}>
-        {filteredProducts.map(product => (
-          <Grid item key={product.id} xs={6} sm={4} md={2}>
-            <ProductCard {...product} />
-          </Grid>
-        ))}
+        {filteredProducts.length === 0 ? (
+          <Error errorMessage="There are no products matching this search currently available..." />
+        ) : (
+          filteredProducts.map(product => (
+            <Grid item key={product.id} xs={6} sm={4} md={2}>
+              <ProductCard {...product} />
+            </Grid>
+          ))
+        )}
       </Grid>
     </CardGrid>
   );

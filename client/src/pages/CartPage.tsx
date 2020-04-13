@@ -53,7 +53,9 @@ const CartPage: React.FC = () => {
   }
 
   if (error) {
-    return <Error />;
+    return (
+      <Error errorMessage="Sorry! Something went wrong... Please try again!" />
+    );
   }
 
   if (items?.length === 0) {

@@ -32,7 +32,7 @@ const EditProductPage: React.FC = () => {
 
   if (loading) return <Loader />;
 
-  if (error) return <Error />;
+  if (error) return <Error errorMessage="Sorry! Something went wrong... Please try again!"/>;
 
   return (
     <StyledMain>

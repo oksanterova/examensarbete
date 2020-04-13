@@ -25,13 +25,11 @@ const Logo = styled.div`
   background: url(${big_black_sheep}) center left no-repeat;
 `;
 
-const Error = () => {
+const Error: React.FC<{ errorMessage: string }> = ({ errorMessage }) => {
   return (
     <StyledMain>
       <Logo />
-      <Typography variant="h6">
-        Sorry! Something went wrong... Please try again!
-      </Typography>
+      <Typography variant="h6">{errorMessage}</Typography>
     </StyledMain>
   );
 };

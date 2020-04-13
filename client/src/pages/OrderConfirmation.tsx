@@ -30,7 +30,10 @@ const OrderConfirmation = () => {
   const items = data?.order.items;
 
   if (loading) return <Loader />;
-  if (error) return <Error />;
+  if (error)
+    return (
+      <Error errorMessage="Sorry! Something went wrong... Please try again!" />
+    );
 
   let options = {
     weekday: "long",

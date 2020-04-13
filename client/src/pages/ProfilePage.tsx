@@ -32,7 +32,7 @@ const Profile = () => {
   const [editMode, setEditMode] = useState(false);
 
   if (loading) return <Loader />;
-  if (error) return <Error />;
+  if (error) return <Error errorMessage="Sorry! Something went wrong... Please try again!"/>;
 
   const { firstname, lastname, email, address } = data!.me;
 
@@ -205,7 +205,7 @@ const ProfilePage = () => {
   const { loading, data, error } = useGetMyOrdersQuery();
 
   if (loading) return <Loader />;
-  if (error) return <Error />;
+  if (error) return <Error errorMessage="Sorry! Something went wrong... Please try again!"/>;
 
   return (
     <StyledMain>

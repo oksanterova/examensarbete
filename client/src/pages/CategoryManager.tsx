@@ -49,7 +49,9 @@ const CategoryManager = () => {
   } = useGetCategoriesQuery();
 
   if (error) {
-    return <Error />;
+    return (
+      <Error errorMessage="Sorry! Something went wrong... Please try again!" />
+    );
   }
 
   return (

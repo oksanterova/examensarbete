@@ -126,7 +126,10 @@ const ProductForm: React.FC<ProductFormProps> = ({
 
   if (sizeLoading || categoryLoading) return <Loader />;
 
-  if (sizeError || categoryError) return <Error />;
+  if (sizeError || categoryError)
+    return (
+      <Error errorMessage="Sorry! Something went wrong... Please try again!" />
+    );
 
   return (
     <form
