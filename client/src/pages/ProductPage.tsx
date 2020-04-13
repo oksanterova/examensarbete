@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, FormEventHandler } from "react";
 import {
   useGetProductQuery,
   useAddCartItemMutation,
@@ -34,29 +34,24 @@ const ProductPage = () => {
   });
 
   const { cartId } = useContext(CartContext);
-  const [sizeId, setSizeId] = useState<string>("");
-
-  const input: CreateCartItemInput = {
-    cartId,
-    productId: id,
-    sizeId,
-    quantity: 1
-  };
+  const [sizeId, setSizeId] = useState<string | undefined>(undefined);
+  const [sizeError, setSizeError] = useState(false);
 
   const [
     addCartItemMutation,
     { loading: addCartItemLoading }
   ] = useAddCartItemMutation({
-    variables: {
-      input
-    },
     refetchQueries: [{ query: GetCartDocument, variables: { cartId } }],
     awaitRefetchQueries: true
   });
 
   if (loading) return <Loader />;
 
-  if (error) return <Error errorMessage="Sorry! Something went wrong... Please try again!"/>;
+  if (error) {
+    return (
+      <Error errorMessage="Sorry! Something went wrong... Please try again!" />
+    );
+  }
 
   const product = data!.product;
 
@@ -65,58 +60,76 @@ const ProductPage = () => {
     currency: "USD"
   });
 
+  const handleSubmit: FormEventHandler = e => {
+    e.preventDefault();
+
+    if (sizeId === undefined) {
+      setSizeError(true);
+      return;
+    }
+
+    const input: CreateCartItemInput = {
+      cartId,
+      productId: id,
+      sizeId,
+      quantity: 1
+    };
+
+    addCartItemMutation({ variables: { input } });
+  };
+
   return (
-    <form>
-    <StyledMain>
-      <Typography variant="h6" gutterBottom>
-        {product.name}
-      </Typography>
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
-          <Image src={`/product-image/${product.productImageId}`} />
+    <form onSubmit={handleSubmit}>
+      <StyledMain>
+        <Typography variant="h6" gutterBottom>
+          {product.name}
+        </Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <Image src={`/product-image/${product.productImageId}`} />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Typography gutterBottom>
+              {formatter.format(product.price)}
+            </Typography>
+            <Typography>{product.description}</Typography>
+            <TextField
+              required
+              select
+              fullWidth
+              margin="normal"
+              error={sizeError}
+              label="Select size:"
+              onChange={e => {
+                setSizeId(e.target.value as string);
+                setSizeError(false);
+              }}
+            >
+              {product.sizes.map(size => (
+                <MenuItem key={size.id} value={size.id}>
+                  {size.name}
+                </MenuItem>
+              ))}
+            </TextField>
+            <Typography align="center">Categories:</Typography>
+            <List>
+              {product.categories.map(category => (
+                <ListItem key={category.id}>{category.name}</ListItem>
+              ))}
+            </List>
+          </Grid>
+          <Grid item xs={12}>
+            <LoadingButton
+              variant="contained"
+              color="primary"
+              type="submit"
+              loading={addCartItemLoading}
+            >
+              Add to Cart
+            </LoadingButton>
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <Typography gutterBottom>
-            {formatter.format(product.price)}
-          </Typography>
-          <Typography>{product.description}</Typography>
-          <TextField
-            required
-            select
-            fullWidth
-            margin="normal"
-            value={sizeId}
-            label="Select size:"
-            onChange={e => setSizeId(e.target.value as string)}
-          >
-            {product.sizes.map(size => (
-              <MenuItem key={size.id} value={size.id}>
-                {size.name}
-              </MenuItem>
-            ))}
-          </TextField>
-          <Typography align="center">Categories:</Typography>
-          <List>
-            {product.categories.map(category => (
-              <ListItem key={category.id}>{category.name}</ListItem>
-            ))}
-          </List>
-        </Grid>
-        <Grid item xs={12}>
-          <LoadingButton
-            variant="contained"
-            color="primary"
-            type="submit"
-            onClick={() => {
-              addCartItemMutation();
-            }}
-            loading={addCartItemLoading}
-          >
-            Add to Cart
-          </LoadingButton>
-        </Grid>
-      </Grid>
-    </StyledMain>
+      </StyledMain>
     </form>
   );
 };
