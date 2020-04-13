@@ -1,6 +1,11 @@
 import React from "react";
-import { useGetProductsQuery, GetProductsQuery } from "../generated/graphql";
-
+import {
+  useGetProductsQuery,
+  GetProductsQuery,
+  useGetCategoriesQuery,
+  Category,
+  Product
+} from "../generated/graphql";
 import {
   Typography,
   CardContent,
@@ -32,9 +37,9 @@ const ProductMedia = styled(CardMedia)`
   cursor: pointer;
 `;
 
-type ProductCardProps = GetProductsQuery["products"][0];
+export type ProductCardProps = GetProductsQuery["products"][0];
 
-const ProductCard: React.FC<ProductCardProps> = ({
+export const ProductCard: React.FC<ProductCardProps> = ({
   id,
   name,
   productImageId,
@@ -69,21 +74,109 @@ const ProductCard: React.FC<ProductCardProps> = ({
   );
 };
 
-const Homepage: React.FC = () => {
-  const { loading, data, error } = useGetProductsQuery();
+const Homepage: React.FC<{ activeCategories: string[] }> = ({
+  activeCategories = []
+}) => {
+  const history = useHistory();
+  const {
+    loading: productsLoading,
+    data: { products } = { products: [] },
+    error: productsError
+  } = useGetProductsQuery();
+  const {
+    loading: categoriesLoading,
+    data: { categories } = { categories: [] },
+    error: categoriesError
+  } = useGetCategoriesQuery();
 
-  if (loading) {
+  if (categoriesLoading || productsLoading) {
     return <Loader />;
   }
 
-  if (error) {
-    return <Error />;
+  if (productsError || categoriesError) {
+    return (
+      <Error errorMessage="Sorry! Something went wrong... Please try again!" />
+    );
   }
+
+  const isPeopleCategory = ({ name }: { name: string }) => {
+    return ["Women", "Men", "Kids"].includes(name);
+  };
+
+  const people = categories.filter(isPeopleCategory);
+  const clothes = categories.filter(category => !isPeopleCategory(category));
+
+  const activePeople = activeCategories.filter(name =>
+    isPeopleCategory({ name })
+  );
+  const activeClothes = activeCategories.filter(
+    name => !isPeopleCategory({ name })
+  );
+
+  const isActive = (category: Category) => {
+    return activeCategories.includes(category.name);
+  };
+
+  const selectCategory = (category: Category) => {
+    const newCategories = isActive(category)
+      ? activeCategories.filter(
+          activeCategory => activeCategory !== category.name
+        )
+      : [category.name, ...activeCategories].sort();
+
+    if (newCategories.length === 0) {
+      history.push("/");
+    } else {
+      history.push(`?categories=${newCategories.join(",")}`);
+    }
+  };
+
+  const includesProduct = (product: Product) => {
+    const peopleCategory = product.categories.find(
+      category =>
+        activePeople.length === 0 || activePeople.includes(category.name)
+    );
+
+    const clothesCategory = product.categories.find(
+      category =>
+        activeClothes.length === 0 || activeClothes.includes(category.name)
+    );
+
+    return Boolean(peopleCategory && clothesCategory);
+  };
+
+  const filteredProducts = products.filter(includesProduct);
 
   return (
     <CardGrid maxWidth="xl">
+      <Grid container spacing={3} justify="space-between">
+        <Grid item>
+          {people.map(category => (
+            <Button
+              size="large"
+              color={isActive(category) ? "secondary" : undefined}
+              onClick={() => selectCategory(category)}
+              key={category.id}
+            >
+              {category.name}
+            </Button>
+          ))}
+        </Grid>
+        <Grid item>
+          {clothes.map(category => (
+            <Button
+              size="large"
+              color={isActive(category) ? "secondary" : undefined}
+              onClick={() => selectCategory(category)}
+              key={category.id}
+            >
+              {category.name}
+            </Button>
+          ))}
+        </Grid>
+      </Grid>
       <Grid container spacing={3}>
-        {data?.products.map(product => (
+        {filteredProducts.map(product => (
           <Grid item key={product.id} xs={6} sm={4} md={2}>
             <ProductCard {...product} />
           </Grid>

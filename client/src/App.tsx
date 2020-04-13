@@ -74,7 +74,8 @@ const Logo = styled.div`
 const StyledToolbar = styled(Toolbar)`
   display: flex;
   flew-grow: 1;
-  padding: 0;
+  padding-left: 0;
+  padding-right: 6px;
 `;
 
 const FlexGrow = styled.div`
@@ -89,7 +90,17 @@ const AppMain: React.FC = () => {
       {me && <Route exact path="/profile" component={ProfilePage} />}
       {me && <Route exact path="/logout" component={LogOutPage} />}
       <Route exact path="/product/:id" component={ProductPage} />
-      <Route exact path="/" component={Homepage} />
+      <Route
+        exact
+        path="/"
+        render={({ location }) => {
+          const filter =
+            new URLSearchParams(location.search).get("categories") ?? "";
+          const activeCategories = filter === "" ? [] : filter?.split(",");
+
+          return <Homepage activeCategories={activeCategories} />;
+        }}
+      />
       <Route exact path="/login" component={LoginPage} />
       <Route exact path="/register" component={RegisterPage} />
       <Route exact path="/cart" component={CartPage} />
