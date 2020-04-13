@@ -14,7 +14,7 @@ export type Scalars = {
 export type Cart = {
    __typename?: 'Cart',
   id: Scalars['ID'],
-  items?: Maybe<Array<CartItem>>,
+  items: Array<CartItem>,
 };
 
 export type CartItem = {
@@ -29,7 +29,7 @@ export type Category = {
    __typename?: 'Category',
   id: Scalars['ID'],
   name: Scalars['String'],
-  products?: Maybe<Array<Product>>,
+  products: Array<Product>,
 };
 
 export type CreateCartItemInput = {
@@ -171,7 +171,7 @@ export type Order = {
   id: Scalars['ID'],
   amount: Scalars['Float'],
   createdAt: Scalars['Date'],
-  items?: Maybe<Array<OrderItem>>,
+  items: Array<OrderItem>,
   address: Scalars['String'],
 };
 
@@ -267,7 +267,7 @@ export type User = {
   lastname?: Maybe<Scalars['String']>,
   email: Scalars['String'],
   address?: Maybe<Scalars['String']>,
-  orders?: Maybe<Array<Order>>,
+  orders: Array<Order>,
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -392,7 +392,7 @@ export type ResolversParentTypes = ResolversObject<{
 
 export type CartResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cart'] = ResolversParentTypes['Cart']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
-  items?: Resolver<Maybe<Array<ResolversTypes['CartItem']>>, ParentType, ContextType>,
+  items?: Resolver<Array<ResolversTypes['CartItem']>, ParentType, ContextType>,
 }>;
 
 export type CartItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['CartItem'] = ResolversParentTypes['CartItem']> = ResolversObject<{
@@ -405,7 +405,7 @@ export type CartItemResolvers<ContextType = any, ParentType extends ResolversPar
 export type CategoryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Category'] = ResolversParentTypes['Category']> = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  products?: Resolver<Maybe<Array<ResolversTypes['Product']>>, ParentType, ContextType>,
+  products?: Resolver<Array<ResolversTypes['Product']>, ParentType, ContextType>,
 }>;
 
 export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
@@ -438,7 +438,7 @@ export type OrderResolvers<ContextType = any, ParentType extends ResolversParent
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   amount?: Resolver<ResolversTypes['Float'], ParentType, ContextType>,
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>,
-  items?: Resolver<Maybe<Array<ResolversTypes['OrderItem']>>, ParentType, ContextType>,
+  items?: Resolver<Array<ResolversTypes['OrderItem']>, ParentType, ContextType>,
   address?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
 }>;
 
@@ -488,7 +488,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   lastname?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  orders?: Resolver<Maybe<Array<ResolversTypes['Order']>>, ParentType, ContextType>,
+  orders?: Resolver<Array<ResolversTypes['Order']>, ParentType, ContextType>,
 }>;
 
 export type Resolvers<ContextType = any> = ResolversObject<{

@@ -39,7 +39,7 @@ const OrderPage = () => {
   const [createOrderMutation] = useCreateOrderMutation();
   const [address, setAddress] = useState<string>(me?.address ?? "");
 
-  const items = data?.cart.items;
+  const items = data?.cart?.items ?? [];
 
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -51,6 +51,11 @@ const OrderPage = () => {
     return (
       <Error errorMessage="Sorry! Something went wrong... Please try again!" />
     );
+
+  const totalAmount = items.reduce(
+    (sum, item) => sum + item.product.price * item.quantity,
+    0
+  );
 
   return (
     <StyledMain>
@@ -70,9 +75,7 @@ const OrderPage = () => {
       >
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography variant="h6" gutterBottom>
-              Cart
-            </Typography>
+            <Typography variant="h6">Cart</Typography>
           </Grid>
           <Grid item xs={12}>
             <Table>
@@ -99,9 +102,12 @@ const OrderPage = () => {
             </Table>
           </Grid>
           <Grid item xs={12}>
-            <Typography variant="h6" gutterBottom>
-              Address
+            <Typography variant="body1">
+              Total amount: {formatter.format(totalAmount)}
             </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="h6">Address</Typography>
           </Grid>
           <Grid item xs={12}>
             <TextField
@@ -124,6 +130,15 @@ const OrderPage = () => {
               onClick={() => history.push("/")}
             >
               Resume Shopping
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => history.push("/cart")}
+            >
+              Go to Cart
             </Button>
           </Grid>
           <FlexGrow />

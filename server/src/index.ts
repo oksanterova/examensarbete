@@ -89,7 +89,11 @@ function sizeToGql({ id, ...rest }: Size): graphql.Size {
 }
 
 function categoryToGql({ id, products, ...rest }: Category): graphql.Category {
-  return { id: id?.toString(), products: products?.map(productToGql), ...rest };
+  return {
+    id: id?.toString(),
+    products: products?.map(productToGql) ?? [],
+    ...rest
+  };
 }
 
 function cartToGql({ items, ...rest }: Cart): graphql.Cart {
@@ -119,11 +123,11 @@ function orderItemToGql({
 }
 
 function orderToGql({ items, ...rest }: Order): graphql.Order {
-  return { items: items?.map(orderItemToGql), ...rest };
+  return { items: items?.map(orderItemToGql) ?? [], ...rest };
 }
 
 function userToGql({ id, orders, ...rest }: User): graphql.User {
-  return { id: id.toString(), orders: orders?.map(orderToGql), ...rest };
+  return { id: id.toString(), orders: orders?.map(orderToGql) ?? [], ...rest };
 }
 
 const queryResolvers: QueryResolvers<MyContext> = {

@@ -40,12 +40,11 @@ const CartPage: React.FC = () => {
       cartId
     }
   });
+  const items = data?.cart?.items ?? [];
 
   const [deleteCartItemMutation] = useDeleteCartItemMutation();
 
   const [updateCartItemMutation] = useUpdateCartItemMutation();
-
-  const items = data?.cart.items;
 
   const quantities = [1, 2, 3, 4, 5];
 
@@ -64,7 +63,7 @@ const CartPage: React.FC = () => {
     );
   }
 
-  if (items?.length === 0) {
+  if (items.length === 0) {
     return (
       <StyledMain>
         <Typography variant="h6">Your cart is empty</Typography>
@@ -72,13 +71,16 @@ const CartPage: React.FC = () => {
     );
   }
 
+  const totalAmount = items.reduce(
+    (sum, item) => sum + item.product.price * item.quantity,
+    0
+  );
+
   return (
     <StyledMain>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Typography variant="h6" gutterBottom>
-            Cart
-          </Typography>
+          <Typography variant="h6">Cart</Typography>
         </Grid>
         <Grid item xs={12}>
           <Table>
@@ -143,6 +145,11 @@ const CartPage: React.FC = () => {
               ))}
             </TableBody>
           </Table>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="body1" gutterBottom>
+            Total amount: {formatter.format(totalAmount)}
+          </Typography>
         </Grid>
       </Grid>
       <Box marginBottom={2} />

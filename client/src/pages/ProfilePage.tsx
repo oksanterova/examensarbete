@@ -32,15 +32,16 @@ const Profile = () => {
   const [editMode, setEditMode] = useState(false);
 
   if (loading) return <Loader />;
-  if (error) return <Error errorMessage="Sorry! Something went wrong... Please try again!"/>;
+  if (error)
+    return (
+      <Error errorMessage="Sorry! Something went wrong... Please try again!" />
+    );
 
   const { firstname, lastname, email, address } = data!.me;
 
   return (
     <>
-      <Typography variant="h6" gutterBottom>
-        My profile:
-      </Typography>
+      <Typography variant="h6">My profile:</Typography>
       {editMode ? (
         <EditProfile
           profile={{
@@ -205,7 +206,10 @@ const ProfilePage = () => {
   const { loading, data, error } = useGetMyOrdersQuery();
 
   if (loading) return <Loader />;
-  if (error) return <Error errorMessage="Sorry! Something went wrong... Please try again!"/>;
+  if (error)
+    return (
+      <Error errorMessage="Sorry! Something went wrong... Please try again!" />
+    );
 
   return (
     <StyledMain>
@@ -215,9 +219,7 @@ const ProfilePage = () => {
           You don't have any order yet
         </Typography>
       ) : (
-        <Typography variant="h6" gutterBottom>
-          My orders:
-        </Typography>
+        <Typography variant="h6">My orders:</Typography>
       )}
 
       {data?.me?.orders?.map(order => (

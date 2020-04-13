@@ -3,8 +3,7 @@ import {
   useGetProductsQuery,
   GetProductsQuery,
   useGetCategoriesQuery,
-  Category,
-  Product
+  GetCategoriesQuery
 } from "../generated/graphql";
 import {
   Typography,
@@ -19,6 +18,9 @@ import styled from "styled-components";
 import Loader from "../components/Loader";
 import Error from "../components/Error";
 import { useHistory } from "react-router";
+
+type Product = GetProductsQuery["products"][0];
+type Category = GetCategoriesQuery["categories"][0];
 
 const CardGrid = styled(Container)`
   margin: 0;

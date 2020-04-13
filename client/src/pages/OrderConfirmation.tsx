@@ -27,7 +27,7 @@ const OrderConfirmation = () => {
     }
   });
 
-  const items = data?.order.items;
+  const items = data?.order.items ?? [];
 
   if (loading) return <Loader />;
   if (error)
@@ -51,13 +51,16 @@ const OrderConfirmation = () => {
     currency: "USD"
   });
 
+  const totalAmount = items.reduce(
+    (sum, item) => sum + item.product.price * item.quantity,
+    0
+  );
+
   return (
     <StyledMain>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Typography variant="h6" gutterBottom>
-            Order Confirmation
-          </Typography>
+          <Typography variant="h6">Order Confirmation</Typography>
         </Grid>
         <Grid item xs={12}>
           <Typography>Your order number {data?.order.id}</Typography>
@@ -85,6 +88,11 @@ const OrderConfirmation = () => {
               ))}
             </TableBody>
           </Table>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="body1">
+            Total amount: {formatter.format(totalAmount)}
+          </Typography>
         </Grid>
         <Grid item xs={12}>
           <Typography>

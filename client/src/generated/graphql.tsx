@@ -19,7 +19,7 @@ export type Scalars = {
 export type Cart = {
    __typename?: 'Cart',
   id: Scalars['ID'],
-  items?: Maybe<Array<CartItem>>,
+  items: Array<CartItem>,
 };
 
 export type CartItem = {
@@ -34,7 +34,7 @@ export type Category = {
    __typename?: 'Category',
   id: Scalars['ID'],
   name: Scalars['String'],
-  products?: Maybe<Array<Product>>,
+  products: Array<Product>,
 };
 
 export type CreateCartItemInput = {
@@ -176,7 +176,7 @@ export type Order = {
   id: Scalars['ID'],
   amount: Scalars['Float'],
   createdAt: Scalars['Date'],
-  items?: Maybe<Array<OrderItem>>,
+  items: Array<OrderItem>,
   address: Scalars['String'],
 };
 
@@ -272,7 +272,7 @@ export type User = {
   lastname?: Maybe<Scalars['String']>,
   email: Scalars['String'],
   address?: Maybe<Scalars['String']>,
-  orders?: Maybe<Array<Order>>,
+  orders: Array<Order>,
 };
 
 export type GetProductsQueryVariables = {};
@@ -345,7 +345,7 @@ export type GetOrderQuery = (
   & { order: (
     { __typename?: 'Order' }
     & Pick<Order, 'id' | 'amount' | 'createdAt' | 'address'>
-    & { items: Maybe<Array<(
+    & { items: Array<(
       { __typename?: 'OrderItem' }
       & Pick<OrderItem, 'id' | 'quantity'>
       & { product: (
@@ -359,7 +359,7 @@ export type GetOrderQuery = (
         { __typename?: 'Size' }
         & Pick<Size, 'id' | 'name'>
       ) }
-    )>> }
+    )> }
   ) }
 );
 
@@ -373,7 +373,7 @@ export type GetCartQuery = (
   & { cart: (
     { __typename?: 'Cart' }
     & Pick<Cart, 'id'>
-    & { items: Maybe<Array<(
+    & { items: Array<(
       { __typename?: 'CartItem' }
       & Pick<CartItem, 'id' | 'quantity'>
       & { product: (
@@ -387,7 +387,7 @@ export type GetCartQuery = (
         { __typename?: 'Size' }
         & Pick<Size, 'id' | 'name'>
       ) }
-    )>> }
+    )> }
   ) }
 );
 
@@ -409,10 +409,10 @@ export type GetMyOrdersQuery = (
   { __typename?: 'Query' }
   & { me: (
     { __typename?: 'User' }
-    & { orders: Maybe<Array<(
+    & { orders: Array<(
       { __typename?: 'Order' }
       & Pick<Order, 'id'>
-      & { items: Maybe<Array<(
+      & { items: Array<(
         { __typename?: 'OrderItem' }
         & Pick<OrderItem, 'id' | 'quantity'>
         & { product: (
@@ -422,8 +422,8 @@ export type GetMyOrdersQuery = (
           { __typename?: 'Size' }
           & Pick<Size, 'id' | 'name'>
         ) }
-      )>> }
-    )>> }
+      )> }
+    )> }
   ) }
 );
 
