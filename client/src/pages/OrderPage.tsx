@@ -80,7 +80,7 @@ const OrderPage = () => {
         >
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Typography variant="h6">Cart</Typography>
+              <Typography variant="h6">Order</Typography>
             </Grid>
             <Grid item xs={12}>
               <Table>
@@ -111,6 +111,15 @@ const OrderPage = () => {
                 Total amount: {formatter.format(totalAmount)}
               </Typography>
             </Grid>
+            <Grid item xs={12}>
+              <Typography variant="body1" color="secondary">
+                When you have submitted the order make sure to transer the total
+                amount of money to Swish account number 0793374685. Your order
+                will be shipped to the delivery address within 24 hours after
+                the payment is received.
+              </Typography>
+            </Grid>
+            <Box marginBottom={2} />
             <Grid item xs={12}>
               <Typography variant="h6">Address</Typography>
             </Grid>

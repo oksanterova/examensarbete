@@ -9,6 +9,7 @@ import {
   Table,
   Button,
   Grid,
+  Box,
 } from "@material-ui/core";
 import { useGetOrderQuery } from "../generated/graphql";
 import { useParams } from "react-router-dom";
@@ -101,9 +102,16 @@ const OrderConfirmation = () => {
           </Grid>
           <Grid item xs={12}>
             <Typography>
-              created on {createdAt} will be shiped to your address:{" "}
+              created on {createdAt} will be shipped to your address:{" "}
               {data?.order.address}
             </Typography>
+            <Grid item xs={12}>
+              <Typography variant="body1" color="secondary">
+                within 24 hours after the payment of total amount is received.
+                Thank you!
+              </Typography>
+            </Grid>
+            <Box marginBottom={2} />
           </Grid>
           <Grid item xs={12}>
             <Button
