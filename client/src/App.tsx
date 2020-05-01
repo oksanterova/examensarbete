@@ -42,6 +42,8 @@ import { blueGrey, pink, grey } from "@material-ui/core/colors";
 import { Typography } from "@material-ui/core";
 import { useGetCartQuery } from "./generated/graphql";
 import { Helmet } from "react-helmet";
+import AboutPage from "./pages/AboutPage";
+import ContactPage from "./pages/ContactPage";
 
 const theme = createMuiTheme({
   palette: {
@@ -83,6 +85,17 @@ const FlexGrow = styled.div`
   flex-grow: 1;
 `;
 
+const Footer = styled.footer`
+  background-color: #696969;
+  color: #fff;
+  padding: 6px;
+  height: 40px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: auto;
+`;
+
 const AppMain: React.FC = () => {
   const me = useContext(MeContext);
 
@@ -102,6 +115,8 @@ const AppMain: React.FC = () => {
           return <Homepage activeCategories={activeCategories} />;
         }}
       />
+      <Route exact path="/about" component={AboutPage} />
+      <Route exact path="/contact" component={ContactPage} />
       <Route exact path="/login" component={LoginPage} />
       <Route exact path="/register" component={RegisterPage} />
       <Route exact path="/cart" component={CartPage} />
@@ -266,6 +281,22 @@ const AppHeader: React.FC = () => {
   );
 };
 
+const AppFooter: React.FC = () => {
+  const history = useHistory();
+  return (
+    <Footer>
+      <Typography variant="overline"> &copy; Black Sheep 2020</Typography>
+      <FlexGrow />
+      <Button color="inherit" onClick={() => history.push("/contact")}>
+        Contact
+      </Button>
+      <Button color="inherit" onClick={() => history.push("/about")}>
+        About
+      </Button>
+    </Footer>
+  );
+};
+
 const App: React.FC = () => {
   return (
     <>
@@ -284,6 +315,7 @@ const App: React.FC = () => {
                       <Router>
                         <AppHeader />
                         <AppMain />
+                        <AppFooter />
                       </Router>
                     </CartContextProvider>
                   </MeContextProvider>{" "}
