@@ -172,9 +172,17 @@ const MyOrder: React.FC<MyOrderProps> = ({ id, items }) => {
     currency: "USD",
   });
 
+  const totalAmount = items.reduce(
+    (sum, item) => sum + item.product.price * item.quantity,
+    0
+  );
+
   return (
     <OrderWrapper>
       <Typography>Order {id}</Typography>
+      <Typography variant="body1">
+        Total amount: {formatter.format(totalAmount)}
+      </Typography>
       <Table>
         <TableCell>
           <TableHead>
