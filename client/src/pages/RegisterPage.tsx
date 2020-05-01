@@ -6,6 +6,7 @@ import { useApolloClient } from "@apollo/react-hooks";
 import LoadingButton from "../components/LoadingButton";
 import StyledMain from "../components/StyledMain";
 import { Helmet } from "react-helmet";
+import { GraphQLError } from "graphql";
 
 const RegisterPage = () => {
   const [signUpMutation, { loading }] = useSignUpMutation();
@@ -21,7 +22,11 @@ const RegisterPage = () => {
   const client = useApolloClient();
 
   async function handleSubmit(): Promise<void> {
-    if (validateForm()) {
+    if (!validateForm()) {
+      return;
+    }
+
+    try {
       const { data } = await signUpMutation({ variables: { email, password } });
 
       const token = data?.signUp.token;
@@ -31,6 +36,10 @@ const RegisterPage = () => {
         client.writeData({ data: { isLoggedIn: true } });
         history.push("/");
       }
+    } catch (e) {
+      const error = e?.graphQLErrors[0]?.message || e.message;
+
+      alert(error);
     }
   }
 

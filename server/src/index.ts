@@ -4,13 +4,13 @@ import {
   getConnection,
   In,
   FindOperator,
-  IsNull
+  IsNull,
 } from "typeorm";
 import express from "express";
 import {
   ApolloServer,
   ForbiddenError,
-  AuthenticationError
+  AuthenticationError,
 } from "apollo-server-express";
 import { importSchema } from "graphql-import";
 import {
@@ -21,7 +21,7 @@ import {
   CategoryResolvers,
   OrderResolvers,
   OrderItemResolvers,
-  UserResolvers
+  UserResolvers,
 } from "./generated/graphql";
 import * as graphql from "./generated/graphql";
 import { join } from "path";
@@ -48,7 +48,7 @@ require("dotenv").config();
 let config = {
   port: process.env.PORT || 4000,
   secret: process.env.SECRET!,
-  saltRounds: 10
+  saltRounds: 10,
 };
 
 type MyContext = {
@@ -63,7 +63,7 @@ async function createToken(
 ): Promise<string> {
   const { id, email } = user;
   return jwt.sign({ id, email }, secret, {
-    expiresIn
+    expiresIn,
   });
 }
 
@@ -77,14 +77,14 @@ function productToGql({
     id: id?.toString(),
     categories: categories?.map(categoryToGql) ?? [],
     sizes: sizes?.map(sizeToGql) ?? [],
-    ...rest
+    ...rest,
   };
 }
 
 function sizeToGql({ id, ...rest }: Size): graphql.Size {
   return {
     id: id?.toString(),
-    ...rest
+    ...rest,
   };
 }
 
@@ -92,7 +92,7 @@ function categoryToGql({ id, products, ...rest }: Category): graphql.Category {
   return {
     id: id?.toString(),
     products: products?.map(productToGql) ?? [],
-    ...rest
+    ...rest,
   };
 }
 
@@ -104,7 +104,7 @@ function cartItemToGql({ product, size, ...rest }: CartItem): graphql.CartItem {
   return {
     product: product && productToGql(product),
     size: size && sizeToGql(size),
-    ...rest
+    ...rest,
   };
 }
 
@@ -118,7 +118,7 @@ function orderItemToGql({
     id: id?.toString(),
     product: product && productToGql(product),
     size: size && sizeToGql(size),
-    ...rest
+    ...rest,
   };
 }
 
@@ -177,7 +177,7 @@ const queryResolvers: QueryResolvers<MyContext> = {
     if (!me) throwForbiddenError();
 
     return userToGql(await User.findOneOrFail(me.id));
-  }
+  },
 };
 
 function throwNotFound(): never {
@@ -209,10 +209,16 @@ const mutationResolvers: MutationResolvers<MyContext> = {
     return userToGql(await me.save());
   },
   signUp: async (_, { email, password }, { secret }) => {
+    const users = await User.find({ email });
+
+    if (users.length !== 0) {
+      throw new ForbiddenError("Email is already taken");
+    }
+
     const user = new User({
       isAdmin: false,
       email,
-      password: await bcrypt.hash(password, config.saltRounds)
+      password: await bcrypt.hash(password, config.saltRounds),
     });
 
     await user.save();
@@ -225,7 +231,7 @@ const mutationResolvers: MutationResolvers<MyContext> = {
     const users = await User.find({ email });
 
     if (users.length !== 1) {
-      throw new ForbiddenError("invalid username or password");
+      throw new ForbiddenError("Invalid username or password");
     }
 
     const user = users[0];
@@ -236,7 +242,7 @@ const mutationResolvers: MutationResolvers<MyContext> = {
 
       return { token };
     } else {
-      throw new ForbiddenError("invalid username or password");
+      throw new ForbiddenError("Invalid username or password");
     }
   },
   addCartItem: async (_, { input }) => {
@@ -292,7 +298,7 @@ const mutationResolvers: MutationResolvers<MyContext> = {
     if (!me?.isAdmin) throwForbiddenError();
 
     const size = new Size({
-      name: name
+      name: name,
     });
 
     return sizeToGql(await size.save());
@@ -325,7 +331,7 @@ const mutationResolvers: MutationResolvers<MyContext> = {
       price,
       sizeIds,
       categoryIds,
-      productImageId
+      productImageId,
     } = input;
 
     const categories = await Category.find({ id: FixedIn(categoryIds) });
@@ -337,7 +343,7 @@ const mutationResolvers: MutationResolvers<MyContext> = {
       description,
       categories,
       sizes,
-      productImageId
+      productImageId,
     });
 
     return productToGql(await product.save());
@@ -351,13 +357,13 @@ const mutationResolvers: MutationResolvers<MyContext> = {
       name,
       sizeIds,
       categoryIds,
-      productImageId
+      productImageId,
     } = input;
     const categories = await Category.find({ id: FixedIn(categoryIds) });
     const sizes = await Size.find({ id: FixedIn(sizeIds) });
 
     const product = await Product.findOneOrFail(id, {
-      relations: ["categories", "sizes"]
+      relations: ["categories", "sizes"],
     });
 
     product.name = name;
@@ -373,7 +379,7 @@ const mutationResolvers: MutationResolvers<MyContext> = {
     if (!me?.isAdmin) throwForbiddenError();
 
     const product = await Product.findOneOrFail(id, {
-      relations: ["categories", "sizes"]
+      relations: ["categories", "sizes"],
     });
     await product.remove();
 
@@ -388,7 +394,7 @@ const mutationResolvers: MutationResolvers<MyContext> = {
     if (!me?.isAdmin) throwForbiddenError();
 
     const category = new Category({
-      name: name
+      name: name,
     });
 
     return categoryToGql(await category.save());
@@ -415,120 +421,120 @@ const mutationResolvers: MutationResolvers<MyContext> = {
     const createdAt = new Date();
 
     const cart = await Cart.findOneOrFail(cartId, {
-      relations: ["items", "items.product", "items.size"]
+      relations: ["items", "items.product", "items.size"],
     });
 
-    const items = cart.items.map(item => new OrderItem(item));
+    const items = cart.items.map((item) => new OrderItem(item));
 
     const order = new Order({
       user: me,
       amount: 0,
       address,
       createdAt,
-      items
+      items,
     });
 
     return orderToGql(await order.save());
-  }
+  },
 };
 
 const userResolvers: UserResolvers = {
-  orders: async parent => {
+  orders: async (parent) => {
     const user = await User.findOneOrFail(parent.id, {
-      relations: ["orders"]
+      relations: ["orders"],
     });
     const orders = user.orders ?? throwNotFound();
 
     return orders.map(orderToGql);
-  }
+  },
 };
 
 const productResolvers: ProductResolvers = {
-  categories: async parent => {
+  categories: async (parent) => {
     const product = await Product.findOneOrFail(parent.id, {
-      relations: ["categories"]
+      relations: ["categories"],
     });
     const categories = product.categories ?? [];
 
     return categories.map(categoryToGql);
   },
-  sizes: async parent => {
+  sizes: async (parent) => {
     const product = await Product.findOneOrFail(parent.id, {
-      relations: ["sizes"]
+      relations: ["sizes"],
     });
     const sizes = product.sizes ?? throwNotFound();
 
     return sizes.map(sizeToGql);
-  }
+  },
 };
 
 const categoryResolvers: CategoryResolvers = {
-  products: async parent => {
+  products: async (parent) => {
     const category = await Category.findOneOrFail(parent.id, {
-      relations: ["products"]
+      relations: ["products"],
     });
     const products = category.products ?? [];
 
     return products.map(productToGql);
-  }
+  },
 };
 
 const orderResolvers: OrderResolvers = {
-  items: async parent => {
+  items: async (parent) => {
     const order = await Order.findOneOrFail(parent.id, {
-      relations: ["items"]
+      relations: ["items"],
     });
     const items = order.items ?? [];
 
     return items.map(orderItemToGql);
-  }
+  },
 };
 
 const orderItemResolvers: OrderItemResolvers = {
-  product: async parent => {
+  product: async (parent) => {
     const orderItem = await OrderItem.findOneOrFail(parent.id, {
-      relations: ["product"]
+      relations: ["product"],
     });
 
     return productToGql(orderItem.product);
   },
-  size: async parent => {
+  size: async (parent) => {
     const orderItem = await OrderItem.findOneOrFail(parent.id, {
-      relations: ["size"]
+      relations: ["size"],
     });
 
     return sizeToGql(orderItem.size);
-  }
+  },
 };
 
 const cartResolvers: graphql.CartResolvers = {
-  items: async parent => {
+  items: async (parent) => {
     const items = await getConnection()
       .getRepository(CartItem)
       .createQueryBuilder("item")
       .where('item."cartId" = :cartId', { cartId: parent.id })
       .orderBy({
-        "item.id": "ASC"
+        "item.id": "ASC",
       })
       .getMany();
 
     return items.map(cartItemToGql);
-  }
+  },
 };
 
 const cartItemResolvers: graphql.CartItemResolvers = {
-  product: async parent => {
+  product: async (parent) => {
     const cartItem = await CartItem.findOneOrFail(parent.id, {
-      relations: ["product"]
+      relations: ["product"],
     });
     return productToGql(cartItem.product);
   },
-  size: async parent => {
+  size: async (parent) => {
     const cartitem = await CartItem.findOneOrFail(parent.id, {
-      relations: ["size"]
+      relations: ["size"],
     });
     return sizeToGql(cartitem.size);
-  }
+  },
 };
 
 const resolvers: Resolvers = {
@@ -555,11 +561,11 @@ const resolvers: Resolvers = {
         return parseInt(ast.value, 10);
       }
       return null;
-    }
-  })
+    },
+  }),
 };
 
-createConnection().then(async connection => {
+createConnection().then(async (connection) => {
   const app = express();
 
   async function getMe(req: Request): Promise<User | undefined> {
@@ -583,14 +589,14 @@ createConnection().then(async connection => {
   async function getContext(ctx: ExpressContext): Promise<MyContext> {
     return {
       secret: config.secret,
-      me: await getMe(ctx.req)
+      me: await getMe(ctx.req),
     };
   }
 
   const server = new ApolloServer({
     typeDefs: importSchema("./src/schema.graphql"),
     resolvers,
-    context: getContext
+    context: getContext,
   });
 
   server.applyMiddleware({ app, path: "/graphql" });
@@ -619,7 +625,7 @@ createConnection().then(async connection => {
       console.log("req.file.buffer.length", req.file.buffer?.length);
 
       const productImage = new ProductImage({
-        buffer
+        buffer,
       });
 
       await productImage.save();
