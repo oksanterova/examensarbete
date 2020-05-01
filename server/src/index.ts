@@ -565,78 +565,91 @@ const resolvers: Resolvers = {
   }),
 };
 
-createConnection().then(async (connection) => {
-  const app = express();
+createConnection({
+  url: process.env.DATABASE_URL,
+  type: "postgres",
+  synchronize: true,
+  entities: ["src/entity/*.ts"],
+  subscribers: ["src/subscriber/*.ts"],
+  migrations: ["src/migration/*.ts"],
+  cli: {
+    entitiesDir: "src/entity",
+    migrationsDir: "src/migration",
+    subscribersDir: "src/subscriber",
+  },
+})
+  .then(async (connection) => {
+    const app = express();
 
-  async function getMe(req: Request): Promise<User | undefined> {
-    const token = req.header("x-token");
+    async function getMe(req: Request): Promise<User | undefined> {
+      const token = req.header("x-token");
 
-    if (token) {
-      try {
-        const { id } = (await jwt.verify(token, config.secret)) as {
-          id: number;
-        };
+      if (token) {
+        try {
+          const { id } = (await jwt.verify(token, config.secret)) as {
+            id: number;
+          };
 
-        return User.findOneOrFail(id);
-      } catch (e) {
-        throw new AuthenticationError("Your session expired. Sign in again.");
+          return User.findOneOrFail(id);
+        } catch (e) {
+          throw new AuthenticationError("Your session expired. Sign in again.");
+        }
       }
+
+      return undefined;
     }
 
-    return undefined;
-  }
+    async function getContext(ctx: ExpressContext): Promise<MyContext> {
+      return {
+        secret: config.secret,
+        me: await getMe(ctx.req),
+      };
+    }
 
-  async function getContext(ctx: ExpressContext): Promise<MyContext> {
-    return {
-      secret: config.secret,
-      me: await getMe(ctx.req),
-    };
-  }
+    const server = new ApolloServer({
+      typeDefs: importSchema("./src/schema.graphql"),
+      resolvers,
+      context: getContext,
+    });
 
-  const server = new ApolloServer({
-    typeDefs: importSchema("./src/schema.graphql"),
-    resolvers,
-    context: getContext,
-  });
+    server.applyMiddleware({ app, path: "/graphql" });
 
-  server.applyMiddleware({ app, path: "/graphql" });
+    const upload = multer({ storage: multer.memoryStorage() });
 
-  const upload = multer({ storage: multer.memoryStorage() });
+    app.get(
+      "/product-image/:id",
+      asyncHandler(async (req, res) => {
+        const id = req.params.id as string;
 
-  app.get(
-    "/product-image/:id",
-    asyncHandler(async (req, res) => {
-      const id = req.params.id as string;
+        const productImage = await ProductImage.findOneOrFail(id);
 
-      const productImage = await ProductImage.findOneOrFail(id);
+        res.send(productImage.buffer);
+      })
+    );
 
-      res.send(productImage.buffer);
-    })
-  );
+    app.post(
+      "/product-image",
+      upload.single("image"),
+      asyncHandler(async (req, res, next) => {
+        const buffer = req.file.buffer;
 
-  app.post(
-    "/product-image",
-    upload.single("image"),
-    asyncHandler(async (req, res, next) => {
-      //const blob = new Blob([req.file.buffer]);
-      const buffer = req.file.buffer;
+        console.log("req.file", req.file);
+        console.log("req.file.buffer.length", req.file.buffer?.length);
 
-      console.log("req.file", req.file);
-      console.log("req.file.buffer.length", req.file.buffer?.length);
+        const productImage = new ProductImage({
+          buffer,
+        });
 
-      const productImage = new ProductImage({
-        buffer,
-      });
+        await productImage.save();
 
-      await productImage.save();
+        res.send({ id: productImage.id });
+      })
+    );
 
-      res.send({ id: productImage.id });
-    })
-  );
+    app.use(express.static(join(__dirname, "../../client/build")));
 
-  app.use(express.static(join(__dirname, "../build")));
-
-  app.listen({ port: config.port }, () => {
-    console.log(`Apollo Server on http://localhost:${config.port}/graphql`);
-  });
-});
+    app.listen({ port: config.port }, () => {
+      console.log(`Apollo Server on http://localhost:${config.port}/graphql`);
+    });
+  })
+  .catch(console.log);
