@@ -182,6 +182,18 @@ const AppHeader: React.FC = () => {
 
         <FlexGrow />
 
+        {me && (
+          <IconButton
+            aria-label="account of current user"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            color="inherit"
+            onClick={handleMenu}
+          >
+            <AccountCircle />
+          </IconButton>
+        )}
+
         {!me && (
           <>
             <Button color="inherit" onClick={() => history.push("/login")}>
@@ -190,30 +202,14 @@ const AppHeader: React.FC = () => {
             <Button color="inherit" onClick={() => history.push("/register")}>
               Sign Up
             </Button>
-            <IconButton color="inherit" onClick={() => history.push("/cart")}>
-              <ShoppingCartIcon />
-            </IconButton>
           </>
         )}
 
-        {me && (
-          <>
-            <IconButton
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              color="inherit"
-              onClick={handleMenu}
-            >
-              <AccountCircle />
-            </IconButton>
-            <IconButton color="inherit" onClick={() => history.push("/cart")}>
-              <Badge badgeContent={items?.length} color="secondary">
-                <ShoppingCartIcon />
-              </Badge>
-            </IconButton>
-          </>
-        )}
+        <IconButton color="inherit" onClick={() => history.push("/cart")}>
+          <Badge badgeContent={items?.length} color="secondary">
+            <ShoppingCartIcon />
+          </Badge>
+        </IconButton>
 
         <Menu
           id="menu-appbar"
