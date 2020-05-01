@@ -5,6 +5,7 @@ import { Grid, Typography, TextField } from "@material-ui/core";
 import { useApolloClient } from "@apollo/react-hooks";
 import LoadingButton from "../components/LoadingButton";
 import StyledMain from "../components/StyledMain";
+import { Helmet } from "react-helmet";
 
 const RegisterPage = () => {
   const [signUpMutation, { loading }] = useSignUpMutation();
@@ -15,7 +16,7 @@ const RegisterPage = () => {
   const formEl = useRef<HTMLFormElement>(null);
   const [confirmError, setConfirmError] = useState({
     error: false,
-    helperText: ""
+    helperText: "",
   });
   const client = useApolloClient();
 
@@ -50,69 +51,74 @@ const RegisterPage = () => {
   }
 
   return (
-    <StyledMain>
-      <form
-        ref={formEl}
-        onSubmit={async e => {
-          e.preventDefault();
-          await handleSubmit();
-        }}
-      >
-        <Typography variant="h6" gutterBottom>
-          Register
-        </Typography>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <TextField
-              required
-              id="email"
-              name="email"
-              value={email}
-              type="email"
-              label="Enter your email"
-              onChange={e => setEmail(e.target.value)}
-              fullWidth
-            />
+    <>
+      <Helmet>
+        <title>Register</title>
+      </Helmet>
+      <StyledMain>
+        <form
+          ref={formEl}
+          onSubmit={async (e) => {
+            e.preventDefault();
+            await handleSubmit();
+          }}
+        >
+          <Typography variant="h6" gutterBottom>
+            Register
+          </Typography>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <TextField
+                required
+                id="email"
+                name="email"
+                value={email}
+                type="email"
+                label="Enter your email"
+                onChange={(e) => setEmail(e.target.value)}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                id="password"
+                name="password"
+                value={password}
+                type="password"
+                label="Enter password"
+                onChange={(e) => setPassword(e.target.value)}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                id="confirm-password"
+                name="confirm-password"
+                value={confirm}
+                type="password"
+                error={confirmError.error}
+                helperText={confirmError.helperText}
+                label="Confirm password"
+                onChange={(e) => setConfirm(e.target.value)}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <LoadingButton
+                variant="contained"
+                color="primary"
+                type="submit"
+                loading={loading}
+              >
+                Register
+              </LoadingButton>
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <TextField
-              required
-              id="password"
-              name="password"
-              value={password}
-              type="password"
-              label="Enter password"
-              onChange={e => setPassword(e.target.value)}
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              required
-              id="confirm-password"
-              name="confirm-password"
-              value={confirm}
-              type="password"
-              error={confirmError.error}
-              helperText={confirmError.helperText}
-              label="Confirm password"
-              onChange={e => setConfirm(e.target.value)}
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <LoadingButton
-              variant="contained"
-              color="primary"
-              type="submit"
-              loading={loading}
-            >
-              Register
-            </LoadingButton>
-          </Grid>
-        </Grid>
-      </form>
-    </StyledMain>
+        </form>
+      </StyledMain>
+    </>
   );
 };
 

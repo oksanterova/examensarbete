@@ -3,21 +3,22 @@ import ProductForm from "../components/ProductForm";
 import {
   ProductInput,
   useCreateProductMutation,
-  GetProductsDocument
+  GetProductsDocument,
 } from "../generated/graphql";
 import StyledMain from "../components/StyledMain";
+import { Helmet } from "react-helmet";
 
 const CreateProductPage = () => {
   const [createProductMutation] = useCreateProductMutation({
     refetchQueries: [{ query: GetProductsDocument }],
-    awaitRefetchQueries: true
+    awaitRefetchQueries: true,
   });
 
   async function submit(input: ProductInput): Promise<void> {
     await createProductMutation({
       variables: { input },
       refetchQueries: [{ query: GetProductsDocument }],
-      awaitRefetchQueries: true
+      awaitRefetchQueries: true,
     });
   }
 
@@ -25,9 +26,18 @@ const CreateProductPage = () => {
   const title = "Product creation";
 
   return (
-    <StyledMain>
-      <ProductForm submit={submit} buttonAction={buttonAction} title={title} />
-    </StyledMain>
+    <>
+      <Helmet>
+        <title>Create Product</title>
+      </Helmet>
+      <StyledMain>
+        <ProductForm
+          submit={submit}
+          buttonAction={buttonAction}
+          title={title}
+        />
+      </StyledMain>
+    </>
   );
 };
 

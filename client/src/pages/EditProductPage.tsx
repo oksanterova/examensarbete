@@ -4,23 +4,24 @@ import {
   useUpdateProductMutation,
   ProductInput,
   useGetProductQuery,
-  GetProductsDocument
+  GetProductsDocument,
 } from "../generated/graphql";
 import { useParams } from "react-router-dom";
 import StyledMain from "../components/StyledMain";
 import Loader from "../components/Loader";
 import Error from "../components/Error";
+import { Helmet } from "react-helmet";
 
 const EditProductPage: React.FC = () => {
   // @ts-ignore
   const { id }: { id: string } = useParams();
   const [updateProductMutation] = useUpdateProductMutation({
     refetchQueries: [{ query: GetProductsDocument }],
-    awaitRefetchQueries: true
+    awaitRefetchQueries: true,
   });
 
   const { data, loading, error } = useGetProductQuery({
-    variables: { id: id }
+    variables: { id: id },
   });
 
   async function submit(input: ProductInput): Promise<void> {
@@ -32,17 +33,25 @@ const EditProductPage: React.FC = () => {
 
   if (loading) return <Loader />;
 
-  if (error) return <Error errorMessage="Sorry! Something went wrong... Please try again!"/>;
+  if (error)
+    return (
+      <Error errorMessage="Sorry! Something went wrong... Please try again!" />
+    );
 
   return (
-    <StyledMain>
-      <ProductForm
-        product={data?.product}
-        submit={submit}
-        buttonAction={buttonAction}
-        title={title}
-      />
-    </StyledMain>
+    <>
+      <Helmet>
+        <title>Edit Product</title>
+      </Helmet>
+      <StyledMain>
+        <ProductForm
+          product={data?.product}
+          submit={submit}
+          buttonAction={buttonAction}
+          title={title}
+        />
+      </StyledMain>
+    </>
   );
 };
 

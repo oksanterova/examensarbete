@@ -3,7 +3,7 @@ import {
   useGetProductQuery,
   useAddCartItemMutation,
   GetCartDocument,
-  CreateCartItemInput
+  CreateCartItemInput,
 } from "../generated/graphql";
 import {
   Typography,
@@ -13,7 +13,7 @@ import {
   TextField,
   Grid,
   Box,
-  Button
+  Button,
 } from "@material-ui/core";
 import { useParams, useHistory } from "react-router-dom";
 import LoadingButton from "../components/LoadingButton";
@@ -22,6 +22,7 @@ import StyledMain from "../components/StyledMain";
 import Loader from "../components/Loader";
 import Error from "../components/Error";
 import styled from "styled-components";
+import { Helmet } from "react-helmet";
 
 const Image = styled.img`
   width: 250px;
@@ -37,7 +38,7 @@ const ProductPage = () => {
   // @ts-ignore
   const { id }: { id: string } = useParams();
   const { loading, data, error } = useGetProductQuery({
-    variables: { id: id }
+    variables: { id: id },
   });
 
   const { cartId } = useContext(CartContext);
@@ -46,10 +47,10 @@ const ProductPage = () => {
 
   const [
     addCartItemMutation,
-    { loading: addCartItemLoading }
+    { loading: addCartItemLoading },
   ] = useAddCartItemMutation({
     refetchQueries: [{ query: GetCartDocument, variables: { cartId } }],
-    awaitRefetchQueries: true
+    awaitRefetchQueries: true,
   });
 
   if (loading) return <Loader />;
@@ -64,10 +65,10 @@ const ProductPage = () => {
 
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "USD"
+    currency: "USD",
   });
 
-  const handleSubmit: FormEventHandler = e => {
+  const handleSubmit: FormEventHandler = (e) => {
     e.preventDefault();
 
     if (sizeId === undefined) {
@@ -79,7 +80,7 @@ const ProductPage = () => {
       cartId,
       productId: id,
       sizeId,
-      quantity: 1
+      quantity: 1,
     };
 
     addCartItemMutation({ variables: { input } });
@@ -87,6 +88,10 @@ const ProductPage = () => {
 
   return (
     <form onSubmit={handleSubmit}>
+      <Helmet>
+        <title>{product.name}</title>
+        <meta name="description" content={product.description} />
+      </Helmet>
       <StyledMain>
         <Typography variant="h6" gutterBottom>
           {product.name}
@@ -107,12 +112,12 @@ const ProductPage = () => {
               margin="normal"
               error={sizeError}
               label="Select size:"
-              onChange={e => {
+              onChange={(e) => {
                 setSizeId(e.target.value as string);
                 setSizeError(false);
               }}
             >
-              {product.sizes.map(size => (
+              {product.sizes.map((size) => (
                 <MenuItem key={size.id} value={size.id}>
                   {size.name}
                 </MenuItem>
@@ -121,7 +126,7 @@ const ProductPage = () => {
             <Box marginTop={2} />
             <Typography align="center">Categories:</Typography>
             <List>
-              {product.categories.map(category => (
+              {product.categories.map((category) => (
                 <ListItem key={category.id}>{category.name}</ListItem>
               ))}
             </List>

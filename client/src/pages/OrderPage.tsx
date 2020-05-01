@@ -12,7 +12,7 @@ import {
   TextField,
   Grid,
   Box,
-  Button
+  Button,
 } from "@material-ui/core";
 import { useGetCartQuery, useCreateOrderMutation } from "../generated/graphql";
 import MeContext from "../MeContext";
@@ -20,6 +20,7 @@ import StyledMain from "../components/StyledMain";
 import Loader from "../components/Loader";
 import Error from "../components/Error";
 import styled from "styled-components";
+import { Helmet } from "react-helmet";
 
 const FlexGrow = styled.div`
   flex-grow: 1;
@@ -32,8 +33,8 @@ const OrderPage = () => {
 
   const { data, loading, error } = useGetCartQuery({
     variables: {
-      cartId
-    }
+      cartId,
+    },
   });
 
   const [createOrderMutation] = useCreateOrderMutation();
@@ -43,7 +44,7 @@ const OrderPage = () => {
 
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "USD"
+    currency: "USD",
   });
 
   if (loading) return <Loader />;
@@ -58,103 +59,108 @@ const OrderPage = () => {
   );
 
   return (
-    <StyledMain>
-      <form
-        onSubmit={async e => {
-          e.preventDefault();
+    <>
+      <Helmet>
+        <title>Order</title>
+      </Helmet>
+      <StyledMain>
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
 
-          const { data } = await createOrderMutation({
-            variables: { input: { address, cartId } }
-          });
-          const orderId = data!.createOrder.id;
+            const { data } = await createOrderMutation({
+              variables: { input: { address, cartId } },
+            });
+            const orderId = data!.createOrder.id;
 
-          await resetCart();
+            await resetCart();
 
-          history.push(`/order-confirmation/${orderId}`);
-        }}
-      >
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Typography variant="h6">Cart</Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Size</TableCell>
-                  <TableCell>Quantity</TableCell>
-                  <TableCell>Price</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {items?.map(item => (
-                  <TableRow key={item.id}>
-                    <TableCell>{item.product.name}</TableCell>
-                    <TableCell>{item.size.name}</TableCell>
-                    <TableCell>{item.quantity}</TableCell>
-                    <TableCell>
-                      {formatter.format(item.product.price * item.quantity)}
-                    </TableCell>
+            history.push(`/order-confirmation/${orderId}`);
+          }}
+        >
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Typography variant="h6">Cart</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Size</TableCell>
+                    <TableCell>Quantity</TableCell>
+                    <TableCell>Price</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHead>
+                <TableBody>
+                  {items?.map((item) => (
+                    <TableRow key={item.id}>
+                      <TableCell>{item.product.name}</TableCell>
+                      <TableCell>{item.size.name}</TableCell>
+                      <TableCell>{item.quantity}</TableCell>
+                      <TableCell>
+                        {formatter.format(item.product.price * item.quantity)}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="body1">
+                Total amount: {formatter.format(totalAmount)}
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="h6">Address</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                id="address"
+                name="address"
+                value={address}
+                label="Delivery address"
+                onChange={(e) => setAddress(e.target.value as string)}
+                fullWidth
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <Typography variant="body1">
-              Total amount: {formatter.format(totalAmount)}
-            </Typography>
+          <Box marginBottom={2} />
+          <Grid container spacing={2}>
+            <Grid item>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => history.push("/")}
+              >
+                Resume Shopping
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => history.push("/cart")}
+              >
+                Go to Cart
+              </Button>
+            </Grid>
+            <FlexGrow />
+            <Grid item>
+              <LoadingButton
+                loading={loading}
+                variant="contained"
+                color="secondary"
+                type="submit"
+              >
+                Create order
+              </LoadingButton>
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <Typography variant="h6">Address</Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              required
-              id="address"
-              name="address"
-              value={address}
-              label="Delivery address"
-              onChange={e => setAddress(e.target.value as string)}
-              fullWidth
-            />
-          </Grid>
-        </Grid>
-        <Box marginBottom={2} />
-        <Grid container spacing={2}>
-          <Grid item>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={() => history.push("/")}
-            >
-              Resume Shopping
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={() => history.push("/cart")}
-            >
-              Go to Cart
-            </Button>
-          </Grid>
-          <FlexGrow />
-          <Grid item>
-            <LoadingButton
-              loading={loading}
-              variant="contained"
-              color="secondary"
-              type="submit"
-            >
-              Create order
-            </LoadingButton>
-          </Grid>
-        </Grid>
-      </form>
-    </StyledMain>
+        </form>
+      </StyledMain>
+    </>
   );
 };
 

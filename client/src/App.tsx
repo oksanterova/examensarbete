@@ -17,7 +17,7 @@ import { ApolloProvider as ApolloHooksProvider } from "@apollo/react-hooks";
 import {
   createMuiTheme,
   ThemeProvider as MuiThemeProvider,
-  darken
+  darken,
 } from "@material-ui/core/styles";
 import black_sheep from "./assets/black_sheep.png";
 import styled, { ThemeProvider } from "styled-components";
@@ -41,27 +41,28 @@ import MeContext, { MeContextProvider } from "./MeContext";
 import { blueGrey, pink, grey } from "@material-ui/core/colors";
 import { Typography } from "@material-ui/core";
 import { useGetCartQuery } from "./generated/graphql";
+import { Helmet } from "react-helmet";
 
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: blueGrey[800]
+      main: blueGrey[800],
     },
     secondary: {
-      main: darken(pink.A700, 0.1)
+      main: darken(pink.A700, 0.1),
     },
     background: {
       default: grey[100],
-      paper: grey[200]
-    }
+      paper: grey[200],
+    },
   },
   overrides: {
     MuiTypography: {
       gutterBottom: {
-        marginBottom: 16
-      }
-    }
-  }
+        marginBottom: 16,
+      },
+    },
+  },
 });
 
 const Logo = styled.div`
@@ -137,8 +138,8 @@ const AppHeader: React.FC = () => {
 
   const { data } = useGetCartQuery({
     variables: {
-      cartId
-    }
+      cartId,
+    },
   });
 
   const items = data?.cart.items;
@@ -207,11 +208,11 @@ const AppHeader: React.FC = () => {
           onClose={handleClose}
           anchorOrigin={{
             vertical: "top",
-            horizontal: "right"
+            horizontal: "right",
           }}
           transformOrigin={{
             vertical: "top",
-            horizontal: "right"
+            horizontal: "right",
           }}
         >
           <MenuItem
@@ -267,26 +268,32 @@ const AppHeader: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <StylesProvider injectFirst>
-        <MuiThemeProvider theme={theme}>
-          <ThemeProvider theme={theme}>
-            <ApolloProvider client={client}>
-              <ApolloHooksProvider client={client}>
-                <MeContextProvider>
-                  <CartContextProvider>
-                    <Router>
-                      <AppHeader />
-                      <AppMain />
-                    </Router>
-                  </CartContextProvider>
-                </MeContextProvider>{" "}
-              </ApolloHooksProvider>
-            </ApolloProvider>
-          </ThemeProvider>
-        </MuiThemeProvider>
-      </StylesProvider>
-    </div>
+    <>
+      <Helmet titleTemplate="%s - Black Sheep" defaultTitle="Black Sheep">
+        <html lang="en" />
+        <meta name="description" content="Basic example" />
+      </Helmet>
+      <div className="App">
+        <StylesProvider injectFirst>
+          <MuiThemeProvider theme={theme}>
+            <ThemeProvider theme={theme}>
+              <ApolloProvider client={client}>
+                <ApolloHooksProvider client={client}>
+                  <MeContextProvider>
+                    <CartContextProvider>
+                      <Router>
+                        <AppHeader />
+                        <AppMain />
+                      </Router>
+                    </CartContextProvider>
+                  </MeContextProvider>{" "}
+                </ApolloHooksProvider>
+              </ApolloProvider>
+            </ThemeProvider>
+          </MuiThemeProvider>
+        </StylesProvider>
+      </div>
+    </>
   );
 };
 

@@ -6,6 +6,7 @@ import { useApolloClient } from "@apollo/react-hooks";
 import LoadingButton from "../components/LoadingButton";
 import StyledMain from "../components/StyledMain";
 import { IS_LOGGED_IN, UPDATE_IS_LOGGED_IN } from "../client";
+import { Helmet } from "react-helmet";
 
 const LoginPage = () => {
   const [signInMutation, { loading }] = useSignInMutation();
@@ -25,7 +26,7 @@ const LoginPage = () => {
         mutation: UPDATE_IS_LOGGED_IN,
         variables: { isLoggedIn: true },
         refetchQueries: [{ query: IS_LOGGED_IN }],
-        awaitRefetchQueries: true
+        awaitRefetchQueries: true,
       });
 
       history.push("/");
@@ -33,54 +34,59 @@ const LoginPage = () => {
   }
 
   return (
-    <StyledMain>
-      <form
-        onSubmit={async e => {
-          e.preventDefault();
-          await handleSubmit();
-        }}
-      >
-        <Typography variant="h6" gutterBottom>
-          Login
-        </Typography>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <TextField
-              required
-              id="email"
-              name="email"
-              value={email}
-              type="email"
-              label="Enter your email"
-              onChange={e => setEmail(e.target.value)}
-              fullWidth
-            />
+    <>
+      <Helmet>
+        <title>Login</title>
+      </Helmet>
+      <StyledMain>
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            await handleSubmit();
+          }}
+        >
+          <Typography variant="h6" gutterBottom>
+            Login
+          </Typography>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <TextField
+                required
+                id="email"
+                name="email"
+                value={email}
+                type="email"
+                label="Enter your email"
+                onChange={(e) => setEmail(e.target.value)}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                id="password"
+                name="password"
+                value={password}
+                type="password"
+                label="Enter your password"
+                onChange={(e) => setPassword(e.target.value)}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <LoadingButton
+                variant="contained"
+                color="primary"
+                type="submit"
+                loading={loading}
+              >
+                Login
+              </LoadingButton>
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <TextField
-              required
-              id="password"
-              name="password"
-              value={password}
-              type="password"
-              label="Enter your password"
-              onChange={e => setPassword(e.target.value)}
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <LoadingButton
-              variant="contained"
-              color="primary"
-              type="submit"
-              loading={loading}
-            >
-              Login
-            </LoadingButton>
-          </Grid>
-        </Grid>
-      </form>
-    </StyledMain>
+        </form>
+      </StyledMain>
+    </>
   );
 };
 

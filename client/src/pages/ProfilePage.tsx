@@ -11,20 +11,21 @@ import {
   List,
   Button,
   TextField,
-  Box
+  Box,
 } from "@material-ui/core";
 import {
   useGetMyOrdersQuery,
   useUpdateMeMutation,
   GetMyOrdersQuery,
   GetMeDocument,
-  useGetMeQuery
+  useGetMeQuery,
 } from "../generated/graphql";
 import LoadingButton from "../components/LoadingButton";
 import Loader from "../components/Loader";
 import Error from "../components/Error";
 import StyledMain from "../components/StyledMain";
 import styled from "styled-components";
+import { Helmet } from "react-helmet";
 
 const Profile = () => {
   const { loading, data, error } = useGetMeQuery();
@@ -47,7 +48,7 @@ const Profile = () => {
           profile={{
             firstname: firstname ?? "",
             lastname: lastname ?? "",
-            address: address ?? ""
+            address: address ?? "",
           }}
           onSubmit={() => setEditMode(false)}
         />
@@ -64,7 +65,7 @@ const Profile = () => {
             <Button
               variant="contained"
               color="primary"
-              onClick={e => setEditMode(true)}
+              onClick={(e) => setEditMode(true)}
             >
               Edit information
             </Button>
@@ -94,16 +95,16 @@ const EditProfile: React.FC<EditProfileProps> = ({ profile, onSubmit }) => {
       input: {
         firstname,
         lastname,
-        address
-      }
+        address,
+      },
     },
     refetchQueries: [{ query: GetMeDocument }],
-    awaitRefetchQueries: true
+    awaitRefetchQueries: true,
   });
 
   return (
     <form
-      onSubmit={async e => {
+      onSubmit={async (e) => {
         e.preventDefault();
         await updateMeMutation();
         onSubmit();
@@ -116,7 +117,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ profile, onSubmit }) => {
             name="firstname"
             value={firstname}
             label="Enter firstname"
-            onChange={e => setFirstname(e.target.value)}
+            onChange={(e) => setFirstname(e.target.value)}
             fullWidth
           />
         </Grid>
@@ -126,7 +127,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ profile, onSubmit }) => {
             name="lastname"
             value={lastname}
             label="Enter lastname"
-            onChange={e => setLastname(e.target.value)}
+            onChange={(e) => setLastname(e.target.value)}
             fullWidth
           />
         </Grid>
@@ -136,7 +137,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ profile, onSubmit }) => {
             name="address"
             value={address}
             label="Enter address"
-            onChange={e => setAddress(e.target.value)}
+            onChange={(e) => setAddress(e.target.value)}
             fullWidth
           />
         </Grid>
@@ -161,14 +162,14 @@ type MyOrderProps = NonNullable<GetMyOrdersQuery["me"]["orders"]>[0];
 
 const OrderWrapper = styled.div`
   width: 100%;
-  padding: ${props => props.theme.spacing(1)}px 0;
+  padding: ${(props) => props.theme.spacing(1)}px 0;
   margin: 0;
 `;
 
 const MyOrder: React.FC<MyOrderProps> = ({ id, items }) => {
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "USD"
+    currency: "USD",
   });
 
   return (
@@ -185,7 +186,7 @@ const MyOrder: React.FC<MyOrderProps> = ({ id, items }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {items?.map(item => (
+            {items?.map((item) => (
               <TableRow key={item.id}>
                 <TableCell>{item.product.name}</TableCell>
                 <TableCell>{item.size.name}</TableCell>
@@ -212,20 +213,25 @@ const ProfilePage = () => {
     );
 
   return (
-    <StyledMain>
-      <Profile />
-      {data?.me?.orders?.length === 0 ? (
-        <Typography variant="h6" gutterBottom>
-          You don't have any order yet
-        </Typography>
-      ) : (
-        <Typography variant="h6">My orders:</Typography>
-      )}
+    <>
+      <Helmet>
+        <title>My Profile</title>
+      </Helmet>
+      <StyledMain>
+        <Profile />
+        {data?.me?.orders?.length === 0 ? (
+          <Typography variant="h6" gutterBottom>
+            You don't have any order yet
+          </Typography>
+        ) : (
+          <Typography variant="h6">My orders:</Typography>
+        )}
 
-      {data?.me?.orders?.map(order => (
-        <MyOrder key={order.id} {...order} />
-      ))}
-    </StyledMain>
+        {data?.me?.orders?.map((order) => (
+          <MyOrder key={order.id} {...order} />
+        ))}
+      </StyledMain>
+    </>
   );
 };
 
