@@ -6,7 +6,7 @@ import { useApolloClient } from "@apollo/react-hooks";
 import LoadingButton from "../components/LoadingButton";
 import StyledMain from "../components/StyledMain";
 import { Helmet } from "react-helmet";
-import { GraphQLError } from "graphql";
+import Error from "../components/Error";
 
 const RegisterPage = () => {
   const [signUpMutation, { loading }] = useSignUpMutation();
@@ -19,6 +19,7 @@ const RegisterPage = () => {
     error: false,
     helperText: "",
   });
+  const [error, setError] = useState("");
   const client = useApolloClient();
 
   async function handleSubmit(): Promise<void> {
@@ -38,8 +39,7 @@ const RegisterPage = () => {
       }
     } catch (e) {
       const error = e?.graphQLErrors[0]?.message || e.message;
-
-      alert(error);
+      setError(error);
     }
   }
 
@@ -58,6 +58,8 @@ const RegisterPage = () => {
 
     return false;
   }
+
+  if (error) return <Error errorMessage={error} />;
 
   return (
     <>

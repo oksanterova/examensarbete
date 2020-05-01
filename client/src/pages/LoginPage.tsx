@@ -6,6 +6,7 @@ import { useApolloClient } from "@apollo/react-hooks";
 import LoadingButton from "../components/LoadingButton";
 import StyledMain from "../components/StyledMain";
 import { IS_LOGGED_IN, UPDATE_IS_LOGGED_IN } from "../client";
+import Error from "../components/Error";
 import { Helmet } from "react-helmet";
 
 const LoginPage = () => {
@@ -13,25 +14,33 @@ const LoginPage = () => {
   const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const client = useApolloClient();
 
   async function handleSubmit(): Promise<void> {
-    const { data } = await signInMutation({ variables: { email, password } });
-    const token = data?.signIn?.token;
+    try {
+      const { data } = await signInMutation({ variables: { email, password } });
+      const token = data?.signIn?.token;
 
-    if (token !== undefined) {
-      localStorage.setItem("token", token);
+      if (token !== undefined) {
+        localStorage.setItem("token", token);
 
-      await client.mutate({
-        mutation: UPDATE_IS_LOGGED_IN,
-        variables: { isLoggedIn: true },
-        refetchQueries: [{ query: IS_LOGGED_IN }],
-        awaitRefetchQueries: true,
-      });
+        await client.mutate({
+          mutation: UPDATE_IS_LOGGED_IN,
+          variables: { isLoggedIn: true },
+          refetchQueries: [{ query: IS_LOGGED_IN }],
+          awaitRefetchQueries: true,
+        });
 
-      history.push("/");
+        history.push("/");
+      }
+    } catch (e) {
+      const error = e?.graphQLErrors[0]?.message || e.message;
+      setError(error);
     }
   }
+
+  if (error) return <Error errorMessage={error} />;
 
   return (
     <>
