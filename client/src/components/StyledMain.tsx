@@ -11,17 +11,17 @@ const GlobalStyle = createGlobalStyle`
 
 const Main = styled.main`
   width: 100%;
-  padding-top: ${props => props.theme.spacing(6)}px;
-  padding-bottom: ${props => props.theme.spacing(2)}px;
+  padding-top: ${(props) => props.theme.spacing(6)}px;
+  padding-bottom: ${(props) => props.theme.spacing(2)}px;
   margin-left: 0;
   margin-right: 0;
   overflow-x: scroll;
 
-  ${props => props.theme.breakpoints.up(600 + props.theme.spacing(3) * 2)} {
+  ${(props) => props.theme.breakpoints.up(600 + props.theme.spacing(3) * 2)} {
     width: 600px;
-    margin-top: ${props => props.theme.spacing(6)}px;
-    padding-top: ${props => props.theme.spacing(3)}px;
-    padding-bottom: ${props => props.theme.spacing(1)}px;
+    margin-top: ${(props) => props.theme.spacing(6)}px;
+    padding-top: ${(props) => props.theme.spacing(3)}px;
+    padding-bottom: ${(props) => props.theme.spacing(1)}px;
     margin-left: auto;
     margin-right: auto;
   }
@@ -33,15 +33,15 @@ const StyledPaper = styled(Paper)`
   min-width: 100%;
   margin-left: auto;
   margin-right: auto;
-  margin-top: ${props => props.theme.spacing(3)}px;
-  margin-bottom: ${props => props.theme.spacing(3)}px;
-  padding: ${props => props.theme.spacing(2)}px;
+  margin-top: ${(props) => props.theme.spacing(3)}px;
+  margin-bottom: ${(props) => props.theme.spacing(3)}px;
+  padding: ${(props) => props.theme.spacing(3)}px;
   box-sizing: border-box;
 
-  ${props => props.theme.breakpoints.up(600 + props.theme.spacing(3) * 2)} {
-    margin-top: ${props => props.theme.spacing(3)}px;
-    margin-bottom: ${props => props.theme.spacing(3)}px;
-    padding: ${props => props.theme.spacing(3)}px;
+  ${(props) => props.theme.breakpoints.up(600 + props.theme.spacing(3) * 2)} {
+    margin-top: ${(props) => props.theme.spacing(3)}px;
+    margin-bottom: ${(props) => props.theme.spacing(3)}px;
+    padding: ${(props) => props.theme.spacing(3)}px;
   }
 `;
 

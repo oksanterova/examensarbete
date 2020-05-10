@@ -69,7 +69,9 @@ const OrderConfirmation = () => {
             <Typography variant="h6">Order Confirmation</Typography>
           </Grid>
           <Grid item xs={12}>
-            <Typography>Your order number {data?.order.id}</Typography>
+            <Typography>
+              Your order number {data?.order.id.substring(0, 8)}
+            </Typography>
           </Grid>
           <Grid item xs={12}>
             <Table>

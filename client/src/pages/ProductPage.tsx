@@ -132,7 +132,7 @@ const ProductPage = () => {
             </List>
           </Grid>
           <Box margin={1} />
-          <Grid item>
+          <Grid item xs={12} sm={"auto"}>
             <Button
               variant="outlined"
               color="primary"
@@ -141,7 +141,7 @@ const ProductPage = () => {
               Resume Shopping
             </Button>
           </Grid>
-          <Grid item>
+          <Grid item xs={12} sm={"auto"}>
             <Button
               variant="outlined"
               color="primary"
@@ -151,7 +151,7 @@ const ProductPage = () => {
             </Button>
           </Grid>
           <FlexGrow />
-          <Grid item>
+          <Grid item xs={12} sm={"auto"}>
             <LoadingButton
               variant="contained"
               color="secondary"

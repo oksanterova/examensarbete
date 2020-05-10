@@ -14,7 +14,11 @@ import {
   Box,
   Button,
 } from "@material-ui/core";
-import { useGetCartQuery, useCreateOrderMutation } from "../generated/graphql";
+import {
+  useGetCartQuery,
+  useCreateOrderMutation,
+  GetMyOrdersDocument,
+} from "../generated/graphql";
 import MeContext from "../MeContext";
 import StyledMain from "../components/StyledMain";
 import Loader from "../components/Loader";
@@ -70,7 +74,9 @@ const OrderPage = () => {
 
             const { data } = await createOrderMutation({
               variables: { input: { address, cartId } },
+              refetchQueries: me ? [{ query: GetMyOrdersDocument }] : [],
             });
+
             const orderId = data!.createOrder.id;
 
             await resetCart();
@@ -113,10 +119,10 @@ const OrderPage = () => {
             </Grid>
             <Grid item xs={12}>
               <Typography variant="body1" color="secondary">
-                When you have submitted the order make sure to transer the total
-                amount of money to Swish account number 0793374685. Your order
-                will be shipped to the delivery address within 24 hours after
-                the payment is received.
+                When you have submitted the order, make sure to transer the
+                total amount of money to Swish account number 0793374685. Your
+                order will be shipped to the delivery address within 24 hours
+                after the payment is received.
               </Typography>
             </Grid>
             <Box marginBottom={2} />

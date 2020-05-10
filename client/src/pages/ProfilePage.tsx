@@ -179,7 +179,7 @@ const MyOrder: React.FC<MyOrderProps> = ({ id, items }) => {
 
   return (
     <OrderWrapper>
-      <Typography>Order {id}</Typography>
+      <Typography>Order {id.substring(0, 8)}</Typography>
       <Typography variant="body1">
         Total amount: {formatter.format(totalAmount)}
       </Typography>

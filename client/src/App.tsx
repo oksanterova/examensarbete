@@ -89,7 +89,7 @@ const Footer = styled.footer`
   background-color: #696969;
   color: #fff;
   padding: 6px;
-  height: 40px;
+  height: 36px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
